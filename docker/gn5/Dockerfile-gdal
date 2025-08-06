@@ -1,0 +1,48 @@
+FROM node:24 AS gnui
+
+ADD geonetwork-frontend /geonetwork-frontend
+WORKDIR /geonetwork-frontend
+
+RUN npm install
+RUN npm run build-all
+
+FROM maven:3-eclipse-temurin-21 AS gn5-build
+
+ADD . /geonetwork5
+COPY --from=gnui /geonetwork-frontend/dist geonetwork5/geonetwork-frontend/dist
+WORKDIR /geonetwork5
+RUN ./mvnw -B clean install -Drelax
+
+FROM ghcr.io/osgeo/gdal:alpine-normal-latest AS final
+
+ARG COMMIT_OR_BRANCH="unknown"
+
+LABEL org.opencontainers.image.revision="$COMMIT_OR_BRANCH"
+LABEL org.opencontainers.image.created="2023-10-01T00:00:00Z"
+LABEL org.opencontainers.image.source="https://github.com/eea/geonetwork5-eea.git"
+LABEL org.opencontainers.image.url="eeacms/eea-geonetwork5"
+LABEL org.opencontainers.image.vendor="European Environment Agency"
+LABEL org.opencontainers.image.title="GeoNetwork 5 EEA"
+LABEL org.opencontainers.image.description="GeoNetwork 5 EEA is a catalog application for managing geospatial data and services."
+LABEL org.opencontainers.image.licenses="GPL-3.0-only"
+ENV COMMIT=${COMMIT_OR_BRANCH}
+
+WORKDIR /opt/geonetwork
+
+RUN getent group www-data && delgroup www-data || echo "group www-data not found" && \
+    addgroup -g 933 www-data && \
+    getent passwd www-data && deluser www-data || echo "user www-data not found" && \
+    adduser -u 933 -G www-data -D www-data && \
+    getent group jetty && delgroup jetty || echo "group jetty not found" && \
+    addgroup -g 33 jetty && \
+    getent passwd jetty && deluser jetty || echo "user jetty not found" && \
+    adduser -u 33 -G jetty -D jetty
+
+RUN apk add --no-cache openjdk21-jre-headless
+
+USER www-data:www-data
+
+COPY --from=gn5-build --chown=www-data:www-data /geonetwork5/src/apps/geonetwork/target/gn-main-app-5.0.0-*.jar /opt/geonetwork/geonetwork.jar
+
+ENTRYPOINT [ "java", "-jar", "/opt/geonetwork/geonetwork.jar" ]
+
