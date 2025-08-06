@@ -24,7 +24,7 @@ pipeline {
                 tagName = "$BRANCH_NAME"
             }
             try {
-                dockerImage = docker.build("$registry:$tagName", "--pull --no-cache --build-arg COMMIT_OR_BRANCH=$tagName -f Dockerfile-gdal ./docker/gn5")
+                dockerImage = docker.build("$registry:$tagName", "--pull --no-cache --build-arg COMMIT_OR_BRANCH=$tagName -f ./docker/gn5/Dockerfile-gdal .")
                 docker.withRegistry( '', 'eeajenkins' ) {
                     dockerImage.push()
                 }
