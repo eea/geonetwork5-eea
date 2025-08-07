@@ -26,7 +26,16 @@ import org.geonetwork.data.model.DataFormat;
 public class GdalUtils {
 
     private static final String GDAL_FORMAT_REGEX = " +(\\w+) +-([\\w,]+)- \\(([rwvso\\+]+)\\):\\ (.*)";
-    private static final String GDAL_LAYERS_REGEX = "[0-9]+: ([:\\w]+) +\\(.*\\)";
+    /**
+     * Layer list provided by OGRInfo command.
+     *
+     * <p>using driver `OpenFileGDB' successful. Layer: NationalBoundary_AL_02462_v03_250m (Multi Polygon)
+     *
+     * <p>using driver `GPKG' successful. 1: MonitoringSite (3D Measured Point) 2: GroundWaterBodyPoint (3D Measured
+     * Point) 3: GroundWaterBody (3D Measured Polygon)
+     */
+    private static final String GDAL_LAYERS_REGEX = "(?:[0-9]+|Layer): ([:\\-\\w]+) +\\(.*\\)";
+
     public static final String GDAL_DEFAULT_RASTER_LAYER = "RASTER_LAYER";
 
     protected static List<DataFormat> parseFormats(String output) {
