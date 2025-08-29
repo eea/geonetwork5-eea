@@ -5,17 +5,20 @@ import {
   inject,
   input,
   model,
+  viewChild,
+  OnDestroy,
   OnInit,
   TemplateRef,
+  ViewChild,
 } from '@angular/core';
 import { Button } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { Inplace } from 'primeng/inplace';
 import { InputText } from 'primeng/inputtext';
 import {
+  RecordsApi,
   BatchEditRequest,
   DateRangeDetails,
-  RecordsApi,
   VerticalRange,
 } from 'g5api';
 import { RecordsApi as Gn4RecordsApi } from 'gapi';
@@ -40,7 +43,7 @@ import { NgTemplateOutlet } from '@angular/common';
   ],
   templateUrl: './inplace-field.component.html',
 })
-export class InplaceFieldComponent implements OnInit {
+export class InplaceFieldComponent implements OnInit, OnDestroy {
   uuid = input.required<string>();
   property = input.required<string>();
   value = model<string | DateRangeDetails | VerticalRange | undefined>();
@@ -69,7 +72,7 @@ export class InplaceFieldComponent implements OnInit {
     this.value.set(event);
   }
 
-  saveEdit(event: Event, cb: Function) {
+  saveEdit(event?: Event, cb?: Function) {
     let batchEditRequest: BatchEditRequest = {
       uuids: [this.uuid()],
       batchEditParameter: [
@@ -86,12 +89,22 @@ export class InplaceFieldComponent implements OnInit {
       .batchEdit(batchEditRequest)
       .then(response => {
         this.gn4RecordsApi().index({ uuids: [this.uuid()] });
-        cb(event);
+        cb && cb(event);
       });
   }
 
   cancelEdit(event: Event, cb: Function) {
     this.value.set(this.initialValue);
     cb(event);
+  }
+
+  hasUnsavedChanges(): boolean {
+    return this.value() !== this.initialValue;
+  }
+
+  ngOnDestroy(): void {
+    if (this.hasUnsavedChanges()) {
+      this.saveEdit();
+    }
   }
 }
