@@ -212,6 +212,7 @@ export class NewRecordPanelComponent implements OnInit {
   layers = signal<string[]>([]);
 
   isCreatingRecord = signal(false);
+  isUploadingFiles = signal(false);
   isFetchingLayers = signal(false);
   isExecutingAnalysis = signal(false);
   isCreatingPreview = signal(false);
@@ -354,6 +355,16 @@ export class NewRecordPanelComponent implements OnInit {
       );
   }
 
+  reportLayerListError(error: string) {
+    const msg =
+      'No layer found in datasource ' +
+      this.datasource() +
+      '. Can be due to unsupported format or invalid datasource content.';
+    console.log(msg, error);
+    this.errorFetchingLayers.set(msg);
+    this.isFetchingLayers.set(false);
+  }
+
   /**
    * Retrieves the layers list for a remote datasource.
    */
@@ -376,11 +387,7 @@ export class NewRecordPanelComponent implements OnInit {
           this.isFetchingLayers.set(false);
         },
         error => {
-          console.log(
-            'Error retrieving the dataset layers: ' + error.response.statusText
-          );
-          this.errorFetchingLayers.set(error.statusText);
-          this.isFetchingLayers.set(false);
+          this.reportLayerListError(error.response.statusText);
         }
       );
   }
@@ -416,11 +423,7 @@ export class NewRecordPanelComponent implements OnInit {
           this.isFetchingLayers.set(false);
         },
         error => {
-          console.log(
-            'Error retrieving the dataset layers: ' + error.response.statusText
-          );
-          this.errorFetchingLayers.set(error.response.statusText);
-          this.isFetchingLayers.set(false);
+          this.reportLayerListError(error.response.statusText);
         }
       );
   }
@@ -633,6 +636,13 @@ export class NewRecordPanelComponent implements OnInit {
     this.onDatasourceChange();
   }
 
+  updateProgress(currentFileIndex: number, totalFiles: number) {
+    if (currentFileIndex + 1 >= totalFiles) {
+      this.isUploadingFiles.set(false);
+      this.fileUpload.clear();
+    }
+  }
+
   /**
    * Event triggered to upload the selected files to the metadata.
    */
@@ -640,6 +650,8 @@ export class NewRecordPanelComponent implements OnInit {
     if (!this.newRecordId()) {
       return;
     }
+
+    this.isUploadingFiles.set(true);
 
     for (let i = 0; i < event.files.length; i++) {
       const putResourceRequest: PutResourceRequest = {
@@ -653,19 +665,20 @@ export class NewRecordPanelComponent implements OnInit {
           response => {
             // select the file by default, when uploading 1 file only
             this.retrieveMetadataFiles(event.files.length == 1);
+            this.updateProgress(i, event.files.length);
           },
           error => {
-            console.log(
-              'Error uploading file to metadata: ' + error.response.statusText
-            );
-            this.errorMessage.set(
-              'Error uploading file to metadata: ' + error.response.statusText
-            );
+            var msg =
+              'Error uploading file ' +
+              event.files[i].name +
+              ' to metadata: ' +
+              error.response.statusText;
+            console.log(msg);
+            this.errorMessage.set(msg);
+            this.updateProgress(i, event.files.length);
           }
         );
     }
-
-    this.fileUpload.clear();
   }
 
   onRemove(event: FileRemoveEvent) {

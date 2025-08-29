@@ -106,9 +106,17 @@
                         chooseLabel="Select your file"
                         uploadLabel="Upload"
                         multiple="true"
-                        [maxFileSize]="2000 * 1000000">
+                        [maxFileSize]="2000 * 1000000"
+                        mode="advanced">
                         <ng-template #empty>
                           <div>Drag and drop files to here to upload.</div>
+                        </ng-template>
+                        <ng-template pTemplate="content">
+                          @if (isUploadingFiles()) {
+                            <p-progressBar
+                              mode="indeterminate"
+                              [style]="{ height: '6px' }" />
+                          }
                         </ng-template>
                       </p-fileupload>
                     </p-tabpanel>
@@ -179,12 +187,9 @@
 
               @if (errorFetchingLayers()) {
                 <p class="error-message">
-                  An error occurred retrieving dataset information. Please try
-                  later.
+                  An error occurred retrieving dataset information.
                 </p>
-                <small class="error-message"
-                  >Error is: {{ errorFetchingLayers() }}</small
-                >
+                <small class="error-message">{{ errorFetchingLayers() }}</small>
               }
 
               @if (layers().length > 0) {
