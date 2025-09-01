@@ -56,7 +56,8 @@ export interface GetResourceRequest {
 export interface PatchResourceRequest {
   metadataUuid: string;
   resourceId: string;
-  visibility: PatchResourceVisibilityEnum;
+  visibility?: PatchResourceVisibilityEnum;
+  newResourceName?: string;
   approved?: boolean;
 }
 
@@ -386,7 +387,7 @@ export class RecordsApi extends runtime.BaseAPI {
   }
 
   /**
-   * Update the metadata resource visibility
+   * Update the metadata resource visibility or rename a resource
    */
   async patchResourceRaw(
     requestParameters: PatchResourceRequest,
@@ -406,17 +407,14 @@ export class RecordsApi extends runtime.BaseAPI {
       );
     }
 
-    if (requestParameters['visibility'] == null) {
-      throw new runtime.RequiredError(
-        'visibility',
-        'Required parameter "visibility" was null or undefined when calling patchResource().'
-      );
-    }
-
     const queryParameters: any = {};
 
     if (requestParameters['visibility'] != null) {
       queryParameters['visibility'] = requestParameters['visibility'];
+    }
+
+    if (requestParameters['newResourceName'] != null) {
+      queryParameters['newResourceName'] = requestParameters['newResourceName'];
     }
 
     if (requestParameters['approved'] != null) {
@@ -449,7 +447,7 @@ export class RecordsApi extends runtime.BaseAPI {
   }
 
   /**
-   * Update the metadata resource visibility
+   * Update the metadata resource visibility or rename a resource
    */
   async patchResource(
     requestParameters: PatchResourceRequest,

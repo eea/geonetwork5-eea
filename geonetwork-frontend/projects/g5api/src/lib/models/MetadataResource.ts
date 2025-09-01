@@ -46,12 +46,6 @@ export interface MetadataResource {
   lastModification?: Date;
   /**
    *
-   * @type {number}
-   * @memberof MetadataResource
-   */
-  metadataId?: number;
-  /**
-   *
    * @type {string}
    * @memberof MetadataResource
    */
@@ -92,6 +86,12 @@ export interface MetadataResource {
    * @memberof MetadataResource
    */
   metadataUuid?: string;
+  /**
+   *
+   * @type {number}
+   * @memberof MetadataResource
+   */
+  metadataId?: number;
 }
 
 /**
@@ -136,7 +136,6 @@ export function MetadataResourceFromJSONTyped(
       json['lastModification'] == null
         ? undefined
         : new Date(json['lastModification']),
-    metadataId: json['metadataId'] == null ? undefined : json['metadataId'],
     visibility: json['visibility'] == null ? undefined : json['visibility'],
     id: json['id'] == null ? undefined : json['id'],
     size: json['size'] == null ? undefined : json['size'],
@@ -145,6 +144,7 @@ export function MetadataResourceFromJSONTyped(
     filename: json['filename'] == null ? undefined : json['filename'],
     metadataUuid:
       json['metadataUuid'] == null ? undefined : json['metadataUuid'],
+    metadataId: json['metadataId'] == null ? undefined : json['metadataId'],
   };
 }
 
@@ -162,7 +162,6 @@ export function MetadataResourceToJSON(value?: MetadataResource | null): any {
       value['lastModification'] == null
         ? undefined
         : value['lastModification'].toISOString(),
-    metadataId: value['metadataId'],
     visibility: value['visibility'],
     id: value['id'],
     size: value['size'],
@@ -170,5 +169,6 @@ export function MetadataResourceToJSON(value?: MetadataResource | null): any {
     url: value['url'],
     filename: value['filename'],
     metadataUuid: value['metadataUuid'],
+    metadataId: value['metadataId'],
   };
 }

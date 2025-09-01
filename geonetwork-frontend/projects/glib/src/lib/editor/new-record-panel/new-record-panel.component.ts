@@ -116,6 +116,8 @@ export class NewRecordPanelComponent implements OnInit {
   defaultGroupOwner = '1';
 
   groupOwner = input<string | undefined>(this.defaultGroupOwner);
+  includeProperties = input<string[] | undefined>([]);
+  excludeProperties = input<string[] | undefined>([]);
 
   searchFilter = input<string | undefined>();
   routeFilter = signal<string | undefined>(undefined);
@@ -579,11 +581,15 @@ export class NewRecordPanelComponent implements OnInit {
           visibility: LayersVisibilityEnum.Public,
           approved: true,
           layer: this.layername(),
+          include: this.includeProperties(),
+          exclude: this.excludeProperties()
         }
       : {
           uuid: this.newRecordId(),
           datasource: this.datasourceWithPrefix(),
           layer: this.layername(),
+          include: this.includeProperties(),
+          exclude: this.excludeProperties()
         };
 
     const applyAnalysis =

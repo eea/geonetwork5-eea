@@ -181,15 +181,17 @@ For GDAL, version 3.7.0+ is required (added support for JSON output in info comm
             @RequestParam(required = false, defaultValue = "public") MetadataResourceVisibility visibility,
             @RequestParam(required = false, defaultValue = "true") boolean approved,
             @RequestParam String datasource,
-            @RequestParam String layer)
+            @RequestParam String layer,
+            @RequestParam(required = false) List<String> include,
+            @RequestParam(required = false) List<String> exclude)
             throws MetadataNotFoundException, ResourceNotFoundException {
 
         Metadata metadataRecord = metadataManager.findMetadataByUuidOrId(uuid, approved);
         String datasourceToUse = resolveDatasource(datasource, uuid, visibility, approved);
 
         BatchEditMode editMode = BatchEditMode.PREVIEW;
-        ResponseEntity<String> builtMetadata =
-                applyDataAnalysisOnRecord(metadataRecord.getUuid(), datasourceToUse, layer, metadataRecord, editMode);
+        ResponseEntity<String> builtMetadata = applyDataAnalysisOnRecord(
+                metadataRecord.getUuid(), datasourceToUse, layer, metadataRecord, editMode, include, exclude);
         if (builtMetadata != null) return builtMetadata;
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -206,15 +208,17 @@ For GDAL, version 3.7.0+ is required (added support for JSON output in info comm
             @RequestParam(required = false, defaultValue = "public") MetadataResourceVisibility visibility,
             @RequestParam(required = false, defaultValue = "true") boolean approved,
             @RequestParam String datasource,
-            @RequestParam String layer)
+            @RequestParam String layer,
+            @RequestParam(required = false) List<String> include,
+            @RequestParam(required = false) List<String> exclude)
             throws MetadataNotFoundException, ResourceNotFoundException {
 
         Metadata metadataRecord = metadataManager.findMetadataByUuidOrId(uuid, approved);
         String datasourceToUse = resolveDatasource(datasource, uuid, visibility, approved);
 
         BatchEditMode editMode = BatchEditMode.SAVE;
-        ResponseEntity<String> builtMetadata =
-                applyDataAnalysisOnRecord(metadataRecord.getUuid(), datasourceToUse, layer, metadataRecord, editMode);
+        ResponseEntity<String> builtMetadata = applyDataAnalysisOnRecord(
+                metadataRecord.getUuid(), datasourceToUse, layer, metadataRecord, editMode, include, exclude);
         if (builtMetadata != null) return builtMetadata;
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -259,13 +263,19 @@ For GDAL, version 3.7.0+ is required (added support for JSON output in info comm
     }
 
     private @Nullable ResponseEntity<String> applyDataAnalysisOnRecord(
-            String uuid, String datasource, String layer, Metadata metadataRecord, BatchEditMode editMode) {
+            String uuid,
+            String datasource,
+            String layer,
+            Metadata metadataRecord,
+            BatchEditMode editMode,
+            List<String> include,
+            List<String> exclude) {
         if (layer.equals(GDAL_DEFAULT_RASTER_LAYER)) {
             Optional<RasterInfo> layerProperties = analyzer.getRasterProperties(datasource);
 
             if (layerProperties.isPresent()) {
                 String builtMetadata = metadataBuilder.buildMetadata(
-                        uuid, metadataRecord.getSchemaid(), layerProperties.get(), editMode);
+                        uuid, metadataRecord.getSchemaid(), layerProperties.get(), editMode, include, exclude);
                 return new ResponseEntity<>(builtMetadata, HttpStatus.OK);
             }
         } else {
@@ -273,7 +283,7 @@ For GDAL, version 3.7.0+ is required (added support for JSON output in info comm
 
             if (layerProperties.isPresent()) {
                 String builtMetadata = metadataBuilder.buildMetadata(
-                        uuid, metadataRecord.getSchemaid(), layerProperties.get(), editMode);
+                        uuid, metadataRecord.getSchemaid(), layerProperties.get(), editMode, include, exclude);
                 return new ResponseEntity<>(builtMetadata, HttpStatus.OK);
             }
         }

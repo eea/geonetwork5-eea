@@ -14,16 +14,9 @@
     },
     "version": "5.0.0"
   },
-  "servers": [
-    {
-      "url": "http://localhost:7979/geonetwork"
-    }
-  ],
+  "servers": [{ "url": "http://localhost:7979/geonetwork" }],
   "tags": [
-    {
-      "name": "records",
-      "description": "Metadata record operations"
-    },
+    { "name": "records", "description": "Metadata record operations" },
     {
       "name": "Data analysis",
       "description": "Data analysis operations can extract information from a dataset, such as the number of features, the extent, the data model, ...\nand update or compose a metadata record based on the dataset properties.\n\nThe default analyzer provided is based on [GDAL](http://gdal.org/), which supports a wide range of raster and vector formats.\n"
@@ -46,9 +39,7 @@
             "in": "path",
             "description": "The metadata UUID or internal identifier",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "43d7c186-2187-4bcd-8843-41e575a5ef56"
           },
           {
@@ -68,20 +59,14 @@
             "in": "query",
             "description": "Use approved version or not",
             "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": true
-            },
+            "schema": { "type": "boolean", "default": true },
             "example": true
           },
           {
             "name": "filter",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "string",
-              "default": "*.*"
-            }
+            "schema": { "type": "string", "default": "*" }
           }
         ],
         "responses": {
@@ -91,9 +76,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MetadataResource"
-                  }
+                  "items": { "$ref": "#/components/schemas/MetadataResource" }
                 }
               }
             }
@@ -104,9 +87,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MetadataResource"
-                  }
+                  "items": { "$ref": "#/components/schemas/MetadataResource" }
                 }
               }
             }
@@ -123,9 +104,7 @@
             "in": "path",
             "description": "The metadata UUID or internal identifier",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "43d7c186-2187-4bcd-8843-41e575a5ef56"
           },
           {
@@ -145,20 +124,14 @@
             "in": "query",
             "description": "The URL to load in the store",
             "required": true,
-            "schema": {
-              "type": "string",
-              "format": "url"
-            }
+            "schema": { "type": "string", "format": "url" }
           },
           {
             "name": "approved",
             "in": "query",
             "description": "Use approved version or not",
             "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false
-            },
+            "schema": { "type": "boolean", "default": false },
             "example": true
           }
         ],
@@ -167,9 +140,7 @@
             "description": "Attachment added.",
             "content": {
               "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/MetadataResource"
-                }
+                "schema": { "$ref": "#/components/schemas/MetadataResource" }
               }
             }
           },
@@ -177,9 +148,7 @@
             "description": "ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_EDIT",
             "content": {
               "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/MetadataResource"
-                }
+                "schema": { "$ref": "#/components/schemas/MetadataResource" }
               }
             }
           }
@@ -195,9 +164,7 @@
             "in": "path",
             "description": "The metadata UUID or internal identifier",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "43d7c186-2187-4bcd-8843-41e575a5ef56"
           },
           {
@@ -217,10 +184,7 @@
             "in": "query",
             "description": "Use approved version or not",
             "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false
-            },
+            "schema": { "type": "boolean", "default": false },
             "example": true
           }
         ],
@@ -246,9 +210,7 @@
             "description": "ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_EDIT",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MetadataResource"
-                }
+                "schema": { "$ref": "#/components/schemas/MetadataResource" }
               }
             }
           },
@@ -256,9 +218,7 @@
             "description": "Attachment uploaded.",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MetadataResource"
-                }
+                "schema": { "$ref": "#/components/schemas/MetadataResource" }
               }
             }
           }
@@ -274,9 +234,7 @@
             "in": "path",
             "description": "The metadata UUID or internal identifier",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "43d7c186-2187-4bcd-8843-41e575a5ef56"
           },
           {
@@ -284,20 +242,15 @@
             "in": "query",
             "description": "Use approved version or not",
             "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false
-            },
+            "schema": { "type": "boolean", "default": false },
             "example": true
           }
         ],
         "responses": {
-          "204": {
-            "description": "Attachment added."
-          },
           "403": {
             "description": "ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_EDIT"
-          }
+          },
+          "204": { "description": "Attachment added." }
         }
       }
     },
@@ -313,31 +266,21 @@
             "in": "query",
             "description": "Record UUIDs. If null current selection is used.",
             "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
+            "schema": { "type": "array", "items": { "type": "string" } }
           },
           {
             "name": "bucket",
             "in": "query",
             "description": "Selection bucket name (not supported in GeoNetwork 5)",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "updateDateStamp",
             "in": "query",
             "description": "If true updates the record date stamp with the current time of the operation.\nDate stamp element in each standards can be different. eg. In ISO19139 it is `gmd:dateStamp`,\nin ISO19115-3 it is the revision date of the metadata.\n",
             "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
+            "schema": { "type": "boolean", "default": false }
           }
         ],
         "requestBody": {
@@ -346,9 +289,7 @@
             "application/json": {
               "schema": {
                 "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/BatchEditParameter"
-                }
+                "items": { "$ref": "#/components/schemas/BatchEditParameter" }
               },
               "examples": {
                 "ISO19139 / Remove all online resources having a protocol 'OGC:WMS'.": {
@@ -387,21 +328,13 @@
           "403": {
             "description": "Operation not allowed. User needs to be able to edit the resource.",
             "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
+              "application/json": { "schema": { "type": "object" } }
             }
           },
           "201": {
             "description": "Return a report of what has been done.",
             "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
+              "application/json": { "schema": { "type": "object" } }
             }
           }
         }
@@ -418,9 +351,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/IProcess"
-                  }
+                  "items": { "$ref": "#/components/schemas/IProcess" }
                 }
               }
             }
@@ -433,9 +364,7 @@
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ProcessDetails"
-              }
+              "schema": { "$ref": "#/components/schemas/ProcessDetails" }
             }
           },
           "required": true
@@ -445,10 +374,7 @@
             "description": "OK",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int64"
-                }
+                "schema": { "type": "integer", "format": "int64" }
               }
             }
           }
@@ -464,41 +390,26 @@
             "name": "q",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "string",
-              "default": ""
-            }
+            "schema": { "type": "string", "default": "" }
           },
           {
             "name": "from",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
           },
           {
             "name": "size",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 10
-            }
+            "schema": { "type": "integer", "format": "int32", "default": 10 }
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
+              "application/json": { "schema": { "type": "string" } }
             }
           }
         }
@@ -511,10 +422,7 @@
             "name": "bucket",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "string",
-              "default": "metadata"
-            }
+            "schema": { "type": "string", "default": "metadata" }
           },
           {
             "name": "relatedType",
@@ -523,32 +431,20 @@
             "required": false,
             "schema": {
               "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/RelatedItemType"
-              },
+              "items": { "$ref": "#/components/schemas/RelatedItemType" },
               "default": []
             }
           }
         ],
         "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          },
+          "content": { "application/json": { "schema": { "type": "string" } } },
           "required": true
         },
         "responses": {
           "200": {
             "description": "OK",
             "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
+              "application/json": { "schema": { "type": "string" } }
             }
           }
         }
@@ -566,21 +462,14 @@
             "in": "query",
             "description": "Record UUIDs. If null current selection is used.",
             "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
+            "schema": { "type": "array", "items": { "type": "string" } }
           },
           {
             "name": "bucket",
             "in": "query",
             "description": "Selection bucket name (not supported in GeoNetwork 5)",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           }
         ],
         "requestBody": {
@@ -589,9 +478,7 @@
             "application/json": {
               "schema": {
                 "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/BatchEditParameter"
-                }
+                "items": { "$ref": "#/components/schemas/BatchEditParameter" }
               }
             }
           },
@@ -600,23 +487,11 @@
         "responses": {
           "403": {
             "description": "Operation not allowed. User needs to be able to edit the resource.",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "content": { "application/xml": { "schema": { "type": "string" } } }
           },
           "200": {
             "description": "In preview mode, the response is an XML document with the modified records.\n\n```xml\n<preview>\n    <gmd:MD_Metadata ...\n    <gmd:MD_Metadata ...\n</preview>\n```\n",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "content": { "application/xml": { "schema": { "type": "string" } } }
           }
         }
       }
@@ -632,9 +507,7 @@
             "name": "uuid",
             "in": "query",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "visibility",
@@ -642,45 +515,39 @@
             "required": false,
             "schema": {
               "type": "string",
+              "default": "public",
               "enum": ["public", "private"]
-            }
-          },
-          {
-            "name": "datasource",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
             }
           },
           {
             "name": "approved",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
+            "schema": { "type": "boolean", "default": true }
+          },
+          {
+            "name": "datasource",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
           },
           {
             "name": "layer",
             "in": "query",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "exclude",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "content": { "text/plain": { "schema": { "type": "string" } } }
           }
         }
       }
@@ -696,9 +563,7 @@
             "in": "path",
             "description": "The metadata UUID or internal identifier",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "43d7c186-2187-4bcd-8843-41e575a5ef56"
           },
           {
@@ -706,19 +571,14 @@
             "in": "path",
             "description": "The resource identifier (ie. filename)",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "approved",
             "in": "query",
             "description": "Use approved version or not",
             "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": true
-            },
+            "schema": { "type": "boolean", "default": true },
             "example": true
           },
           {
@@ -726,10 +586,7 @@
             "in": "query",
             "description": "Size (only applies to images). From 1px to 2048px.",
             "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
+            "schema": { "type": "integer", "format": "int32" },
             "example": 200
           }
         ],
@@ -737,12 +594,7 @@
           "200": {
             "description": "Record attachment.",
             "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
+              "*/*": { "schema": { "type": "string", "format": "binary" } }
             }
           },
           "403": {
@@ -760,9 +612,7 @@
             "in": "path",
             "description": "The metadata UUID or internal identifier",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "43d7c186-2187-4bcd-8843-41e575a5ef56"
           },
           {
@@ -770,19 +620,14 @@
             "in": "path",
             "description": "The resource identifier (ie. filename)",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "approved",
             "in": "query",
             "description": "Use approved version or not",
             "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false
-            },
+            "schema": { "type": "boolean", "default": false },
             "example": true
           }
         ],
@@ -790,14 +635,12 @@
           "403": {
             "description": "ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_EDIT"
           },
-          "204": {
-            "description": "Attachment visibility removed."
-          }
+          "204": { "description": "Attachment visibility removed." }
         }
       },
       "patch": {
         "tags": ["records"],
-        "summary": "Update the metadata resource visibility",
+        "summary": "Update the metadata resource visibility or rename a resource",
         "operationId": "patchResource",
         "parameters": [
           {
@@ -805,9 +648,7 @@
             "in": "path",
             "description": "The metadata UUID or internal identifier",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "example": "43d7c186-2187-4bcd-8843-41e575a5ef56"
           },
           {
@@ -815,30 +656,29 @@
             "in": "path",
             "description": "The resource identifier (ie. filename)",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "visibility",
             "in": "query",
             "description": "The visibility",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["public", "private"]
-            },
+            "required": false,
+            "schema": { "type": "string", "enum": ["public", "private"] },
             "example": "public"
+          },
+          {
+            "name": "newResourceName",
+            "in": "query",
+            "description": "The new resource name",
+            "required": false,
+            "schema": { "type": "string" }
           },
           {
             "name": "approved",
             "in": "query",
             "description": "Use approved version or not",
             "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false
-            },
+            "schema": { "type": "boolean", "default": false },
             "example": true
           }
         ],
@@ -847,9 +687,7 @@
             "description": "ApiParams.API_RESPONSE_NOT_ALLOWED_CAN_EDIT",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MetadataResource"
-                }
+                "schema": { "$ref": "#/components/schemas/MetadataResource" }
               }
             }
           },
@@ -857,9 +695,7 @@
             "description": "Attachment visibility updated.",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MetadataResource"
-                }
+                "schema": { "$ref": "#/components/schemas/MetadataResource" }
               }
             }
           }
@@ -958,9 +794,7 @@
             "in": "path",
             "description": "local identifier of a catalog",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
@@ -1024,9 +858,7 @@
             "in": "path",
             "description": "local identifier of a catalog",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
@@ -1034,14 +866,10 @@
             "description": "A list of properties by which the server response may be sorted.",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/schema"
-                }
+                "schema": { "$ref": "#/components/schemas/schema" }
               },
               "text/html": {
-                "schema": {
-                  "$ref": "#/components/schemas/schema"
-                }
+                "schema": { "$ref": "#/components/schemas/schema" }
               }
             }
           },
@@ -1090,27 +918,21 @@
             "in": "path",
             "description": "local identifier of a catalog",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "bbox",
             "in": "query",
             "description": "Only features that have a geometry that intersects the bounding box are selected. The bounding box is provided as four or six numbers, depending on whether the coordinate reference system includes a vertical axis (height or depth):  * Lower left corner, coordinate axis 1 * Lower left corner, coordinate axis 2 * Minimum value, coordinate axis 3 (optional) * Upper right corner, coordinate axis 1 * Upper right corner, coordinate axis 2 * Maximum value, coordinate axis 3 (optional)  If the value consists of four numbers, the coordinate reference system is WGS 84 longitude/latitude (http://www.opengis.net/def/crs/OGC/1.3/CRS84) unless a different coordinate reference system is specified in the parameter `bbox-crs`.  If the value consists of six numbers, the coordinate reference system is WGS 84 longitude/latitude/ellipsoidal height (http://www.opengis.net/def/crs/OGC/0/CRS84h) unless a different coordinate reference system is specified in the parameter `bbox-crs`.  The query parameter `bbox-crs` is specified in OGC API - Features - Part 2: Coordinate Reference Systems by Reference.  For WGS 84 longitude/latitude the values are in most cases the sequence of minimum longitude, minimum latitude, maximum longitude and maximum latitude. However, in cases where the box spans the antimeridian the first value (west-most box edge) is larger than the third value (east-most box edge).  If the vertical axis is included, the third and the sixth number are the bottom and the top of the 3-dimensional bounding box.  If a feature has multiple spatial geometry properties, it is the decision of the server whether only a single spatial geometry property is used to determine the extent or all relevant geometries.",
             "required": false,
-            "schema": {
-              "$ref": "#/components/schemas/GetRecordsBboxDto"
-            }
+            "schema": { "$ref": "#/components/schemas/GetRecordsBboxDto" }
           },
           {
             "name": "datetime",
             "in": "query",
             "description": "Either a date-time or an interval. Date and time expressions adhere to RFC 3339. Intervals may be bounded or half-bounded (double-dots at start or end).  Examples:  * A date-time: \"2018-02-12T23:20:50Z\" * A bounded interval: \"2018-02-12T00:00:00Z/2018-03-18T12:31:12Z\" * Half-bounded intervals: \"2018-02-12T00:00:00Z/..\" or \"../2018-03-18T12:31:12Z\"  Only features that have a temporal property that intersects the value of `datetime` are selected.  If a feature has multiple temporal properties, it is the decision of the server whether only a single temporal property is used to determine the extent or all relevant temporal properties.",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "limit",
@@ -1130,48 +952,28 @@
             "in": "query",
             "description": "The optional q parameter supports keyword searching.  Only records whose text fields contain one or more of the specified search terms are selected.  The specific set of text keys/fields/properties of a record to which the q operator is applied is up to the description of the server.   Implementations should, however, apply the q operator to the title, description and keywords keys/fields/properties.",
             "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
+            "schema": { "type": "array", "items": { "type": "string" } }
           },
           {
             "name": "type",
             "in": "query",
             "description": "The optional type parameter supports searching by resource type.  Only records whose type, as indicated by the value of the type core queryable, is equal to one of the listed values shall be selected.",
             "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
+            "schema": { "type": "array", "items": { "type": "string" } }
           },
           {
             "name": "externalId",
             "in": "query",
             "description": "The optional externalId parameter supports searching by an identifier that was not assigned by the catalog (i.e. an external identifier). Only records with an external identifer, as indicated by the value of the externalId core queryable array, that is equal to one of the listed values shall be selected.",
             "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
+            "schema": { "type": "array", "items": { "type": "string" } }
           },
           {
             "name": "ids",
             "in": "query",
             "description": "The optional ids parameter allows a specified of records to be fetched from a catalog using their identifiers.",
             "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
+            "schema": { "type": "array", "items": { "type": "string" } }
           },
           {
             "name": "sortby",
@@ -1182,9 +984,7 @@
               "maxItems": 2147483647,
               "minItems": 1,
               "type": "array",
-              "items": {
-                "type": "string"
-              }
+              "items": { "type": "string" }
             }
           }
         ],
@@ -1284,18 +1084,14 @@
             "in": "path",
             "description": "local identifier of a catalog",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "recordId",
             "in": "path",
             "description": "local identifier of a record",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
@@ -1413,9 +1209,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AuthProvider"
-                  }
+                  "items": { "$ref": "#/components/schemas/AuthProvider" }
                 }
               }
             }
@@ -1432,9 +1226,7 @@
             "name": "uuid",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
@@ -1442,9 +1234,7 @@
             "description": "OK",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/IndexRecord"
-                }
+                "schema": { "$ref": "#/components/schemas/IndexRecord" }
               }
             }
           }
@@ -1460,43 +1250,23 @@
             "name": "uuid",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "formatterId",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
-              "application/xml": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/html": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
+              "application/xml": { "schema": { "type": "string" } },
+              "text/html": { "schema": { "type": "string" } },
+              "application/json": { "schema": { "type": "string" } },
+              "text/plain": { "schema": { "type": "string" } }
             }
           }
         }
@@ -1511,35 +1281,17 @@
             "name": "uuid",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
-              "application/xml": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/html": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
+              "application/xml": { "schema": { "type": "string" } },
+              "text/html": { "schema": { "type": "string" } },
+              "application/json": { "schema": { "type": "string" } },
+              "text/plain": { "schema": { "type": "string" } }
             }
           }
         }
@@ -1554,10 +1306,7 @@
             "name": "executionJobId",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+            "schema": { "type": "integer", "format": "int64" }
           }
         ],
         "responses": {
@@ -1593,10 +1342,7 @@
             "name": "executionJobId",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+            "schema": { "type": "integer", "format": "int64" }
           }
         ],
         "responses": {
@@ -1604,9 +1350,7 @@
             "description": "OK",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProcessReport"
-                }
+                "schema": { "$ref": "#/components/schemas/ProcessReport" }
               }
             }
           }
@@ -1624,9 +1368,7 @@
               "*/*": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": {
-                    "type": "object"
-                  }
+                  "additionalProperties": { "type": "object" }
                 }
               }
             }
@@ -1643,21 +1385,14 @@
             "name": "dropIfExists",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": true
-            }
+            "schema": { "type": "boolean", "default": true }
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
+              "application/json": { "schema": { "type": "string" } }
             }
           }
         }
@@ -1674,9 +1409,7 @@
             "required": false,
             "schema": {
               "type": "array",
-              "items": {
-                "type": "string"
-              },
+              "items": { "type": "string" },
               "default": []
             }
           }
@@ -1685,11 +1418,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
+              "application/json": { "schema": { "type": "string" } }
             }
           }
         }
@@ -1705,11 +1434,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
+              "application/json": { "schema": { "type": "string" } }
             }
           }
         }
@@ -1724,11 +1449,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
+              "application/json": { "schema": { "type": "string" } }
             }
           }
         }
@@ -1745,9 +1466,7 @@
             "name": "uuid",
             "in": "query",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "visibility",
@@ -1755,45 +1474,39 @@
             "required": false,
             "schema": {
               "type": "string",
+              "default": "public",
               "enum": ["public", "private"]
-            }
-          },
-          {
-            "name": "datasource",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
             }
           },
           {
             "name": "approved",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
+            "schema": { "type": "boolean", "default": true }
+          },
+          {
+            "name": "datasource",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
           },
           {
             "name": "layer",
             "in": "query",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "exclude",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "content": { "text/plain": { "schema": { "type": "string" } } }
           }
         }
       }
@@ -1808,51 +1521,42 @@
           {
             "name": "uuid",
             "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "required": false,
+            "schema": { "type": "string" }
           },
           {
             "name": "visibility",
             "in": "query",
-            "required": true,
+            "required": false,
             "schema": {
               "type": "string",
+              "default": "public",
               "enum": ["public", "private"]
-            }
-          },
-          {
-            "name": "datasource",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
             }
           },
           {
             "name": "approved",
             "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": true }
+          },
+          {
+            "name": "datasource",
+            "in": "query",
             "required": true,
-            "schema": {
-              "type": "boolean"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "layer",
             "in": "query",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
           "200": {
             "description": "Overview built successfully",
-            "content": {
-              "image/png": {}
-            }
+            "content": { "image/png": {} }
           }
         }
       }
@@ -1868,9 +1572,7 @@
             "name": "uuid",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "visibility",
@@ -1878,17 +1580,22 @@
             "required": false,
             "schema": {
               "type": "string",
+              "default": "public",
               "enum": ["public", "private"]
             }
+          },
+          {
+            "name": "approved",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": true }
           },
           {
             "name": "datasource",
             "in": "query",
             "description": "    The datasource to analyze. It can be a file path or a datasource URL.\n",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "schema": { "type": "string" },
             "examples": {
               "URL to a zipped shapefile": {
                 "description": "URL to a zipped shapefile",
@@ -1919,15 +1626,6 @@
                 "value": "WFS:https://service.pdok.nl/rvo/wetlands/wfs/v1_0"
               }
             }
-          },
-          {
-            "name": "approved",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": true
-            }
           }
         ],
         "responses": {
@@ -1935,12 +1633,7 @@
             "description": "OK",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
+                "schema": { "type": "array", "items": { "type": "string" } }
               }
             }
           }
@@ -1959,9 +1652,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/DataFormat"
-                  }
+                  "items": { "$ref": "#/components/schemas/DataFormat" }
                 }
               }
             }
@@ -1979,9 +1670,7 @@
             "name": "uuid",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "visibility",
@@ -1989,33 +1678,27 @@
             "required": false,
             "schema": {
               "type": "string",
+              "default": "public",
               "enum": ["public", "private"]
-            }
-          },
-          {
-            "name": "datasource",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
             }
           },
           {
             "name": "approved",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": true
-            }
+            "schema": { "type": "boolean", "default": true }
+          },
+          {
+            "name": "datasource",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
           },
           {
             "name": "layer",
             "in": "query",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
@@ -2023,9 +1706,7 @@
             "description": "Analysis executed successfully",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/IndexRecord"
-                }
+                "schema": { "$ref": "#/components/schemas/IndexRecord" }
               }
             }
           }
@@ -2042,10 +1723,8 @@
           {
             "name": "uuid",
             "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "required": false,
+            "schema": { "type": "string" }
           },
           {
             "name": "visibility",
@@ -2053,6 +1732,7 @@
             "required": false,
             "schema": {
               "type": "string",
+              "default": "public",
               "enum": ["public", "private"]
             }
           },
@@ -2060,34 +1740,25 @@
             "name": "approved",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
+            "schema": { "type": "boolean", "default": true }
           },
           {
             "name": "datasource",
             "in": "query",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "layer",
             "in": "query",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "attribute",
             "in": "query",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
@@ -2117,10 +1788,8 @@
           {
             "name": "uuid",
             "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "required": false,
+            "schema": { "type": "string" }
           },
           {
             "name": "visibility",
@@ -2128,6 +1797,7 @@
             "required": false,
             "schema": {
               "type": "string",
+              "default": "public",
               "enum": ["public", "private"]
             }
           },
@@ -2135,34 +1805,25 @@
             "name": "approved",
             "in": "query",
             "required": false,
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
+            "schema": { "type": "boolean", "default": true }
           },
           {
             "name": "datasource",
             "in": "query",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "layer",
             "in": "query",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "attribute",
             "in": "query",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "schema": { "type": "string" }
           },
           {
             "name": "limit",
@@ -2181,12 +1842,7 @@
             "description": "OK",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
-                }
+                "schema": { "type": "array", "items": { "type": "object" } }
               }
             }
           }
@@ -2202,24 +1858,16 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "username": {
-                    "type": "string"
-                  },
-                  "password": {
-                    "type": "string"
-                  }
+                  "username": { "type": "string" },
+                  "password": { "type": "string" }
                 }
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
+          "200": { "description": "OK" },
+          "403": { "description": "Forbidden" }
         }
       }
     }
@@ -2232,51 +1880,23 @@
           "metadataResourceExternalManagementProperties": {
             "$ref": "#/components/schemas/MetadataResourceExternalManagementProperties"
           },
-          "approved": {
-            "type": "boolean"
-          },
-          "lastModification": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "metadataId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "visibility": {
-            "type": "string",
-            "enum": ["public", "private"]
-          },
-          "id": {
-            "type": "string"
-          },
-          "size": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "version": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          },
-          "filename": {
-            "type": "string"
-          },
-          "metadataUuid": {
-            "type": "string"
-          }
+          "approved": { "type": "boolean" },
+          "lastModification": { "type": "string", "format": "date-time" },
+          "visibility": { "type": "string", "enum": ["public", "private"] },
+          "id": { "type": "string" },
+          "size": { "type": "integer", "format": "int64" },
+          "version": { "type": "string" },
+          "url": { "type": "string" },
+          "filename": { "type": "string" },
+          "metadataUuid": { "type": "string" },
+          "metadataId": { "type": "integer", "format": "int32" }
         }
       },
       "MetadataResourceExternalManagementProperties": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          },
+          "id": { "type": "string" },
+          "url": { "type": "string" },
           "validationStatus": {
             "type": "string",
             "enum": ["UNKNOWN", "VALID", "INCOMPLETE"]
@@ -2305,21 +1925,15 @@
           }
         },
         "description": "Batch edit parameter. Use either xpath or property to identify the element to edit.",
-        "xml": {
-          "name": "edit"
-        }
+        "xml": { "name": "edit" }
       },
       "ProcessDetails": {
         "type": "object",
         "properties": {
-          "process": {
-            "type": "string"
-          },
+          "process": { "type": "string" },
           "parameters": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "additionalProperties": { "type": "string" }
           }
         }
       },
@@ -2345,32 +1959,19 @@
         "properties": {
           "conformsTo": {
             "type": "array",
-            "items": {
-              "type": "string",
-              "xml": {
-                "name": "conformsTo"
-              }
-            }
+            "items": { "type": "string", "xml": { "name": "conformsTo" } }
           }
         },
-        "xml": {
-          "name": "OgcApiRecordsConfClassesDto"
-        }
+        "xml": { "name": "OgcApiRecordsConfClassesDto" }
       },
       "OgcApiRecordsExceptionDto": {
         "required": ["code"],
         "type": "object",
         "properties": {
-          "code": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          }
+          "code": { "type": "string" },
+          "description": { "type": "string" }
         },
-        "xml": {
-          "name": "OgcApiRecordsExceptionDto"
-        }
+        "xml": { "name": "OgcApiRecordsExceptionDto" }
       },
       "OgcApiRecordsGetCollections200ResponseDto": {
         "required": ["collections", "links"],
@@ -2378,16 +1979,9 @@
         "properties": {
           "links": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/OgcApiRecordsLinkDto"
-            }
+            "items": { "$ref": "#/components/schemas/OgcApiRecordsLinkDto" }
           },
-          "collections": {
-            "type": "array",
-            "items": {
-              "type": "object"
-            }
-          },
+          "collections": { "type": "array", "items": { "type": "object" } },
           "linkTemplates": {
             "type": "array",
             "items": {
@@ -2395,9 +1989,7 @@
             }
           }
         },
-        "xml": {
-          "name": "OgcApiRecordsGetCollections200ResponseDto"
-        }
+        "xml": { "name": "OgcApiRecordsGetCollections200ResponseDto" }
       },
       "OgcApiRecordsLinkDto": {
         "required": ["href", "rel"],
@@ -2407,30 +1999,16 @@
             "type": "string",
             "example": "http://data.example.com/buildings/123"
           },
-          "rel": {
-            "type": "string",
-            "example": "alternate"
-          },
-          "type": {
-            "type": "string",
-            "example": "application/geo+json"
-          },
-          "hreflang": {
-            "type": "string",
-            "example": "en"
-          },
+          "rel": { "type": "string", "example": "alternate" },
+          "type": { "type": "string", "example": "application/geo+json" },
+          "hreflang": { "type": "string", "example": "en" },
           "title": {
             "type": "string",
             "example": "Trierer Strasse 70, 53115 Bonn"
           },
-          "length": {
-            "type": "integer",
-            "format": "int32"
-          }
+          "length": { "type": "integer", "format": "int32" }
         },
-        "xml": {
-          "name": "OgcApiRecordsLinkDto"
-        }
+        "xml": { "name": "OgcApiRecordsLinkDto" }
       },
       "OgcApiRecordsLinkTemplateDto": {
         "required": ["uriTemplate"],
@@ -2456,10 +2034,7 @@
             "description": "Used to label the destination of a link such that it can be used as a human-readable identifier.",
             "example": "Trierer Strasse 70, 53115 Bonn"
           },
-          "length": {
-            "type": "integer",
-            "format": "int32"
-          },
+          "length": { "type": "integer", "format": "int32" },
           "created": {
             "type": "string",
             "description": "Date of creation of the resource pointed to by the link.",
@@ -2484,15 +2059,11 @@
             "description": "This object contains one key per substitution variable in the templated URL.  Each key defines the schema of one substitution variable using a JSON Schema fragment and can thus include things like the data type of the variable, enumerations, minimum values, maximum values, etc."
           }
         },
-        "xml": {
-          "name": "OgcApiRecordsLinkTemplateDto"
-        }
+        "xml": { "name": "OgcApiRecordsLinkTemplateDto" }
       },
       "OgcApiRecordsCatalog1AllOfItemTypeDto": {
         "type": "object",
-        "xml": {
-          "name": "OgcApiRecordsCatalog1AllOfItemTypeDto"
-        }
+        "xml": { "name": "OgcApiRecordsCatalog1AllOfItemTypeDto" }
       },
       "OgcApiRecordsCatalog1Dto": {
         "required": ["id", "links", "type"],
@@ -2504,9 +2075,7 @@
             "items": {
               "type": "string",
               "description": "The extensions/conformance classes used in this record.",
-              "xml": {
-                "name": "conformsTo"
-              }
+              "xml": { "name": "conformsTo" }
             }
           },
           "created": {
@@ -2519,10 +2088,7 @@
             "description": "The most recent date on which the record was changed.",
             "format": "date-time"
           },
-          "type": {
-            "type": "string",
-            "enum": ["Catalog"]
-          },
+          "type": { "type": "string", "enum": ["Catalog"] },
           "title": {
             "type": "string",
             "description": "A human-readable name given to the resource."
@@ -2537,9 +2103,7 @@
             "items": {
               "type": "string",
               "description": "The topic or topics of the resource. Typically represented using free-form keywords, tags, key phrases, or classification codes.",
-              "xml": {
-                "name": "keywords"
-              }
+              "xml": { "name": "keywords" }
             }
           },
           "themes": {
@@ -2547,26 +2111,18 @@
             "minItems": 1,
             "type": "array",
             "description": "A knowledge organization system used to classify the resource.",
-            "items": {
-              "$ref": "#/components/schemas/OgcApiRecordsThemeDto"
-            }
+            "items": { "$ref": "#/components/schemas/OgcApiRecordsThemeDto" }
           },
-          "language": {
-            "$ref": "#/components/schemas/language"
-          },
+          "language": { "$ref": "#/components/schemas/language" },
           "languages": {
             "type": "array",
             "description": "This list of languages in which this record is available.",
-            "items": {
-              "$ref": "#/components/schemas/language"
-            }
+            "items": { "$ref": "#/components/schemas/language" }
           },
           "resourceLanguages": {
             "type": "array",
             "description": "The list of languages in which the resource described by this record is available.",
-            "items": {
-              "$ref": "#/components/schemas/language"
-            }
+            "items": { "$ref": "#/components/schemas/language" }
           },
           "externalIds": {
             "type": "array",
@@ -2578,20 +2134,14 @@
           "formats": {
             "type": "array",
             "description": "A list of available distributions of the resource.",
-            "items": {
-              "$ref": "#/components/schemas/OgcApiRecordsFormatDto"
-            }
+            "items": { "$ref": "#/components/schemas/OgcApiRecordsFormatDto" }
           },
           "contacts": {
             "type": "array",
             "description": "A list of contacts qualified by their role(s) in association to the record or the resource described by the record.",
-            "items": {
-              "$ref": "#/components/schemas/OgcApiRecordsContactDto"
-            }
+            "items": { "$ref": "#/components/schemas/OgcApiRecordsContactDto" }
           },
-          "license": {
-            "$ref": "#/components/schemas/OgcApiRecordsLicenseDto"
-          },
+          "license": { "$ref": "#/components/schemas/OgcApiRecordsLicenseDto" },
           "rights": {
             "type": "string",
             "description": "A statement that concerns all rights not addressed by the license such as a copyright statement."
@@ -2603,23 +2153,17 @@
           "itemType": {
             "$ref": "#/components/schemas/OgcApiRecordsCatalog1AllOfItemTypeDto"
           },
-          "extent": {
-            "$ref": "#/components/schemas/extent"
-          },
+          "extent": { "$ref": "#/components/schemas/extent" },
           "crs": {
             "type": "array",
             "description": "The list of supported coordinate reference systems.",
             "items": {
               "type": "string",
               "description": "The list of supported coordinate reference systems.",
-              "xml": {
-                "name": "crs"
-              }
+              "xml": { "name": "crs" }
             }
           },
-          "recordsArrayName": {
-            "type": "string"
-          },
+          "recordsArrayName": { "type": "string" },
           "records": {
             "type": "array",
             "description": "An array of records that are part of this catalog that are encoded in-line with the catalog.",
@@ -2629,9 +2173,7 @@
           },
           "links": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/OgcApiRecordsLinkBaseDto"
-            }
+            "items": { "$ref": "#/components/schemas/OgcApiRecordsLinkBaseDto" }
           },
           "linkTemplates": {
             "type": "array",
@@ -2640,64 +2182,40 @@
             }
           }
         },
-        "xml": {
-          "name": "OgcApiRecordsCatalog1Dto"
-        }
+        "xml": { "name": "OgcApiRecordsCatalog1Dto" }
       },
       "OgcApiRecordsContactDto": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          }
+          "name": { "type": "string" },
+          "url": { "type": "string" },
+          "email": { "type": "string" }
         },
         "description": "A list of contacts qualified by their role(s) in association to the record or the resource described by the record.",
-        "xml": {
-          "name": "OgcApiRecordsContactDto"
-        }
+        "xml": { "name": "OgcApiRecordsContactDto" }
       },
       "OgcApiRecordsExtentSpatialBboxInnerDto": {
         "type": "object",
         "description": "One or more bounding boxes that describe the spatial extent of the dataset. In the Core only a single bounding box is supported.  Extensions may support additional areas. The first bounding box describes the overall spatial extent of the data. All subsequent bounding boxes describe more precise bounding boxes, e.g., to identify clusters of data. Clients only interested in the overall spatial extent will only need to access the first bounding box in the array.",
-        "xml": {
-          "name": "OgcApiRecordsExtentSpatialBboxInnerDto"
-        }
+        "xml": { "name": "OgcApiRecordsExtentSpatialBboxInnerDto" }
       },
       "OgcApiRecordsFormatDto": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "mediaType": {
-            "type": "string"
-          }
+          "name": { "type": "string" },
+          "mediaType": { "type": "string" }
         },
         "description": "A list of available distributions of the resource.",
-        "xml": {
-          "name": "OgcApiRecordsFormatDto"
-        }
+        "xml": { "name": "OgcApiRecordsFormatDto" }
       },
       "OgcApiRecordsLicenseDto": {
         "required": ["name"],
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          }
+          "name": { "type": "string" },
+          "url": { "type": "string" }
         },
-        "xml": {
-          "name": "OgcApiRecordsLicenseDto"
-        }
+        "xml": { "name": "OgcApiRecordsLicenseDto" }
       },
       "OgcApiRecordsLinkBaseDto": {
         "type": "object",
@@ -2722,10 +2240,7 @@
             "description": "Used to label the destination of a link such that it can be used as a human-readable identifier.",
             "example": "Trierer Strasse 70, 53115 Bonn"
           },
-          "length": {
-            "type": "integer",
-            "format": "int32"
-          },
+          "length": { "type": "integer", "format": "int32" },
           "created": {
             "type": "string",
             "description": "Date of creation of the resource pointed to by the link.",
@@ -2737,9 +2252,7 @@
             "format": "date-time"
           }
         },
-        "xml": {
-          "name": "OgcApiRecordsLinkBaseDto"
-        }
+        "xml": { "name": "OgcApiRecordsLinkBaseDto" }
       },
       "OgcApiRecordsRecordCommonPropertiesExternalIdsInnerDto": {
         "required": ["value"],
@@ -2767,10 +2280,7 @@
             "type": "string",
             "description": "A unique identifier of the catalog record."
           },
-          "type": {
-            "type": "string",
-            "enum": ["Feature"]
-          },
+          "type": { "type": "string", "enum": ["Feature"] },
           "time": {
             "$ref": "#/components/schemas/OgcApiRecordsRecordGeoJSONTimeDto"
           },
@@ -2782,9 +2292,7 @@
           },
           "links": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/OgcApiRecordsLinkBaseDto"
-            }
+            "items": { "$ref": "#/components/schemas/OgcApiRecordsLinkBaseDto" }
           },
           "linkTemplates": {
             "type": "array",
@@ -2793,15 +2301,11 @@
             }
           }
         },
-        "xml": {
-          "name": "OgcApiRecordsRecordGeoJSONDto"
-        }
+        "xml": { "name": "OgcApiRecordsRecordGeoJSONDto" }
       },
       "OgcApiRecordsRecordGeoJSONGeometryDto": {
         "type": "object",
-        "xml": {
-          "name": "OgcApiRecordsRecordGeoJSONGeometryDto"
-        }
+        "xml": { "name": "OgcApiRecordsRecordGeoJSONGeometryDto" }
       },
       "OgcApiRecordsRecordGeoJSONPropertiesDto": {
         "type": "object",
@@ -2812,9 +2316,7 @@
             "items": {
               "type": "string",
               "description": "The extensions/conformance classes used in this record.",
-              "xml": {
-                "name": "conformsTo"
-              }
+              "xml": { "name": "conformsTo" }
             }
           },
           "created": {
@@ -2845,9 +2347,7 @@
             "items": {
               "type": "string",
               "description": "The topic or topics of the resource. Typically represented using free-form keywords, tags, key phrases, or classification codes.",
-              "xml": {
-                "name": "keywords"
-              }
+              "xml": { "name": "keywords" }
             }
           },
           "themes": {
@@ -2855,26 +2355,18 @@
             "minItems": 1,
             "type": "array",
             "description": "A knowledge organization system used to classify the resource.",
-            "items": {
-              "$ref": "#/components/schemas/OgcApiRecordsThemeDto"
-            }
+            "items": { "$ref": "#/components/schemas/OgcApiRecordsThemeDto" }
           },
-          "language": {
-            "$ref": "#/components/schemas/language"
-          },
+          "language": { "$ref": "#/components/schemas/language" },
           "languages": {
             "type": "array",
             "description": "This list of languages in which this record is available.",
-            "items": {
-              "$ref": "#/components/schemas/language"
-            }
+            "items": { "$ref": "#/components/schemas/language" }
           },
           "resourceLanguages": {
             "type": "array",
             "description": "The list of languages in which the resource described by this record is available.",
-            "items": {
-              "$ref": "#/components/schemas/language"
-            }
+            "items": { "$ref": "#/components/schemas/language" }
           },
           "externalIds": {
             "type": "array",
@@ -2886,34 +2378,24 @@
           "formats": {
             "type": "array",
             "description": "A list of available distributions of the resource.",
-            "items": {
-              "$ref": "#/components/schemas/OgcApiRecordsFormatDto"
-            }
+            "items": { "$ref": "#/components/schemas/OgcApiRecordsFormatDto" }
           },
           "contacts": {
             "type": "array",
             "description": "A list of contacts qualified by their role(s) in association to the record or the resource described by the record.",
-            "items": {
-              "$ref": "#/components/schemas/OgcApiRecordsContactDto"
-            }
+            "items": { "$ref": "#/components/schemas/OgcApiRecordsContactDto" }
           },
-          "license": {
-            "$ref": "#/components/schemas/OgcApiRecordsLicenseDto"
-          },
+          "license": { "$ref": "#/components/schemas/OgcApiRecordsLicenseDto" },
           "rights": {
             "type": "string",
             "description": "A statement that concerns all rights not addressed by the license such as a copyright statement."
           }
         },
-        "xml": {
-          "name": "OgcApiRecordsRecordGeoJSONPropertiesDto"
-        }
+        "xml": { "name": "OgcApiRecordsRecordGeoJSONPropertiesDto" }
       },
       "OgcApiRecordsRecordGeoJSONTimeDto": {
         "type": "object",
-        "xml": {
-          "name": "OgcApiRecordsRecordGeoJSONTimeDto"
-        }
+        "xml": { "name": "OgcApiRecordsRecordGeoJSONTimeDto" }
       },
       "OgcApiRecordsThemeConceptsInnerDto": {
         "required": ["id"],
@@ -2938,9 +2420,7 @@
           }
         },
         "description": "One or more entity/concept identifiers from this knowledge system. it is recommended that a resolvable URI be used for each entity/concept identifier.",
-        "xml": {
-          "name": "OgcApiRecordsThemeConceptsInnerDto"
-        }
+        "xml": { "name": "OgcApiRecordsThemeConceptsInnerDto" }
       },
       "OgcApiRecordsThemeDto": {
         "required": ["concepts", "scheme"],
@@ -2961,24 +2441,16 @@
           }
         },
         "description": "A knowledge organization system used to classify the resource.",
-        "xml": {
-          "name": "OgcApiRecordsThemeDto"
-        }
+        "xml": { "name": "OgcApiRecordsThemeDto" }
       },
       "extent": {
         "type": "object",
         "properties": {
-          "spatial": {
-            "$ref": "#/components/schemas/extent_spatial"
-          },
-          "temporal": {
-            "$ref": "#/components/schemas/extent_temporal"
-          }
+          "spatial": { "$ref": "#/components/schemas/extent_spatial" },
+          "temporal": { "$ref": "#/components/schemas/extent_temporal" }
         },
         "description": "The extent of the features in the collection. In the Core only spatial and temporal extents are specified. Extensions may add additional members to represent other extents, for example, thermal or pressure ranges.  An array of extents is provided for each extent type (spatial, temporal). The first item in the array describes the overall extent of the data. All subsequent items describe more precise extents, e.g., to identify clusters of data. Clients only interested in the overall extent will only need to access the first extent in the array.",
-        "xml": {
-          "name": "OgcApiRecordsExtentDto"
-        }
+        "xml": { "name": "OgcApiRecordsExtentDto" }
       },
       "extent_spatial": {
         "type": "object",
@@ -3002,9 +2474,7 @@
           }
         },
         "description": "The spatial extent of the features in the collection.",
-        "xml": {
-          "name": "OgcApiRecordsExtentSpatialDto"
-        }
+        "xml": { "name": "OgcApiRecordsExtentSpatialDto" }
       },
       "extent_temporal": {
         "type": "object",
@@ -3017,16 +2487,12 @@
             "items": {
               "type": "array",
               "description": "One or more time intervals that describe the temporal extent of the dataset. In the Core only a single time interval is supported.  Extensions may support multiple intervals. The first time interval describes the overall temporal extent of the data. All subsequent time intervals describe more precise time intervals, e.g., to identify clusters of data. Clients only interested in the overall temporal extent will only need to access the first time interval in the array (a pair of lower and upper bound instants).",
-              "xml": {
-                "name": "interval"
-              },
+              "xml": { "name": "interval" },
               "items": {
                 "type": "string",
                 "description": "One or more time intervals that describe the temporal extent of the dataset. In the Core only a single time interval is supported.  Extensions may support multiple intervals. The first time interval describes the overall temporal extent of the data. All subsequent time intervals describe more precise time intervals, e.g., to identify clusters of data. Clients only interested in the overall temporal extent will only need to access the first time interval in the array (a pair of lower and upper bound instants).",
                 "format": "date-time",
-                "xml": {
-                  "name": "interval"
-                }
+                "xml": { "name": "interval" }
               }
             }
           },
@@ -3037,9 +2503,7 @@
           }
         },
         "description": "The temporal extent of the features in the collection.",
-        "xml": {
-          "name": "OgcApiRecordsExtentTemporalDto"
-        }
+        "xml": { "name": "OgcApiRecordsExtentTemporalDto" }
       },
       "language": {
         "required": ["code"],
@@ -3069,103 +2533,55 @@
           }
         },
         "description": "The language used for textual values in this record.",
-        "xml": {
-          "name": "OgcApiRecordsLanguageDto"
-        }
+        "xml": { "name": "OgcApiRecordsLanguageDto" }
       },
       "OgcApiRecordsComponentsDto": {
         "type": "object",
         "properties": {
-          "schemas": {
-            "type": "object"
-          },
-          "responses": {
-            "type": "object"
-          },
-          "parameters": {
-            "type": "object"
-          },
-          "examples": {
-            "type": "object"
-          },
-          "requestBodies": {
-            "type": "object"
-          },
-          "headers": {
-            "type": "object"
-          },
-          "securitySchemes": {
-            "type": "object"
-          },
-          "links": {
-            "type": "object"
-          },
-          "callbacks": {
-            "type": "object"
-          }
+          "schemas": { "type": "object" },
+          "responses": { "type": "object" },
+          "parameters": { "type": "object" },
+          "examples": { "type": "object" },
+          "requestBodies": { "type": "object" },
+          "headers": { "type": "object" },
+          "securitySchemes": { "type": "object" },
+          "links": { "type": "object" },
+          "callbacks": { "type": "object" }
         },
-        "xml": {
-          "name": "OgcApiRecordsComponentsDto"
-        }
+        "xml": { "name": "OgcApiRecordsComponentsDto" }
       },
       "OgcApiRecordsExternalDocumentationDto": {
         "required": ["url"],
         "type": "object",
         "properties": {
-          "description": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          }
+          "description": { "type": "string" },
+          "url": { "type": "string" }
         },
-        "xml": {
-          "name": "OgcApiRecordsExternalDocumentationDto"
-        }
+        "xml": { "name": "OgcApiRecordsExternalDocumentationDto" }
       },
       "OgcApiRecordsInfoDto": {
         "required": ["title", "version"],
         "type": "object",
         "properties": {
-          "title": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "termsOfService": {
-            "type": "string"
-          },
-          "contact": {
-            "$ref": "#/components/schemas/OgcApiRecordsContactDto"
-          },
-          "license": {
-            "$ref": "#/components/schemas/OgcApiRecordsLicenseDto"
-          },
-          "version": {
-            "type": "string"
-          }
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "termsOfService": { "type": "string" },
+          "contact": { "$ref": "#/components/schemas/OgcApiRecordsContactDto" },
+          "license": { "$ref": "#/components/schemas/OgcApiRecordsLicenseDto" },
+          "version": { "type": "string" }
         },
-        "xml": {
-          "name": "OgcApiRecordsInfoDto"
-        }
+        "xml": { "name": "OgcApiRecordsInfoDto" }
       },
       "OgcApiRecordsSecurityRequirementDto": {
         "type": "object",
-        "xml": {
-          "name": "OgcApiRecordsSecurityRequirementDto"
-        }
+        "xml": { "name": "OgcApiRecordsSecurityRequirementDto" }
       },
       "OgcApiRecordsServerDto": {
         "required": ["url"],
         "type": "object",
         "properties": {
-          "url": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
+          "url": { "type": "string" },
+          "description": { "type": "string" },
           "variables": {
             "type": "object",
             "additionalProperties": {
@@ -3173,71 +2589,45 @@
             }
           }
         },
-        "xml": {
-          "name": "OgcApiRecordsServerDto"
-        }
+        "xml": { "name": "OgcApiRecordsServerDto" }
       },
       "OgcApiRecordsServerVariableDto": {
         "required": ["default"],
         "type": "object",
         "properties": {
-          "description": {
-            "type": "string"
-          },
-          "default": {
-            "type": "string"
-          },
+          "description": { "type": "string" },
+          "default": { "type": "string" },
           "enum": {
             "type": "array",
-            "items": {
-              "type": "string",
-              "xml": {
-                "name": "enum"
-              }
-            }
+            "items": { "type": "string", "xml": { "name": "enum" } }
           }
         },
-        "xml": {
-          "name": "OgcApiRecordsServerVariableDto"
-        }
+        "xml": { "name": "OgcApiRecordsServerVariableDto" }
       },
       "OgcApiRecordsTagDto": {
         "required": ["name"],
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
           "externalDocs": {
             "$ref": "#/components/schemas/OgcApiRecordsExternalDocumentationDto"
           }
         },
-        "xml": {
-          "name": "OgcApiRecordsTagDto"
-        }
+        "xml": { "name": "OgcApiRecordsTagDto" }
       },
       "schema": {
         "required": ["info", "openapi", "paths"],
         "type": "object",
         "properties": {
-          "openapi": {
-            "pattern": "^3\\.0\\.\\d(-.+)?$",
-            "type": "string"
-          },
-          "info": {
-            "$ref": "#/components/schemas/OgcApiRecordsInfoDto"
-          },
+          "openapi": { "pattern": "^3\\.0\\.\\d(-.+)?$", "type": "string" },
+          "info": { "$ref": "#/components/schemas/OgcApiRecordsInfoDto" },
           "externalDocs": {
             "$ref": "#/components/schemas/OgcApiRecordsExternalDocumentationDto"
           },
           "servers": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/OgcApiRecordsServerDto"
-            }
+            "items": { "$ref": "#/components/schemas/OgcApiRecordsServerDto" }
           },
           "security": {
             "type": "array",
@@ -3248,30 +2638,21 @@
           "tags": {
             "uniqueItems": true,
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/OgcApiRecordsTagDto"
-            }
+            "items": { "$ref": "#/components/schemas/OgcApiRecordsTagDto" }
           },
-          "paths": {
-            "type": "object"
-          },
+          "paths": { "type": "object" },
           "components": {
             "$ref": "#/components/schemas/OgcApiRecordsComponentsDto"
           }
         },
         "description": "The description of OpenAPI v3.0.x documents, as defined by https://spec.openapis.org/oas/v3.0.3",
-        "xml": {
-          "name": "OgcApiRecordsSchemaDto"
-        }
+        "xml": { "name": "OgcApiRecordsSchemaDto" }
       },
       "OgcApiRecordsGetRecords200ResponseDto": {
         "required": ["features", "type"],
         "type": "object",
         "properties": {
-          "type": {
-            "type": "string",
-            "enum": ["FeatureCollection"]
-          },
+          "type": { "type": "string", "enum": ["FeatureCollection"] },
           "features": {
             "type": "array",
             "items": {
@@ -3280,14 +2661,9 @@
           },
           "links": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/OgcApiRecordsLinkDto"
-            }
+            "items": { "$ref": "#/components/schemas/OgcApiRecordsLinkDto" }
           },
-          "timeStamp": {
-            "type": "string",
-            "format": "date-time"
-          },
+          "timeStamp": { "type": "string", "format": "date-time" },
           "numberMatched": {
             "minimum": 0,
             "type": "integer",
@@ -3305,33 +2681,24 @@
             }
           }
         },
-        "xml": {
-          "name": "OgcApiRecordsGetRecords200ResponseDto"
-        }
+        "xml": { "name": "OgcApiRecordsGetRecords200ResponseDto" }
       },
       "GetRecordsBboxDto": {
         "type": "object",
-        "xml": {
-          "name": "GetRecordsBboxDto"
-        }
+        "xml": { "name": "GetRecordsBboxDto" }
       },
       "OgcApiRecordsLandingPageDto": {
         "required": ["links"],
         "type": "object",
         "properties": {
-          "title": {
-            "type": "string",
-            "example": "Buildings in Bonn"
-          },
+          "title": { "type": "string", "example": "Buildings in Bonn" },
           "description": {
             "type": "string",
             "example": "Access to data about buildings in the city of Bonn via a Web API that conforms to the OGC API Features specification."
           },
           "links": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/OgcApiRecordsLinkDto"
-            }
+            "items": { "$ref": "#/components/schemas/OgcApiRecordsLinkDto" }
           },
           "linkTemplates": {
             "type": "array",
@@ -3340,879 +2707,460 @@
             }
           }
         },
-        "xml": {
-          "name": "OgcApiRecordsLandingPageDto"
-        }
+        "xml": { "name": "OgcApiRecordsLandingPageDto" }
       },
       "AuthProvider": {
         "type": "object",
         "properties": {
-          "clientId": {
-            "type": "string"
-          },
-          "endpoint": {
-            "type": "string"
-          }
+          "clientId": { "type": "string" },
+          "endpoint": { "type": "string" }
         }
       },
       "AttributeTable": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "definition": {
-            "type": "string"
-          },
-          "code": {
-            "type": "string"
-          },
-          "link": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          },
-          "cardinality": {
-            "type": "string"
-          },
+          "name": { "type": "string" },
+          "definition": { "type": "string" },
+          "code": { "type": "string" },
+          "link": { "type": "string" },
+          "type": { "type": "string" },
+          "cardinality": { "type": "string" },
           "values": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CodeListValue"
-            }
+            "items": { "$ref": "#/components/schemas/CodeListValue" }
           }
         }
       },
       "CodeListValue": {
         "type": "object",
         "properties": {
-          "label": {
-            "type": "string"
-          },
-          "definition": {
-            "type": "string"
-          },
-          "code": {
-            "type": "string"
-          }
+          "label": { "type": "string" },
+          "definition": { "type": "string" },
+          "code": { "type": "string" }
         }
       },
       "Contact": {
         "type": "object",
         "properties": {
-          "role": {
-            "type": "string"
-          },
-          "individual": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "logo": {
-            "type": "string"
-          },
-          "phone": {
-            "type": "string"
-          },
-          "address": {
-            "type": "string"
-          },
-          "website": {
-            "type": "string"
-          },
-          "position": {
-            "type": "string"
-          },
-          "nilReason": {
-            "type": "string"
-          },
+          "role": { "type": "string" },
+          "individual": { "type": "string" },
+          "email": { "type": "string" },
+          "logo": { "type": "string" },
+          "phone": { "type": "string" },
+          "address": { "type": "string" },
+          "website": { "type": "string" },
+          "position": { "type": "string" },
+          "nilReason": { "type": "string" },
           "organisationObject": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "additionalProperties": { "type": "string" }
           },
           "identifiers": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PartyIdentifier"
-            }
+            "items": { "$ref": "#/components/schemas/PartyIdentifier" }
           }
         }
       },
       "CrsDetails": {
         "type": "object",
         "properties": {
-          "code": {
-            "type": "string"
-          },
-          "codeSpace": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          }
+          "code": { "type": "string" },
+          "codeSpace": { "type": "string" },
+          "name": { "type": "string" },
+          "url": { "type": "string" }
         }
       },
       "DateRange": {
         "type": "object",
         "properties": {
-          "gte": {
-            "type": "string"
-          },
-          "lte": {
-            "type": "string"
-          }
+          "gte": { "type": "string" },
+          "lte": { "type": "string" }
         }
       },
       "DateRangeDetails": {
         "type": "object",
         "properties": {
-          "start": {
-            "$ref": "#/components/schemas/DateRangeDetailsInfo"
-          },
-          "end": {
-            "$ref": "#/components/schemas/DateRangeDetailsInfo"
-          }
+          "start": { "$ref": "#/components/schemas/DateRangeDetailsInfo" },
+          "end": { "$ref": "#/components/schemas/DateRangeDetailsInfo" }
         }
       },
       "DateRangeDetailsInfo": {
         "type": "object",
         "properties": {
-          "date": {
-            "type": "string"
-          },
-          "frame": {
-            "type": "string"
-          },
-          "calendarEraName": {
-            "type": "string"
-          },
-          "indeterminatePosition": {
-            "type": "string"
-          }
+          "date": { "type": "string" },
+          "frame": { "type": "string" },
+          "calendarEraName": { "type": "string" },
+          "indeterminatePosition": { "type": "string" }
         }
       },
       "FeatureType": {
         "type": "object",
         "properties": {
-          "typeName": {
-            "type": "string"
-          },
-          "definition": {
-            "type": "string"
-          },
-          "code": {
-            "type": "string"
-          },
-          "isAbstract": {
-            "type": "string"
-          },
-          "aliases": {
-            "type": "string"
-          },
+          "typeName": { "type": "string" },
+          "definition": { "type": "string" },
+          "code": { "type": "string" },
+          "isAbstract": { "type": "string" },
+          "aliases": { "type": "string" },
           "attributeTable": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AttributeTable"
-            }
+            "items": { "$ref": "#/components/schemas/AttributeTable" }
           }
         }
       },
       "IndexRecord": {
         "type": "object",
         "properties": {
-          "docType": {
-            "type": "string",
-            "enum": ["metadata", "features"]
-          },
-          "document": {
-            "type": "string"
-          },
-          "metadataIdentifier": {
-            "type": "string"
-          },
+          "docType": { "type": "string", "enum": ["metadata", "features"] },
+          "document": { "type": "string" },
+          "metadataIdentifier": { "type": "string" },
           "standardNameObject": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "additionalProperties": { "type": "string" }
           },
           "standardVersionObject": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "additionalProperties": { "type": "string" }
           },
-          "indexingDate": {
-            "type": "string"
-          },
-          "dateStamp": {
-            "type": "string"
-          },
-          "mainLanguage": {
-            "type": "string"
-          },
-          "resourceType": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
+          "indexingDate": { "type": "string" },
+          "dateStamp": { "type": "string" },
+          "mainLanguage": { "type": "string" },
+          "resourceType": { "type": "array", "items": { "type": "string" } },
           "resourceTypeNameObject": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "additionalProperties": { "type": "string" }
           },
           "resourceTitleObject": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "additionalProperties": { "type": "string" }
           },
           "resourceAltTitleObject": {
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
+              "additionalProperties": { "type": "string" }
             }
           },
           "resourceDate": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ResourceDate"
-            }
+            "items": { "$ref": "#/components/schemas/ResourceDate" }
           },
           "resourceTemporalDateRange": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DateRange"
-            }
+            "items": { "$ref": "#/components/schemas/DateRange" }
           },
           "resourceIdentifier": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ResourceIdentifier"
-            }
+            "items": { "$ref": "#/components/schemas/ResourceIdentifier" }
           },
           "resourceAbstractObject": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "additionalProperties": { "type": "string" }
           },
           "supplementalInformationObject": {
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
+              "additionalProperties": { "type": "string" }
             }
           },
           "purposeObject": {
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
+              "additionalProperties": { "type": "string" }
             }
           },
           "tag": {
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
+              "additionalProperties": { "type": "string" }
             }
           },
-          "isOpenData": {
-            "type": "boolean"
-          },
+          "isOpenData": { "type": "boolean" },
           "allKeywords": {
             "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/Thesaurus"
-            }
+            "additionalProperties": { "$ref": "#/components/schemas/Thesaurus" }
           },
           "resolutionDistance": {
             "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "resolutionScaleDenominator": {
             "type": "array",
-            "items": {
-              "type": "number",
-              "format": "float"
-            }
+            "items": { "type": "number", "format": "float" }
           },
           "extentIdentifierObject": {
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
+              "additionalProperties": { "type": "string" }
             }
           },
           "extentDescriptionObject": {
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
+              "additionalProperties": { "type": "string" }
             }
           },
-          "shape": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
+          "shape": { "type": "array", "items": { "type": "string" } },
           "shapeParsingError": {
             "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
-          "geom": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "location": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
+          "geom": { "type": "array", "items": { "type": "string" } },
+          "location": { "type": "array", "items": { "type": "string" } },
           "resourceTemporalExtentDateRange": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DateRange"
-            }
+            "items": { "$ref": "#/components/schemas/DateRange" }
           },
           "resourceTemporalExtentDetails": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DateRangeDetails"
-            }
+            "items": { "$ref": "#/components/schemas/DateRangeDetails" }
           },
           "resourceVerticalRange": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/VerticalRange"
-            }
+            "items": { "$ref": "#/components/schemas/VerticalRange" }
           },
           "coordinateSystem": {
             "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "crsDetails": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CrsDetails"
-            }
+            "items": { "$ref": "#/components/schemas/CrsDetails" }
           },
           "featureTypes": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FeatureType"
-            }
+            "items": { "$ref": "#/components/schemas/FeatureType" }
           },
           "link": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Link"
-            }
+            "items": { "$ref": "#/components/schemas/Link" }
           },
           "lineageObject": {
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
+              "additionalProperties": { "type": "string" }
             }
           },
-          "hassource": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
+          "hassource": { "type": "array", "items": { "type": "string" } },
           "recordLink": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/RecordLink"
-            }
+            "items": { "$ref": "#/components/schemas/RecordLink" }
           },
           "sourceDescriptionObject": {
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
+              "additionalProperties": { "type": "string" }
             }
           },
           "processSteps": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ProcessStep"
-            }
+            "items": { "$ref": "#/components/schemas/ProcessStep" }
           },
           "measure": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Measure"
-            }
+            "items": { "$ref": "#/components/schemas/Measure" }
           },
-          "format": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
+          "format": { "type": "array", "items": { "type": "string" } },
           "orderingInstructionsObject": {
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
+              "additionalProperties": { "type": "string" }
             }
           },
-          "recordGroup": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "parentUuid": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "recordOwner": {
-            "type": "string"
-          },
-          "uuid": {
-            "type": "string"
-          },
-          "harvesterUuid": {
-            "type": "string"
-          },
+          "recordGroup": { "type": "array", "items": { "type": "string" } },
+          "parentUuid": { "type": "array", "items": { "type": "string" } },
+          "recordOwner": { "type": "string" },
+          "uuid": { "type": "string" },
+          "harvesterUuid": { "type": "string" },
           "groupPublishedId": {
             "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
+            "items": { "type": "integer", "format": "int32" }
           },
-          "popularity": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "userinfo": {
-            "type": "string"
-          },
-          "isPublishedToAll": {
-            "type": "boolean"
-          },
-          "draft": {
-            "type": "string"
-          },
-          "changeDate": {
-            "type": "string"
-          },
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "createDate": {
-            "type": "string"
-          },
-          "isPublishedToIntranet": {
-            "type": "boolean"
-          },
-          "valid": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "isTemplate": {
-            "type": "string"
-          },
-          "feedbackCount": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "rating": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "isHarvested": {
-            "type": "boolean"
-          },
-          "userSavedCount": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "sourceCatalogue": {
-            "type": "string"
-          },
+          "popularity": { "type": "integer", "format": "int32" },
+          "userinfo": { "type": "string" },
+          "isPublishedToAll": { "type": "boolean" },
+          "draft": { "type": "string" },
+          "changeDate": { "type": "string" },
+          "id": { "type": "integer", "format": "int32" },
+          "createDate": { "type": "string" },
+          "isPublishedToIntranet": { "type": "boolean" },
+          "valid": { "type": "integer", "format": "int32" },
+          "isTemplate": { "type": "string" },
+          "feedbackCount": { "type": "integer", "format": "int64" },
+          "rating": { "type": "integer", "format": "int32" },
+          "isHarvested": { "type": "boolean" },
+          "userSavedCount": { "type": "integer", "format": "int64" },
+          "sourceCatalogue": { "type": "string" },
           "overview": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Overview"
-            }
+            "items": { "$ref": "#/components/schemas/Overview" }
           },
           "otherProperties": {
             "type": "object",
             "additionalProperties": {
               "type": "array",
-              "items": {
-                "type": "object"
-              }
+              "items": { "type": "object" }
             },
             "writeOnly": true
           },
-          "documentStandard": {
-            "type": "string"
-          },
-          "root": {
-            "type": "string"
-          },
+          "documentStandard": { "type": "string" },
+          "root": { "type": "string" },
           "indexingErrorMsg": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/IndexingErrorMsg"
-            }
+            "items": { "$ref": "#/components/schemas/IndexingErrorMsg" }
           },
-          "owner": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "groupOwner": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "logo": {
-            "type": "string"
-          },
-          "otherLanguage": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "otherLanguageId": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "resourceEdition": {
-            "type": "string"
-          },
-          "displayOrder": {
-            "type": "integer",
-            "format": "int32"
-          },
+          "owner": { "type": "integer", "format": "int32" },
+          "groupOwner": { "type": "integer", "format": "int32" },
+          "logo": { "type": "string" },
+          "otherLanguage": { "type": "array", "items": { "type": "string" } },
+          "otherLanguageId": { "type": "array", "items": { "type": "string" } },
+          "resourceEdition": { "type": "string" },
+          "displayOrder": { "type": "integer", "format": "int32" },
           "licenseObject": {
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
+              "additionalProperties": { "type": "string" }
             }
           },
           "maintenance": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Maintenance"
-            }
+            "items": { "$ref": "#/components/schemas/Maintenance" }
           },
           "resourceCreditObject": {
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
+              "additionalProperties": { "type": "string" }
             }
           },
-          "cat": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "tagNumber": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "mdStatus": {
-            "type": "string"
-          },
-          "isPublishedToGuest": {
-            "type": "boolean"
-          },
-          "groupPublished": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "hasxlinks": {
-            "type": "boolean"
-          },
-          "inspireConformResource": {
-            "type": "boolean"
-          },
-          "valid_inspire": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "inspireReportUrl": {
-            "type": "string"
-          },
-          "inspireValidationDate": {
-            "type": "string"
-          },
+          "cat": { "type": "array", "items": { "type": "string" } },
+          "tagNumber": { "type": "integer", "format": "int32" },
+          "mdStatus": { "type": "string" },
+          "isPublishedToGuest": { "type": "boolean" },
+          "groupPublished": { "type": "array", "items": { "type": "string" } },
+          "hasxlinks": { "type": "boolean" },
+          "inspireConformResource": { "type": "boolean" },
+          "valid_inspire": { "type": "integer", "format": "int32" },
+          "inspireReportUrl": { "type": "string" },
+          "inspireValidationDate": { "type": "string" },
           "resourceLanguage": {
             "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "OrgObject": {
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": {
-                "type": "string"
-              }
+              "additionalProperties": { "type": "string" }
             }
           },
-          "recordOperateOn": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "agg_associated": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "childUuid": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "linkUrl": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
+          "recordOperateOn": { "type": "array", "items": { "type": "string" } },
+          "agg_associated": { "type": "array", "items": { "type": "string" } },
+          "childUuid": { "type": "array", "items": { "type": "string" } },
+          "linkUrl": { "type": "array", "items": { "type": "string" } },
           "linkProtocol": {
             "uniqueItems": true,
             "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
-          "serviceType": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
+          "serviceType": { "type": "array", "items": { "type": "string" } },
           "serviceTypeVersion": {
             "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "items": { "type": "string" }
           },
           "specificationConformance": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SpecificationConformance"
-            }
+            "items": { "$ref": "#/components/schemas/SpecificationConformance" }
           },
-          "hasfeaturecat": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
+          "hasfeaturecat": { "type": "array", "items": { "type": "string" } }
         },
         "description": "Index records are used to store the metadata in the index.\n\nAdditional properties can be:\n* cl_* for codelists\n* contactFor* for contacts\n* measure_* for measures\n* ...\n\nAnd all additional properties not explicitly defined in the class\nor managed in handleUnrecognizedField.\n"
       },
       "IndexingErrorMsg": {
         "type": "object",
         "properties": {
-          "string": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          },
+          "string": { "type": "string" },
+          "type": { "type": "string" },
           "values": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "additionalProperties": { "type": "string" }
           }
         }
       },
-      "Keyword": {
-        "type": "object"
-      },
+      "Keyword": { "type": "object" },
       "Link": {
         "type": "object",
         "properties": {
-          "protocol": {
-            "type": "string"
-          },
-          "function": {
-            "type": "string"
-          },
-          "applicationProfile": {
-            "type": "string"
-          },
-          "group": {
-            "type": "string"
-          },
-          "mimeType": {
-            "type": "string"
-          },
-          "nilReason": {
-            "type": "string"
-          },
-          "hash": {
-            "type": "string"
-          },
-          "idx": {
-            "type": "string"
-          },
+          "protocol": { "type": "string" },
+          "function": { "type": "string" },
+          "applicationProfile": { "type": "string" },
+          "group": { "type": "string" },
+          "mimeType": { "type": "string" },
+          "nilReason": { "type": "string" },
+          "hash": { "type": "string" },
+          "idx": { "type": "string" },
           "urlObject": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "additionalProperties": { "type": "string" }
           },
           "nameObject": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "additionalProperties": { "type": "string" }
           },
           "descriptionObject": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "additionalProperties": { "type": "string" }
           }
         }
       },
       "Maintenance": {
         "type": "object",
         "properties": {
-          "frequency": {
-            "type": "string"
-          },
-          "nextUpdateDate": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "userDefinedFrequency": {
-            "type": "string"
-          },
+          "frequency": { "type": "string" },
+          "nextUpdateDate": { "type": "array", "items": { "type": "string" } },
+          "userDefinedFrequency": { "type": "string" },
           "noteObject": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "additionalProperties": { "type": "string" }
           }
         }
       },
       "Measure": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string"
-          },
-          "value": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          },
-          "unit": {
-            "type": "string"
-          }
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "date": { "type": "string" },
+          "value": { "type": "string" },
+          "type": { "type": "string" },
+          "unit": { "type": "string" }
         }
       },
       "Overview": {
         "type": "object",
         "properties": {
-          "url": {
-            "type": "string"
-          },
-          "data": {
-            "type": "string"
-          },
+          "url": { "type": "string" },
+          "data": { "type": "string" },
           "nameObject": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "additionalProperties": { "type": "string" }
           }
         }
       },
       "PartyIdentifier": {
         "type": "object",
         "properties": {
-          "code": {
-            "type": "string"
-          },
-          "codeSpace": {
-            "type": "string"
-          },
-          "link": {
-            "type": "string"
-          }
+          "code": { "type": "string" },
+          "codeSpace": { "type": "string" },
+          "link": { "type": "string" }
         }
       },
       "ProcessStep": {
@@ -4220,24 +3168,16 @@
         "properties": {
           "descriptionObject": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "additionalProperties": { "type": "string" }
           },
-          "date": {
-            "type": "string"
-          },
+          "date": { "type": "string" },
           "source": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ProcessStepSource"
-            }
+            "items": { "$ref": "#/components/schemas/ProcessStepSource" }
           },
           "processor": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Contact"
-            }
+            "items": { "$ref": "#/components/schemas/Contact" }
           }
         }
       },
@@ -4246,193 +3186,112 @@
         "properties": {
           "descriptionObject": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "additionalProperties": { "type": "string" }
           }
         }
       },
       "RecordLink": {
         "type": "object",
         "properties": {
-          "type": {
-            "type": "string"
-          },
-          "origin": {
-            "type": "string",
-            "enum": ["remote", "catalog"]
-          },
-          "to": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string"
-          },
-          "associationType": {
-            "type": "string"
-          },
-          "initiativeType": {
-            "type": "string"
-          }
+          "type": { "type": "string" },
+          "origin": { "type": "string", "enum": ["remote", "catalog"] },
+          "to": { "type": "string" },
+          "title": { "type": "string" },
+          "url": { "type": "string" },
+          "associationType": { "type": "string" },
+          "initiativeType": { "type": "string" }
         }
       },
       "ResourceDate": {
         "type": "object",
         "properties": {
-          "type": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string"
-          }
+          "type": { "type": "string" },
+          "date": { "type": "string" }
         }
       },
       "ResourceIdentifier": {
         "type": "object",
         "properties": {
-          "code": {
-            "type": "string"
-          },
-          "codeSpace": {
-            "type": "string"
-          },
-          "link": {
-            "type": "string"
-          }
+          "code": { "type": "string" },
+          "codeSpace": { "type": "string" },
+          "link": { "type": "string" }
         }
       },
       "SpecificationConformance": {
         "type": "object",
         "properties": {
-          "link": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "explanation": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string"
-          },
-          "pass": {
-            "type": "string"
-          }
+          "link": { "type": "string" },
+          "title": { "type": "string" },
+          "explanation": { "type": "string" },
+          "date": { "type": "string" },
+          "pass": { "type": "string" }
         }
       },
       "Thesaurus": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
+          "id": { "type": "string" },
+          "title": { "type": "string" },
           "multilingualTitle": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "additionalProperties": { "type": "string" }
           },
-          "theme": {
-            "type": "string"
-          },
-          "link": {
-            "type": "string"
-          },
+          "theme": { "type": "string" },
+          "link": { "type": "string" },
           "keywords": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Keyword"
-            }
+            "items": { "$ref": "#/components/schemas/Keyword" }
           }
         }
       },
       "VerticalRange": {
         "type": "object",
         "properties": {
-          "gte": {
-            "type": "number",
-            "format": "double"
-          },
-          "lte": {
-            "type": "number",
-            "format": "double"
-          },
-          "unit": {
-            "type": "string"
-          }
+          "gte": { "type": "number", "format": "double" },
+          "lte": { "type": "number", "format": "double" },
+          "unit": { "type": "string" }
         }
       },
       "IProcess": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string"
-          },
+          "name": { "type": "string" },
           "parameters": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ProcessParameter"
-            }
+            "items": { "$ref": "#/components/schemas/ProcessParameter" }
           }
         }
       },
       "ProcessParameter": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          }
+          "name": { "type": "string" },
+          "type": { "type": "string" }
         }
       },
       "ProcessReport": {
         "type": "object",
         "properties": {
-          "status": {
-            "type": "string"
-          },
-          "errorMessage": {
-            "type": "string"
-          }
+          "status": { "type": "string" },
+          "errorMessage": { "type": "string" }
         }
       },
       "DataFormat": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "dataType": {
-            "type": "string"
-          },
-          "rwFlag": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          }
+          "name": { "type": "string" },
+          "dataType": { "type": "string" },
+          "rwFlag": { "type": "string" },
+          "description": { "type": "string" }
         }
       },
       "AttributeStatistics": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string"
-          },
+          "name": { "type": "string" },
           "statistics": {
             "type": "object",
-            "additionalProperties": {
-              "type": "object"
-            }
+            "additionalProperties": { "type": "object" }
           }
         }
       }

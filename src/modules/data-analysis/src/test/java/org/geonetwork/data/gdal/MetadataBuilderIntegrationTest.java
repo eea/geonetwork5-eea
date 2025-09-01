@@ -133,7 +133,7 @@ class MetadataBuilderIntegrationTest {
                         .build()));
 
         String builtMetadata = metadataBuilder.buildMetadata(
-                uuid, metadata.getSchemaid(), layerProperties.get(), BatchEditMode.PREVIEW);
+                uuid, metadata.getSchemaid(), layerProperties.get(), BatchEditMode.PREVIEW, List.of(), List.of());
         String expected = Files.readString(
                 Path.of(new ClassPathResource("data/samples/test_data_analysis_injected_in_template.xml").getURI()),
                 StandardCharsets.UTF_8);
@@ -180,7 +180,9 @@ class MetadataBuilderIntegrationTest {
                 layerFile.endsWith(".shp")
                         ? analyzer.getLayerProperties(filePath, layerName).get()
                         : analyzer.getRasterProperties(filePath).get(),
-                BatchEditMode.PREVIEW);
+                BatchEditMode.PREVIEW,
+                List.of(),
+                List.of());
         String expected = IOUtils.toString(
                 new ClassPathResource(String.format("data/samples/%s-%s.xml", layerName, schema)).getInputStream(),
                 StandardCharsets.UTF_8);
@@ -202,7 +204,9 @@ class MetadataBuilderIntegrationTest {
                 layerFile.endsWith(".shp")
                         ? analyzer.getLayerProperties(filePath, layerName).get()
                         : analyzer.getRasterProperties(filePath).get(),
-                BatchEditMode.PREVIEW);
+                BatchEditMode.PREVIEW,
+                List.of(),
+                List.of());
 
         diff = DiffBuilder.compare(Input.fromString(expected))
                 .withTest(Input.fromString(metadataAfterReapplyingAnalysis))

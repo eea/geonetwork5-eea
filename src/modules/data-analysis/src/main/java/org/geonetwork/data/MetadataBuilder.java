@@ -160,15 +160,21 @@ public class MetadataBuilder {
         return sub.replace(template);
     }
 
-    public String buildMetadata(String uuid, String schema, BaseDataInfo datasetInfo, BatchEditMode batchEditMode) {
+    public String buildMetadata(
+            String uuid,
+            String schema,
+            BaseDataInfo datasetInfo,
+            BatchEditMode batchEditMode,
+            List<String> include,
+            List<String> exclude) {
         List<DataIngesterConfiguration.Resource.Property> properties =
                 dataIngesterConfiguration.getResources().getFirst().getProperties();
         List<BatchEditParameter> edits = new ArrayList<>();
 
         if (datasetInfo instanceof DatasetInfo vectorDataset) {
-            buildMetadataFromVectorDataset(schema, vectorDataset, properties, edits);
+            buildMetadataFromVectorDataset(schema, vectorDataset, properties, edits, include, exclude);
         } else if (datasetInfo instanceof RasterInfo rasterDataset) {
-            buildMetadataFromRasterDataset(schema, rasterDataset, properties, edits);
+            buildMetadataFromRasterDataset(schema, rasterDataset, properties, edits, include, exclude);
         }
         try {
             log.atDebug().log(edits.toString());
@@ -190,8 +196,11 @@ public class MetadataBuilder {
             String schema,
             DatasetInfo datasetInfo,
             List<DataIngesterConfiguration.Resource.Property> properties,
-            List<BatchEditParameter> edits) {
-        properties.forEach(property -> {
+            List<BatchEditParameter> edits,
+            List<String> include,
+            List<String> exclude) {
+        for (DataIngesterConfiguration.Resource.Property property : properties) {
+            if (isPropertySkipped(include, exclude, property)) continue;
             if (property.getContext().equals(DataIngesterConfiguration.Resource.Property.Context.DatasetLayer.name())) {
                 property.getOperations().forEach(operation -> {
                     if (operation.getSchema().equals(schema)) {
@@ -243,15 +252,27 @@ public class MetadataBuilder {
                     });
                 });
             }
-        });
+        }
+    }
+
+    private static boolean isPropertySkipped(
+            List<String> include, List<String> exclude, DataIngesterConfiguration.Resource.Property property) {
+        if ((include != null && !include.isEmpty() && !include.contains(property.getName()))
+                || (exclude != null && !exclude.isEmpty() && exclude.contains(property.getName()))) {
+            return true;
+        }
+        return false;
     }
 
     private void buildMetadataFromRasterDataset(
             String schema,
             RasterInfo rasterInfo,
             List<DataIngesterConfiguration.Resource.Property> properties,
-            List<BatchEditParameter> edits) {
-        properties.forEach(property -> {
+            List<BatchEditParameter> edits,
+            List<String> include,
+            List<String> exclude) {
+        for (DataIngesterConfiguration.Resource.Property property : properties) {
+            if (isPropertySkipped(include, exclude, property)) continue;
             if (property.getContext().equals(DataIngesterConfiguration.Resource.Property.Context.DatasetLayer.name())) {
                 property.getOperations().forEach(operation -> {
                     if (operation.getSchema().equals(schema)) {
@@ -275,6 +296,6 @@ public class MetadataBuilder {
                     }
                 });
             }
-        });
+        }
     }
 }

@@ -41,33 +41,34 @@ export interface ApplyDataAnalysisOnRecordRequest {
   layer: string;
   visibility?: ApplyDataAnalysisOnRecordVisibilityEnum;
   approved?: boolean;
+  exclude?: Array<string>;
 }
 
 export interface AttributeCodelistRequest {
-  uuid: string;
   datasource: string;
   layer: string;
   attribute: string;
+  uuid?: string;
   visibility?: AttributeCodelistVisibilityEnum;
   approved?: boolean;
   limit?: number;
 }
 
 export interface AttributeStatisticsRequest {
-  uuid: string;
   datasource: string;
   layer: string;
   attribute: string;
+  uuid?: string;
   visibility?: AttributeStatisticsVisibilityEnum;
   approved?: boolean;
 }
 
 export interface BuildOverviewRequest {
-  uuid: string;
-  visibility: BuildOverviewVisibilityEnum;
   datasource: string;
-  approved: boolean;
   layer: string;
+  uuid?: string;
+  visibility?: BuildOverviewVisibilityEnum;
+  approved?: boolean;
 }
 
 export interface LayersRequest {
@@ -83,6 +84,7 @@ export interface PreviewDataAnalysisOnRecordRequest {
   layer: string;
   visibility?: PreviewDataAnalysisOnRecordVisibilityEnum;
   approved?: boolean;
+  exclude?: Array<string>;
 }
 
 /**
@@ -120,12 +122,12 @@ export class DataAnalysisApi extends runtime.BaseAPI {
       queryParameters['visibility'] = requestParameters['visibility'];
     }
 
-    if (requestParameters['datasource'] != null) {
-      queryParameters['datasource'] = requestParameters['datasource'];
-    }
-
     if (requestParameters['approved'] != null) {
       queryParameters['approved'] = requestParameters['approved'];
+    }
+
+    if (requestParameters['datasource'] != null) {
+      queryParameters['datasource'] = requestParameters['datasource'];
     }
 
     if (requestParameters['layer'] != null) {
@@ -202,16 +204,20 @@ export class DataAnalysisApi extends runtime.BaseAPI {
       queryParameters['visibility'] = requestParameters['visibility'];
     }
 
-    if (requestParameters['datasource'] != null) {
-      queryParameters['datasource'] = requestParameters['datasource'];
-    }
-
     if (requestParameters['approved'] != null) {
       queryParameters['approved'] = requestParameters['approved'];
     }
 
+    if (requestParameters['datasource'] != null) {
+      queryParameters['datasource'] = requestParameters['datasource'];
+    }
+
     if (requestParameters['layer'] != null) {
       queryParameters['layer'] = requestParameters['layer'];
+    }
+
+    if (requestParameters['exclude'] != null) {
+      queryParameters['exclude'] = requestParameters['exclude'];
     }
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -256,13 +262,6 @@ export class DataAnalysisApi extends runtime.BaseAPI {
     requestParameters: AttributeCodelistRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<Array<object>>> {
-    if (requestParameters['uuid'] == null) {
-      throw new runtime.RequiredError(
-        'uuid',
-        'Required parameter "uuid" was null or undefined when calling attributeCodelist().'
-      );
-    }
-
     if (requestParameters['datasource'] == null) {
       throw new runtime.RequiredError(
         'datasource',
@@ -352,13 +351,6 @@ export class DataAnalysisApi extends runtime.BaseAPI {
     requestParameters: AttributeStatisticsRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<Array<AttributeStatistics>>> {
-    if (requestParameters['uuid'] == null) {
-      throw new runtime.RequiredError(
-        'uuid',
-        'Required parameter "uuid" was null or undefined when calling attributeStatistics().'
-      );
-    }
-
     if (requestParameters['datasource'] == null) {
       throw new runtime.RequiredError(
         'datasource',
@@ -446,31 +438,10 @@ export class DataAnalysisApi extends runtime.BaseAPI {
     requestParameters: BuildOverviewRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction
   ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters['uuid'] == null) {
-      throw new runtime.RequiredError(
-        'uuid',
-        'Required parameter "uuid" was null or undefined when calling buildOverview().'
-      );
-    }
-
-    if (requestParameters['visibility'] == null) {
-      throw new runtime.RequiredError(
-        'visibility',
-        'Required parameter "visibility" was null or undefined when calling buildOverview().'
-      );
-    }
-
     if (requestParameters['datasource'] == null) {
       throw new runtime.RequiredError(
         'datasource',
         'Required parameter "datasource" was null or undefined when calling buildOverview().'
-      );
-    }
-
-    if (requestParameters['approved'] == null) {
-      throw new runtime.RequiredError(
-        'approved',
-        'Required parameter "approved" was null or undefined when calling buildOverview().'
       );
     }
 
@@ -491,12 +462,12 @@ export class DataAnalysisApi extends runtime.BaseAPI {
       queryParameters['visibility'] = requestParameters['visibility'];
     }
 
-    if (requestParameters['datasource'] != null) {
-      queryParameters['datasource'] = requestParameters['datasource'];
-    }
-
     if (requestParameters['approved'] != null) {
       queryParameters['approved'] = requestParameters['approved'];
+    }
+
+    if (requestParameters['datasource'] != null) {
+      queryParameters['datasource'] = requestParameters['datasource'];
     }
 
     if (requestParameters['layer'] != null) {
@@ -628,12 +599,12 @@ export class DataAnalysisApi extends runtime.BaseAPI {
       queryParameters['visibility'] = requestParameters['visibility'];
     }
 
-    if (requestParameters['datasource'] != null) {
-      queryParameters['datasource'] = requestParameters['datasource'];
-    }
-
     if (requestParameters['approved'] != null) {
       queryParameters['approved'] = requestParameters['approved'];
+    }
+
+    if (requestParameters['datasource'] != null) {
+      queryParameters['datasource'] = requestParameters['datasource'];
     }
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -702,16 +673,20 @@ export class DataAnalysisApi extends runtime.BaseAPI {
       queryParameters['visibility'] = requestParameters['visibility'];
     }
 
-    if (requestParameters['datasource'] != null) {
-      queryParameters['datasource'] = requestParameters['datasource'];
-    }
-
     if (requestParameters['approved'] != null) {
       queryParameters['approved'] = requestParameters['approved'];
     }
 
+    if (requestParameters['datasource'] != null) {
+      queryParameters['datasource'] = requestParameters['datasource'];
+    }
+
     if (requestParameters['layer'] != null) {
       queryParameters['layer'] = requestParameters['layer'];
+    }
+
+    if (requestParameters['exclude'] != null) {
+      queryParameters['exclude'] = requestParameters['exclude'];
     }
 
     const headerParameters: runtime.HTTPHeaders = {};
