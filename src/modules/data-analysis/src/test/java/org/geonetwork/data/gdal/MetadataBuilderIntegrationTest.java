@@ -32,6 +32,8 @@ import org.geonetwork.editing.BatchEditsService;
 import org.geonetwork.editing.SchemaConfiguration;
 import org.geonetwork.metadata.MetadataAccessManager;
 import org.geonetwork.metadata.MetadataManager;
+import org.geonetwork.metadata.config.MetadataDirConfig;
+import org.geonetwork.metadata.datadir.DefaultMetadataDirPathProcessor;
 import org.geonetwork.schemas.SchemaManager;
 import org.geonetwork.security.AuthenticationFacade;
 import org.geonetwork.security.user.UserManager;
@@ -68,7 +70,9 @@ import org.xmlunit.diff.ElementSelectors;
     MetadataAccessManager.class,
     UserManager.class,
     AuthenticationFacade.class,
-    SchemaManager.class
+    SchemaManager.class,
+    MetadataDirConfig.class,
+    DefaultMetadataDirPathProcessor.class
 })
 @EnableConfigurationProperties({DataIngesterConfiguration.class, SchemaConfiguration.class})
 @ActiveProfiles({"prod", "test"})
@@ -109,7 +113,7 @@ class MetadataBuilderIntegrationTest {
     }
 
     @Test
-    void dataAnalysisFromShapefileInjectedInTemplate() throws IOException {
+    void dataAnalysisFromShapefileInjectedInTemplate() throws IOException, JDOMException {
         String layerFile = "CEEUBG100kV2_1.shp";
         Optional<DatasetInfo> layerProperties = analyzer.getLayerProperties(
                 new ClassPathResource("data/samples/" + layerFile).getFile().getCanonicalPath(), "CEEUBG100kV2_1");
@@ -146,6 +150,34 @@ class MetadataBuilderIntegrationTest {
                 .checkForSimilar()
                 .build();
         assertFalse(diff.hasDifferences(), String.format("%s. Differences: %s", layerFile, diff));
+        List<?> distributionFormatNodes =
+                Xml.selectNodes(Xml.loadString(builtMetadata, false), ".//*[local-name() = 'distributionFormat']");
+        assertEquals(1, distributionFormatNodes.size());
+
+        List<String> excludedFields = List.of("distributionFormat", "featureCatalogue");
+        builtMetadata = metadataBuilder.buildMetadata(
+                uuid, metadata.getSchemaid(), layerProperties.get(), BatchEditMode.PREVIEW, List.of(), excludedFields);
+
+        for (String excludedField : excludedFields) {
+            distributionFormatNodes = Xml.selectNodes(
+                    Xml.loadString(builtMetadata, false), String.format(".//*[local-name() = '%s']", excludedField));
+            assertEquals(0, distributionFormatNodes.size());
+        }
+
+        List<String> includedFields = List.of("spatialResolution");
+        builtMetadata = metadataBuilder.buildMetadata(
+                uuid, metadata.getSchemaid(), layerProperties.get(), BatchEditMode.PREVIEW, includedFields, List.of());
+
+        for (String includedField : includedFields) {
+            distributionFormatNodes = Xml.selectNodes(
+                    Xml.loadString(builtMetadata, false), String.format(".//*[local-name() = '%s']", includedField));
+            assertEquals(1, distributionFormatNodes.size());
+        }
+        for (String excludedField : excludedFields) {
+            distributionFormatNodes = Xml.selectNodes(
+                    Xml.loadString(builtMetadata, false), String.format(".//*[local-name() = '%s']", excludedField));
+            assertEquals(0, distributionFormatNodes.size());
+        }
     }
 
     @ParameterizedTest

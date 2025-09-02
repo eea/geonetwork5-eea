@@ -6,10 +6,12 @@
 package org.geonetwork.metadata.datadir;
 
 import java.nio.file.Path;
+import lombok.NoArgsConstructor;
 import org.geonetwork.metadata.MetadataNotFoundException;
 
+@NoArgsConstructor
 public class DefaultMetadataDirPathProcessor implements IMetadataDirProcessor {
-    private final MetadataDirPrivileges metadataDirectoryPrivileges;
+    private MetadataDirPrivileges metadataDirectoryPrivileges = MetadataDirPrivileges.NONE;
 
     public DefaultMetadataDirPathProcessor(MetadataDirPrivileges metadataDirectoryPrivileges) {
         this.metadataDirectoryPrivileges = metadataDirectoryPrivileges;

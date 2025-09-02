@@ -39,7 +39,7 @@ public class MetadataBuilder {
         Map<String, String> replacements = new HashMap<>();
         DatasetLayer datasetLayer = datasetInfo.getLayers().getFirst();
         switch (property.getName()) {
-            case "name":
+            case "title":
                 replacements.put(
                         "title",
                         // Metadata title can be extracted from a WFS GetCapabilities layer information
