@@ -10,7 +10,8 @@
   <mdb:MD_Metadata xmlns:cit="http://standards.iso.org/iso/19115/-3/cit/2.0"
                    xmlns:gco="http://standards.iso.org/iso/19115/-3/gco/1.0"
                    xmlns:gex="http://standards.iso.org/iso/19115/-3/gex/1.0"
-                   xmlns:gfc="http://standards.iso.org/iso/19110/gfc/1.1" xmlns:gml="http://www.opengis.net/gml/3.2"
+                   xmlns:gfc="http://standards.iso.org/iso/19110/gfc/1.1"
+                   xmlns:gml="http://www.opengis.net/gml/3.2"
                    xmlns:lan="http://standards.iso.org/iso/19115/-3/lan/1.0"
                    xmlns:mcc="http://standards.iso.org/iso/19115/-3/mcc/1.0"
                    xmlns:mco="http://standards.iso.org/iso/19115/-3/mco/1.0"
@@ -352,6 +353,24 @@
             <cat:versionNumber gco:nilReason="missing">
               <gco:CharacterString/>
             </cat:versionNumber>
+            <cat:versionDate>
+              <gco:Date/>
+            </cat:versionDate>
+            <gfc:producer>
+              <cit:CI_Responsibility>
+                <cit:role>
+                  <cit:CI_RoleCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#CI_RoleCode"
+                                   codeListValue="author"/>
+                </cit:role>
+                <cit:party>
+                  <cit:CI_Organisation>
+                    <cit:name gco:nilReason="missing">
+                      <gco:CharacterString></gco:CharacterString>
+                    </cit:name>
+                  </cit:CI_Organisation>
+                </cit:party>
+              </cit:CI_Responsibility>
+            </gfc:producer>
             <gfc:featureType>
               <gfc:FC_FeatureType>
                 <gfc:typeName>CEEUBG100kV2_1</gfc:typeName>
@@ -364,6 +383,9 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
+                    <gfc:cardinality gco:nilReason="missing">
+                      <gco:CharacterString/>
+                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -379,6 +401,9 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
+                    <gfc:cardinality gco:nilReason="missing">
+                      <gco:CharacterString/>
+                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -394,6 +419,9 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
+                    <gfc:cardinality gco:nilReason="missing">
+                      <gco:CharacterString/>
+                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -409,6 +437,9 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
+                    <gfc:cardinality gco:nilReason="missing">
+                      <gco:CharacterString/>
+                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -424,6 +455,9 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
+                    <gfc:cardinality gco:nilReason="missing">
+                      <gco:CharacterString/>
+                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -439,6 +473,9 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
+                    <gfc:cardinality gco:nilReason="missing">
+                      <gco:CharacterString/>
+                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -454,6 +491,9 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
+                    <gfc:cardinality gco:nilReason="missing">
+                      <gco:CharacterString/>
+                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -469,6 +509,9 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
+                    <gfc:cardinality gco:nilReason="missing">
+                      <gco:CharacterString/>
+                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -484,6 +527,9 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
+                    <gfc:cardinality gco:nilReason="missing">
+                      <gco:CharacterString/>
+                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -499,6 +545,9 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
+                    <gfc:cardinality gco:nilReason="missing">
+                      <gco:CharacterString/>
+                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -514,6 +563,9 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
+                    <gfc:cardinality gco:nilReason="missing">
+                      <gco:CharacterString/>
+                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -529,6 +581,9 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
+                    <gfc:cardinality gco:nilReason="missing">
+                      <gco:CharacterString/>
+                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -544,6 +599,9 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
+                    <gfc:cardinality gco:nilReason="missing">
+                      <gco:CharacterString/>
+                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>

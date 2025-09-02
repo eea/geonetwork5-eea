@@ -105,7 +105,7 @@ public class MetadataBuilder {
             String template, DataIngesterConfiguration.Resource.Property property, RasterInfo datasetInfo) {
         Map<String, String> replacements = new HashMap<>();
         switch (property.getName()) {
-            case "name":
+            case "title":
                 replacements.put(
                         "title",
                         datasetInfo
