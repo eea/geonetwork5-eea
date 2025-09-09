@@ -20,15 +20,15 @@ export class GcNewRecordPanelComponent extends GcBaseComponent {
     alias: 'search-filter',
   });
   groupOwner = input<string | undefined>(undefined, { alias: 'group-owner' });
-  listOfIncludedAnalysisProperties: input<string>('', { alias: 'include-properties' });
-  listOfExcludedAnalysisProperties: input<string>('', { alias: 'exclude-properties' });
+  listOfIncludedAnalysisProperties = input<string>('', { alias: 'include-properties' });
+  listOfExcludedAnalysisProperties = input<string>('', { alias: 'exclude-properties' });
 
   includeProperties = signal<string[]>([])
   excludeProperties = signal<string[]>([])
 
   override ngOnInit() {
     super.ngOnInit();
-    this.includeProperties && this.includeProperties.set(this.listOfIncludedAnalysisProperties.split(','));
-    this.excludeProperties && this.excludeProperties.set(this.listOfExcludedAnalysisProperties.split(','));
+    this.includeProperties && this.includeProperties.set(this.listOfIncludedAnalysisProperties().split(','));
+    this.excludeProperties && this.excludeProperties.set(this.listOfExcludedAnalysisProperties().split(','));
   }
 }
