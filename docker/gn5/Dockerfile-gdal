@@ -40,9 +40,9 @@ RUN getent group www-data && delgroup www-data || echo "group www-data not found
 
 RUN apk add --no-cache openjdk21-jre-headless
 
-USER www-data:www-data
+USER jetty:jetty
 
-COPY --from=gn5-build --chown=www-data:www-data /geonetwork5/src/apps/geonetwork/target/gn-main-app-5.0.0-*.jar /opt/geonetwork/geonetwork.jar
+COPY --from=gn5-build --chown=jetty:jetty /geonetwork5/src/apps/geonetwork/target/gn-main-app-5.0.0-*.jar /opt/geonetwork/geonetwork.jar
 
 ENTRYPOINT [ "java", "-jar", "/opt/geonetwork/geonetwork.jar" ]
 
