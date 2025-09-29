@@ -19,10 +19,7 @@ import org.geonetwork.index.client.IndexClient;
 import org.geonetwork.index.model.record.IndexRecord;
 import org.geonetwork.search.model.RelatedItemType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,7 +40,7 @@ public class SearchController {
     }
 
     /** Search. */
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    // Disabed @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public String getQuery(
             @RequestParam(defaultValue = "", required = false) String q,
             @RequestParam(defaultValue = "0", required = false) Integer from,
@@ -59,7 +56,7 @@ public class SearchController {
     }
 
     /** Search using POST. */
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    // Disabed @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public String query(
             @RequestParam(defaultValue = SelectionManager.SELECTION_METADATA) String bucket,
             @Parameter(
@@ -76,7 +73,7 @@ public class SearchController {
     }
 
     /** Get a document from the index. */
-    @GetMapping(path = "doc/{uuid:.+}", produces = MediaType.APPLICATION_JSON_VALUE)
+    // Disabed @GetMapping(path = "doc/{uuid:.+}", produces = MediaType.APPLICATION_JSON_VALUE)
     public IndexRecord getIndexDocument(@PathVariable String uuid) throws Exception {
         SearchRequest searchRequest = SearchRequest.of(s -> s.index(client.getIndexRecordName())
                 .query(q -> q.match(m -> m.field("_id").query(uuid)))

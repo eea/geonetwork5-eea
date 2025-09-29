@@ -133,6 +133,9 @@ geonetwork:
 
           - name: "dateRangeDetails"
             xpath: "mdb:identificationInfo/mri:MD_DataIdentification/mri:extent/gex:EX_Extent/gex:temporalElement"
+            condition: "count(./mdb:identificationInfo/mri:MD_DataIdentification/mri:extent/*/gex:temporalElement[
+              */gex:extent/gml:TimePeriod/gml:beginPosition/text() ='{{start.date}}'
+              and */gex:extent/gml:TimePeriod/gml:beginPosition/text() ='{{end.date}}']) = 0"
             value: >
                <gex:temporalElement xmlns:mri="http://standards.iso.org/iso/19115/-3/mri/1.0"
                                                                  xmlns:gex="http://standards.iso.org/iso/19115/-3/gex/1.0"
