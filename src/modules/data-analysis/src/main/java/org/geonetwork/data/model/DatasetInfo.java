@@ -50,6 +50,7 @@ public class DatasetInfo extends BaseDataInfo {
         if (!datasetLayer.getGeometryFields().isEmpty()) {
             String crs = GeomUtil.parseCrsCode(
                     datasetLayer.getGeometryFields().get(0).getCrs());
+            indexRecord.coordinateSystem(List.of(crs));
 
             if (datasetLayer.getGeometryFields().getFirst().getExtent() != null) {
                 calculateIndexRecordGeomInfo(

@@ -34,6 +34,33 @@ geonetwork:
                   value: "{{title}}"
 
 
+            - name: "crs"
+              help: "Set the CRS of the dataset"
+              context: "DatasetLayer"
+              operations:
+                - schema: "iso19115-3.2018"
+                  operation: "gn_delete"
+                  xpath: "mdb:referenceSystemInfo"
+                - schema: "iso19115-3.2018"
+                  operation: "gn_create"
+                  xpath: "mdb:referenceSystemInfo"
+                  value: >
+                    <mdb:referenceSystemInfo xmlns:mdb="http://standards.iso.org/iso/19115/-3/mdb/2.0"
+                                                             xmlns:mrs="http://standards.iso.org/iso/19115/-3/mrs/1.0"
+                                                             xmlns:mcc="http://standards.iso.org/iso/19115/-3/mcc/1.0"
+                                                             xmlns:gcx="http://standards.iso.org/iso/19115/-3/gcx/1.0"
+                                                             xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <mrs:MD_ReferenceSystem>
+                     <mrs:referenceSystemIdentifier>
+                       <mcc:MD_Identifier>
+                         <mcc:code>
+                           <gcx:Anchor xlink:href="http://www.opengis.net/def/crs/EPSG/0/{{crs:-4326}}">{{crs:-4326}}</gcx:Anchor>
+                         </mcc:code>
+                       </mcc:MD_Identifier>
+                     </mrs:referenceSystemIdentifier>
+                    </mrs:MD_ReferenceSystem>
+                    </mdb:referenceSystemInfo>
+
             - name: "spatialRepresentationType"
               help: "Set the spatial representation type of the dataset. If not set, it will be set to 'vector'"
               context: "DatasetLayer"

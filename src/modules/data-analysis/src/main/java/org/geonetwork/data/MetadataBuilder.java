@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.text.StringSubstitutor;
+import org.geonetwork.data.geom.GeomUtil;
 import org.geonetwork.data.model.BaseDataInfo;
 import org.geonetwork.data.model.DatasetInfo;
 import org.geonetwork.data.model.DatasetLayer;
@@ -72,6 +73,11 @@ public class MetadataBuilder {
                 }
                 replacements.put("featureCount", datasetLayer.getFeatureCount().toString());
                 break;
+            case "crs":
+                String crs = GeomUtil.parseCrsCode(
+                        datasetLayer.getGeometryFields().get(0).getCrs());
+                replacements.put("crs", crs);
+                break;
             case "distributionFormat":
                 replacements.put("format", datasetInfo.getFormat());
                 replacements.put("formatDescription", datasetInfo.getFormatDescription());
@@ -122,6 +128,10 @@ public class MetadataBuilder {
                     replacements.put("east", wgs84Extent.get(2).toString());
                     replacements.put("north", wgs84Extent.get(3).toString());
                 }
+                break;
+            case "crs":
+                String crs = GeomUtil.parseCrsCode(datasetInfo.getCrs());
+                replacements.put("crs", crs);
                 break;
             case "spatialRepresentationType":
                 replacements.put("datasetType", "grid");
