@@ -74,9 +74,11 @@ public class MetadataBuilder {
                 replacements.put("featureCount", datasetLayer.getFeatureCount().toString());
                 break;
             case "crs":
-                String crs = GeomUtil.parseCrsCode(
-                        datasetLayer.getGeometryFields().get(0).getCrs());
-                replacements.put("crs", crs);
+                if (!datasetLayer.getGeometryFields().isEmpty()) {
+                    String crs = GeomUtil.parseCrsCode(
+                            datasetLayer.getGeometryFields().get(0).getCrs());
+                    replacements.put("crs", crs);
+                }
                 break;
             case "distributionFormat":
                 replacements.put("format", datasetInfo.getFormat());
