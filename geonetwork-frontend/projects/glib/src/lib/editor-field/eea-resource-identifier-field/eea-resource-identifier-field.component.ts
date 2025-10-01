@@ -112,7 +112,7 @@ export class EeaResourceIdentifierFieldComponent implements OnInit {
       const now = new Date();
       let dateRange = tokens[7]
         .split('-')
-        .filter(date => !(new Date(date) instanceof Date))
+        .filter(date => new Date(date) instanceof Date)
         .map(date => new Date(date));
       this.resourceIdentifier.temporalCoverage.set(
         dateRange.length === 0 ? [now, now] : dateRange
