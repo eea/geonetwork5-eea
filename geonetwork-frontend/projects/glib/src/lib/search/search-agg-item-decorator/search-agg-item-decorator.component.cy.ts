@@ -27,7 +27,8 @@ describe('SearchAggItemDecoratorComponent', () => {
       },
     });
 
-    cy.get('i').should('have.class', aggregationConfig().meta.decorator.prefix + aggregationConfig().meta.decorator.map.key;
+    cy.get('i').should('have.class',
+      aggregationConfig().meta.decorator.prefix + aggregationConfig().meta.decorator.map.key);
   });
 
   it('should set proper image based on bucket key', () => {

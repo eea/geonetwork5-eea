@@ -68,7 +68,12 @@ export class DataAnalysisPanelComponent {
   uuid = input.required<string>();
 
   spatialRepresentationType = computed(
-    () => this.analysisResult()?.cl_spatialRepresentationType[0].key
+    () => {
+      if (this.analysisResult()?.format && ["Comma Separated Value (.csv)", "MS Excel format"].includes(this.analysisResult()?.format?.[0] ?? "")) {
+        return 'textTable';
+      }
+      return this.analysisResult()?.cl_spatialRepresentationType[0].key
+    }
   );
   isVector = computed(() => this.spatialRepresentationType() === 'vector');
   isRaster = computed(() => this.spatialRepresentationType() === 'grid');

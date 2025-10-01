@@ -37,6 +37,7 @@
     <div>
       <p-input-number
         placeholder="EPSG code"
+        [disabled]="resourceIdentifier!.dataType() === 't'"
         [min]="0"
         [maxFractionDigits]="0"
         [useGrouping]="false"
@@ -66,7 +67,8 @@
           [min]="0"
           [maxFractionDigits]="0"
           [format]="false"
-          [(ngModel)]="resourceIdentifier.scale">
+          [(ngModel)]="resourceIdentifier.scale"
+          [disabled]="resourceIdentifier!.dataType() === 't'">
         </p-input-number>
 
         <p-select
@@ -74,6 +76,7 @@
           optionLabel="code"
           optionValue="code"
           [(ngModel)]="resourceIdentifier.scaleUnit"
+          [disabled]="resourceIdentifier!.dataType() === 't'"
           [appendTo]="resourceIdentifierField">
           <ng-template let-unit #item>
             <span>{{ unit.code }} - {{ unit.name }}</span>

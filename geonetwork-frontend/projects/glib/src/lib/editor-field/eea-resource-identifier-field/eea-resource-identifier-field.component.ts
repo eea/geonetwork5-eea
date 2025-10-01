@@ -18,9 +18,9 @@ import { InputMask } from 'primeng/inputmask';
 export interface EEAResourceIdentifier {
   provider: WritableSignal<string>;
   dataType: WritableSignal<string>;
-  epsg: WritableSignal<number | undefined>;
-  scale: WritableSignal<number | undefined>;
-  scaleUnit: WritableSignal<string | undefined>;
+  epsg: WritableSignal<number | 'X' | undefined>;
+  scale: WritableSignal<number | 'X' | undefined>;
+  scaleUnit: WritableSignal<string | 'X' | undefined>;
   shortName: WritableSignal<string>;
   access: WritableSignal<string>;
   temporalCoverage: WritableSignal<Date[] | undefined>;
@@ -66,6 +66,11 @@ export class EeaResourceIdentifierFieldComponent implements OnInit {
 
   constructor() {
     effect(() => {
+      if (this.resourceIdentifier!.dataType() === 't') {
+        this.resourceIdentifier!.epsg.set('X');
+        this.resourceIdentifier!.scale.set('X');
+        this.resourceIdentifier!.scaleUnit.set('X');
+      }
       this.value.set(
         [
           this.resourceIdentifier!.provider(),
@@ -122,7 +127,7 @@ export class EeaResourceIdentifierFieldComponent implements OnInit {
     { code: 'r', name: 'Raster datasets (GeoTIFF, Erdas IMG, DEMs)' },
     {
       code: 'v',
-      name: 'Vectorial datasets (GML, Shapefile, GDB, Ascii Coordinate data)',
+      name: 'Vector datasets (GML, Shapefile, GDB, Ascii Coordinate data)',
     },
     { code: 't', name: 'Tabular datasets (csv, xlsx, accdb)' },
     { code: 's', name: 'Series' },
