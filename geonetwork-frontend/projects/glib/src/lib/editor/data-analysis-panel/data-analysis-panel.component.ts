@@ -47,7 +47,7 @@ enum StatsType {
     InplaceFieldComponent,
     TemporalExtentFieldComponent,
     ProgressBar,
-    VerticalExtentFieldComponent,
+    // VerticalExtentFieldComponent,
     JsonPipe,
   ],
   templateUrl: './data-analysis-panel.component.html',
@@ -67,14 +67,17 @@ export class DataAnalysisPanelComponent {
 
   uuid = input.required<string>();
 
-  spatialRepresentationType = computed(
-    () => {
-      if (this.analysisResult()?.format && ["Comma Separated Value (.csv)", "MS Excel format"].includes(this.analysisResult()?.format?.[0] ?? "")) {
-        return 'textTable';
-      }
-      return this.analysisResult()?.cl_spatialRepresentationType[0].key
+  spatialRepresentationType = computed(() => {
+    if (
+      this.analysisResult()?.format &&
+      ['Comma Separated Value (.csv)', 'MS Excel format'].includes(
+        this.analysisResult()?.format?.[0] ?? ''
+      )
+    ) {
+      return 'textTable';
     }
-  );
+    return this.analysisResult()?.cl_spatialRepresentationType[0].key;
+  });
   isVector = computed(() => this.spatialRepresentationType() === 'vector');
   isRaster = computed(() => this.spatialRepresentationType() === 'grid');
   isTabular = computed(() => this.spatialRepresentationType() === 'textTable');
