@@ -2,7 +2,6 @@ import { SearchAggItemDecoratorComponent } from './search-agg-item-decorator.com
 import { signal } from '@angular/core';
 
 describe('SearchAggItemDecoratorComponent', () => {
-
   let bucket = signal({
     key: 'key',
   });
@@ -27,8 +26,11 @@ describe('SearchAggItemDecoratorComponent', () => {
       },
     });
 
-    cy.get('i').should('have.class',
-      aggregationConfig().meta.decorator.prefix + aggregationConfig().meta.decorator.map.key);
+    cy.get('i').should(
+      'have.class',
+      aggregationConfig().meta.decorator.prefix +
+        aggregationConfig().meta.decorator.map.key
+    );
   });
 
   it('should set proper image based on bucket key', () => {
@@ -53,7 +55,10 @@ describe('SearchAggItemDecoratorComponent', () => {
       },
     });
 
-    cy.get('div img').should('have.attr', 'src', aggregationConfig().meta.decorator.map.key);
+    cy.get('div img').should(
+      'have.attr',
+      'src',
+      aggregationConfig().meta.decorator.map.key
+    );
   });
-
 });

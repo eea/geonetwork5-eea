@@ -582,14 +582,14 @@ export class NewRecordPanelComponent implements OnInit {
           approved: true,
           layer: this.layername(),
           include: this.includeProperties(),
-          exclude: this.excludeProperties()
+          exclude: this.excludeProperties(),
         }
       : {
           uuid: this.newRecordId(),
           datasource: this.datasourceWithPrefix(),
           layer: this.layername(),
           include: this.includeProperties(),
-          exclude: this.excludeProperties()
+          exclude: this.excludeProperties(),
         };
 
     const applyAnalysis =
