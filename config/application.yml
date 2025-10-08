@@ -93,7 +93,8 @@ server:
       cookie:
         name: GNSESSIONID
   forward-headers-strategy: framework
-
+  tomcat:
+    relaxed-query-chars: "|"
 spring:
   application:
     name: GeoNetwork
