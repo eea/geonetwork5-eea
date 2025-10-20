@@ -10,5 +10,9 @@ import org.springframework.security.core.Authentication;
 public interface IAuthenticationFacade {
     Authentication getAuthentication();
 
+    public boolean isAuthenticated();
+
+    boolean isAdmin();
+
     String getUsername();
 }

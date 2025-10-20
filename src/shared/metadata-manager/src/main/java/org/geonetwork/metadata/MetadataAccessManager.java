@@ -8,38 +8,40 @@ package org.geonetwork.metadata;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import org.geonetwork.domain.Group;
 import org.geonetwork.domain.Metadata;
 import org.geonetwork.domain.Operation;
+import org.geonetwork.domain.Operationallowed;
 import org.geonetwork.domain.Profile;
+import org.geonetwork.domain.ReservedGroup;
 import org.geonetwork.domain.ReservedOperation;
 import org.geonetwork.domain.User;
 import org.geonetwork.domain.Usergroup;
+import org.geonetwork.domain.repository.GroupRepository;
+import org.geonetwork.domain.repository.OperationRepository;
+import org.geonetwork.domain.repository.UsergroupRepository;
+import org.geonetwork.domain.specification.UserGroupSpecs;
 import org.geonetwork.security.AuthenticationFacade;
 import org.geonetwork.security.user.UserManager;
+import org.geonetwork.utility.NetworkUtil;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 @Component
 @AllArgsConstructor
 public class MetadataAccessManager implements IMetadataAccessManager {
-
+    private final NetworkUtil networkUtil;
     private final MetadataManager metadataManager;
     private final UserManager userManager;
     private final AuthenticationFacade authenticationFacade;
+    private final OperationRepository operationRepository;
+    private final UsergroupRepository userGroupRepository;
+    private final GroupRepository groupRepository;
 
-    /**
-     * Returns true if, and only if, at least one of these conditions is satisfied:
-     *
-     * <ul>
-     *   <li>the user is owner (@see #isOwner)
-     *   <li>the user has edit rights over the metadata
-     * </ul>
-     *
-     * @param metadataId The metadata internal identifier
-     */
     @Override
     public boolean canEdit(final int metadataId) throws Exception {
         return isOwner(metadataId) || hasEditPermission(metadataId);
@@ -48,7 +50,7 @@ public class MetadataAccessManager implements IMetadataAccessManager {
     @Override
     public boolean isOwner(final int metadataId) throws Exception {
         try {
-            if (!this.authenticationFacade.getAuthentication().isAuthenticated()) {
+            if (!this.authenticationFacade.isAuthenticated()) {
                 return false;
             }
 
@@ -67,7 +69,6 @@ public class MetadataAccessManager implements IMetadataAccessManager {
             Metadata metadata = metadataManager.findMetadataById(metadataId);
 
             // --- check if the user is the metadata owner
-            //
             if (currentUser.getId().equals(metadata.getOwner())) {
                 return true;
             }
@@ -85,23 +86,14 @@ public class MetadataAccessManager implements IMetadataAccessManager {
 
             List<Usergroup> userReviewerGroups = this.userManager.getUserGroups(currentUser.getId(), Profile.Reviewer);
 
-            boolean isReviewerInGroupOwner = (userReviewerGroups.stream()
-                            .filter(usergroup -> usergroup.getGroupid().getId().equals(groupOwner))
-                            .count()
-                    > 0);
-
-            return isReviewerInGroupOwner;
+            return userReviewerGroups.stream()
+                    .anyMatch(usergroup -> usergroup.getGroupid().getId().equals(groupOwner));
 
         } catch (MetadataNotFoundException ex) {
             return false;
         }
     }
 
-    /**
-     * Check if current user can edit the metadata according to the groups where the metadata is editable.
-     *
-     * @param metadataId The metadata internal identifier
-     */
     @Override
     public boolean hasEditPermission(final int metadataId) throws Exception {
         return hasEditingPermissionWithProfile(metadataId);
@@ -114,9 +106,8 @@ public class MetadataAccessManager implements IMetadataAccessManager {
             return true;
         }
         int downloadId = ReservedOperation.download.getId();
-        // TODO: get IP address --> context.getIpAddress()
-        String ipAddress = "";
-        Set<Operation> ops = getOperations(metadataId, ipAddress);
+
+        Set<Operation> ops = getOperations(metadataId);
         for (Operation op : ops) {
             if (op.getId() == downloadId) {
                 return true;
@@ -127,37 +118,25 @@ public class MetadataAccessManager implements IMetadataAccessManager {
 
     @Override
     public boolean canView(int metadataId) throws Exception {
-        // TODO: get IP address --> context.getIpAddress()
-        String ipAddress = "";
-        Set<Operation> hsOper = this.getOperations(metadataId, ipAddress);
-        boolean hasViewOperation = (hsOper.stream()
-                        .filter(op -> op.getId() == ReservedOperation.view.getId())
-                        .count()
-                > 0);
+        Set<Operation> hsOper = this.getOperations(metadataId);
 
-        return hasViewOperation;
-    }
-
-    /**
-     * Given a user(session) a list of groups and a metadata returns all operations that user can perform on that
-     * metadata (an set of OPER_XXX as keys). If the user is authenticated the permissions are taken from the groups the
-     * user belong. If the user is not authenticated, a dynamic group is assigned depending on user location (0 for
-     * internal and 1 for external).
-     */
-    @Override
-    public Set<Operation> getOperations(int metadataId, String ip) throws Exception {
-        return getOperations(metadataId, ip, null);
+        return hsOper.stream().anyMatch(op -> op.getId() == ReservedOperation.view.getId());
     }
 
     @Override
-    public Set<Operation> getOperations(int metadataId, String ip, Collection<Operation> operations) throws Exception {
+    public Set<Operation> getOperations(int metadataId) throws Exception {
+        return getOperations(metadataId, null);
+    }
+
+    @Override
+    public Set<Operation> getOperations(int metadataId, Collection<Operation> operations) throws Exception {
         Set<Operation> results;
         // if user is an administrator OR is the owner of the record then allow all operations
         if (isOwner(metadataId)) {
             results = new HashSet<>(this.metadataManager.getAvailableMetadataOperations());
         } else {
             if (operations == null) {
-                results = new HashSet<>(getAllOperations(metadataId, ip));
+                results = new HashSet<>(getAllOperations(metadataId));
             } else {
                 results = new HashSet<>(operations);
             }
@@ -172,20 +151,55 @@ public class MetadataAccessManager implements IMetadataAccessManager {
         return results;
     }
 
-    /** Returns all operations permitted by the user on a particular metadata. */
     @Override
-    public Set<Operation> getAllOperations(int metadataId, String ip) throws Exception {
-        // TODO: Implement
-
+    public Set<Operation> getAllOperations(int metadataId) throws Exception {
         HashSet<Operation> operations = new HashSet<>();
-        /*Set<Integer> groups = getUserGroups(context.getUserSession(),
-          ip, false);
-        for (Operationallowed opAllow : this.metadataManager.getMetadataOperations(mdId)) {
-          if (groups.contains(opAllow.getId().getGroupid())) {
-            operations.add(operationRepository.findById(opAllow.getId().getOperationId()).get());
-          }
-        }*/
+        Set<Integer> groups = getUserGroups(false);
+        for (Operationallowed opAllow : this.metadataManager.getMetadataOperations(metadataId)) {
+            if (groups.contains(opAllow.getId().getGroupid())) {
+                operations.add(operationRepository
+                        .findById(opAllow.getId().getOperationid())
+                        .get());
+            }
+        }
         return operations;
+    }
+
+    /** Returns all groups accessible by the user (a set of ids). */
+    public Set<Integer> getUserGroups(boolean editingGroupsOnly) throws Exception {
+        Set<Integer> hs = new HashSet<>();
+
+        // add All (1) network group
+        hs.add(ReservedGroup.all.getId());
+
+        Optional<String> ip = networkUtil.getClientIpAddress();
+        if (ip.isPresent() && networkUtil.isIntranet(ip.get())) {
+            hs.add(ReservedGroup.intranet.getId());
+        }
+
+        // get other groups
+        if (authenticationFacade.isAuthenticated()) {
+            // add (-1) GUEST group
+            hs.add(ReservedGroup.guest.getId());
+
+            if (authenticationFacade.isAdmin()) {
+                List<Integer> allGroupIds =
+                        groupRepository.findAll().stream().map(Group::getId).toList();
+                hs.addAll(allGroupIds);
+            } else {
+                User currentUser = userManager.getUserByUsername(authenticationFacade.getUsername());
+                Specification<Usergroup> spec = UserGroupSpecs.hasUserId(currentUser.getId());
+                if (editingGroupsOnly) {
+                    spec = Specification.where(spec).and(UserGroupSpecs.hasProfile(Profile.Editor));
+                }
+
+                List<Usergroup> usergroupList = userGroupRepository.findAll(spec);
+                for (Usergroup ug : usergroupList) {
+                    hs.add(ug.getGroupid().getId());
+                }
+            }
+        }
+        return hs;
     }
 
     /**
@@ -215,14 +229,12 @@ public class MetadataAccessManager implements IMetadataAccessManager {
         List<Usergroup> userEditableGroups = this.userManager.getUserGroups(currentUser.getId());
         List<Integer> userEditableGroupsIds = userEditableGroups.stream()
                 .map(usergroup -> usergroup.getId().getGroupid())
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
 
-        boolean userCanEditMetadata = (userEditableGroupsIds.stream()
-                        .filter(metadataEditableGroups::contains)
-                        .distinct()
-                        .count()
-                > 0);
-
-        return userCanEditMetadata;
+        return userEditableGroupsIds.stream()
+                .filter(metadataEditableGroups::contains)
+                .distinct()
+                .findAny()
+                .isPresent();
     }
 }

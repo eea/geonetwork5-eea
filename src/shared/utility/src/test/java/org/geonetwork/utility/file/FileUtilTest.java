@@ -3,14 +3,13 @@
  * This code is licensed under the GPL 2.0 license,
  * available at the root application directory.
  */
-package geonetwork.utility.file;
+package org.geonetwork.utility.file;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
-import org.geonetwork.utility.file.FileUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
