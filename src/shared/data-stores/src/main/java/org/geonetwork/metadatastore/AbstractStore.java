@@ -68,8 +68,9 @@ public abstract class AbstractStore implements Store {
             throws Exception {
         int metadataId = getAndCheckMetadataId(metadataUuid, approved);
         boolean canEdit = this.metadataAccessManager.canEdit(metadataId);
+        boolean canDownload = this.metadataAccessManager.canDownload(metadataId);
 
-        List<MetadataResource> resourceList;
+        List<MetadataResource> resourceList = new ArrayList<>();
 
         if (metadataDirConfig.getMetadataDirPrivileges() == MetadataDirPrivileges.DEFAULT) {
             resourceList =
@@ -77,7 +78,7 @@ public abstract class AbstractStore implements Store {
             if (canEdit) {
                 resourceList.addAll(getResources(metadataUuid, MetadataResourceVisibility.PRIVATE, filter, approved));
             }
-        } else {
+        } else if (canDownload) {
             resourceList =
                     new ArrayList<>(getResources(metadataUuid, MetadataResourceVisibility.PUBLIC, filter, approved));
         }

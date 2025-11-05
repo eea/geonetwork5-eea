@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import lombok.RequiredArgsConstructor;
 import org.geonetwork.domain.Metadata;
@@ -107,7 +108,7 @@ public class AttachmentsController {
 
             Metadata metadata = metadataManager.findMetadataByUuidOrId(metadataUuid, approved);
 
-            if (!metadataAccessManager.canView(metadata.getId())) {
+            if (!metadataAccessManager.canDownload(metadata.getId())) {
                 throw new AccessDeniedException("User is not permitted to access this resource");
             }
 
@@ -245,7 +246,6 @@ public class AttachmentsController {
                     @RequestParam(required = false, defaultValue = "false")
                     Boolean approved)
             throws Exception {
-
         return store.putResource(metadataUuid, file, visibility, approved);
     }
 
