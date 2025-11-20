@@ -15,6 +15,7 @@ geonetwork:
       /jolokia,
       /xml/,
       /index/,
+      /dashboards/,
       /doc/api/index.html,
       /doc/api/swagger-ui.css,
       /doc/api/swagger-ui-bundle.js,
