@@ -58,6 +58,7 @@ public class WebSecurityConfiguration {
             HttpProxyPolicyAgentAuthorizationManager proxyPolicyAgentAuthorizationManager,
             GeoNetworkOAuth2UserService geoNetworkOAuth2UserService,
             @Value("${geonetwork.home: '/'}") String homeUrl,
+            @Value("${geonetwork.signin: ''}") String signinUrl,
             @Value("${geonetwork.security.frameOptions.mode: 'DENY'}") String frameOptionMode,
             @Value("${geonetwork.security.frameOptions.allowFrom: ''}") String allowFrom)
             throws Exception {
@@ -78,6 +79,7 @@ public class WebSecurityConfiguration {
                         .successHandler((request, response, authentication) -> {
                             handleRedirectParam(request, response, homeUrl);
                         })
+                        .failureUrl(signinUrl + "?failure=true")
                         //                        .defaultSuccessUrl("/", false)
                         .permitAll())
                 .httpBasic(AbstractHttpConfigurer::disable)
