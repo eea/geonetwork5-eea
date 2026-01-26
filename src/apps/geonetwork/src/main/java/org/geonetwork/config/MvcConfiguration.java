@@ -6,6 +6,7 @@
 package org.geonetwork.config;
 
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -15,9 +16,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class MvcConfiguration implements WebMvcConfigurer {
     private String homeUrl;
+    private String signinUrl;
 
-    public MvcConfiguration(@Value("${geonetwork.home: '/'}") String homeUrl) {
+    public MvcConfiguration(
+            @Value("${geonetwork.home: '/'}") String homeUrl, @Value("${geonetwork.signin: ''}") String signinUrl) {
         this.homeUrl = homeUrl;
+        this.signinUrl = signinUrl;
     }
     /**
      * Add view controllers.
@@ -39,6 +43,11 @@ public class MvcConfiguration implements WebMvcConfigurer {
             registry.addViewController(app + "{path1}/{path2}/{path3:[a-zA-Z0-9_-]+}")
                     .setViewName(indexPath);
         });
-        registry.addViewController("/signin").setViewName("signin");
+
+        if (StringUtils.isNotEmpty(signinUrl)) {
+            registry.addViewController("/signin").setViewName("redirect:" + signinUrl);
+        } else {
+            registry.addViewController("/signin").setViewName("signin");
+        }
     }
 }

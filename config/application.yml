@@ -2,6 +2,7 @@ geonetwork:
   url: http://localhost:7979
   url_with_context: http://localhost:7979/geonetwork
   home: /srv
+  signin: /srv/eng/catalog.signin
   4:
     url: http://localhost:8080/geonetwork
     path: >
