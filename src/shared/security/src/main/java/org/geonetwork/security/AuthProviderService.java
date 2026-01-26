@@ -16,23 +16,30 @@ public class AuthProviderService {
     InMemoryClientRegistrationRepository clientRegistrationRepository;
     private String baseUrl;
     private String contextPath;
+    private String localSecurityProvider;
 
     public AuthProviderService(
             InMemoryClientRegistrationRepository clientRegistrationRepository,
             @Value("${geonetwork.url}") String baseUrl,
-            @Value("${server.servlet.context-path:}") String contextPath) {
+            @Value("${server.servlet.context-path:}") String contextPath,
+            @Value("${geonetwork.security.provider:}") String localSecurityProvider) {
+        this.localSecurityProvider = localSecurityProvider;
         this.clientRegistrationRepository = clientRegistrationRepository;
         this.contextPath = contextPath;
         this.baseUrl = baseUrl;
     }
 
     public List<AuthProvider> getAuthProviders() {
-        List<AuthProvider> clientId = new ArrayList<>();
-        clientRegistrationRepository.forEach(clientRegistration -> clientId.add(AuthProvider.builder()
-                .clientId(clientRegistration.getClientId())
+        List<AuthProvider> providerList = new ArrayList<>();
+        if ("database".equalsIgnoreCase(localSecurityProvider) || "ldap".equalsIgnoreCase(localSecurityProvider)) {
+            providerList.add(
+                    AuthProvider.builder().clientId(localSecurityProvider).build());
+        }
+        clientRegistrationRepository.forEach(clientRegistration -> providerList.add(AuthProvider.builder()
+                .clientId(clientRegistration.getRegistrationId())
                 .endpoint(String.format(
                         "%s%s/oauth2/authorization/%s", baseUrl, contextPath, clientRegistration.getRegistrationId()))
                 .build()));
-        return clientId;
+        return providerList;
     }
 }
