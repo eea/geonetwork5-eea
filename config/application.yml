@@ -121,9 +121,9 @@ spring:
     oauth2:
       client:
         registration:
-          github:
-            clientId: github-client-id
-            clientSecret: github-client-secret
+#          github:
+#            clientId: github-client-id
+#            clientSecret: github-client-secret
 #          custom:
 #            client-id: custom-client-id
 #            client-secret: custom-client-secret
