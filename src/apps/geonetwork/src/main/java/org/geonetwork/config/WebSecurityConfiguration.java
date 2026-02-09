@@ -16,6 +16,7 @@ import org.geonetwork.proxy.HttpProxyPolicyAgentAuthorizationManager;
 import org.geonetwork.security.DatabaseUserAuthProperties;
 import org.geonetwork.security.DatabaseUserDetailsService;
 import org.geonetwork.security.GeoNetworkUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -56,7 +58,8 @@ public class WebSecurityConfiguration {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             HttpProxyPolicyAgentAuthorizationManager proxyPolicyAgentAuthorizationManager,
-            GeoNetworkOAuth2UserService geoNetworkOAuth2UserService,
+            @Autowired(required = false) InMemoryClientRegistrationRepository clientRegistrationRepository,
+            @Autowired(required = false) GeoNetworkOAuth2UserService geoNetworkOAuth2UserService,
             @Value("${geonetwork.home: '/'}") String homeUrl,
             @Value("${geonetwork.signin: ''}") String signinUrl,
             @Value("${geonetwork.security.frameOptions.mode: 'DENY'}") String frameOptionMode,
@@ -70,11 +73,15 @@ public class WebSecurityConfiguration {
                         .requestMatchers("/api/proxy")
                         .access(proxyPolicyAgentAuthorizationManager)
                         .anyRequest()
-                        .permitAll())
-                .oauth2Login(oauth -> oauth.permitAll().userInfoEndpoint(userInfo -> userInfo.oidcUserService(
-                                geoNetworkOAuth2UserService.oidcUserService())
-                        .userService(geoNetworkOAuth2UserService.userService())))
-                .formLogin(form -> form.loginPage("/signin")
+                        .permitAll());
+
+        if (clientRegistrationRepository != null) {
+            http.oauth2Login(oauth -> oauth.permitAll().userInfoEndpoint(userInfo -> userInfo.oidcUserService(
+                            geoNetworkOAuth2UserService.oidcUserService())
+                    .userService(geoNetworkOAuth2UserService.userService())));
+        }
+
+        http.formLogin(form -> form.loginPage("/signin")
                         .loginProcessingUrl("/api/user/signin")
                         .successHandler((request, response, authentication) -> {
                             handleRedirectParam(request, response, homeUrl);
