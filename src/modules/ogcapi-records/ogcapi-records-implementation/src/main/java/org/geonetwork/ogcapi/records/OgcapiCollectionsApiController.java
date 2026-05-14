@@ -151,7 +151,8 @@ public class OgcapiCollectionsApiController implements CollectionsApi {
             String filter,
             String filterLang,
             String filterCrs,
-            List<String> profile) {
+            List<String> profile,
+            List<String> advancedFacets) {
         var query = queryBuilder.buildFromRequest(
                 catalogId,
                 bbox,
@@ -166,13 +167,14 @@ public class OgcapiCollectionsApiController implements CollectionsApi {
                 filter,
                 filterLang,
                 filterCrs,
-                request.getParameterMap());
+                request.getParameterMap(),
+                advancedFacets);
 
         var requestInfo = requestMediaTypeAndProfileBuilder.build(request, OgcApiRecordsMultiRecordResponse.class);
 
         var records = itemsApi.getRecordsFromElastic(query);
 
-        var facetInfo = facetsInjector.getFacets(records);
+        var facetInfo = facetsInjector.getFacets(records, query.getAdvancedFacets());
         var totalNumHits = records.hits().total().value();
         var indexRecords = records.hits().hits().stream().map(x -> x.source()).toList();
 

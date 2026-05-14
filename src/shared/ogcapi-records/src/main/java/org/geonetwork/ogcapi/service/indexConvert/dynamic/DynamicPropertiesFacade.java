@@ -41,6 +41,26 @@ public class DynamicPropertiesFacade {
     }
 
     /**
+     * given a facet seach for the field its apart of (facet configs are part of field defintion - see the
+     * property/facet configuration)
+     *
+     * @param facetConfig facet to look for
+     */
+    public OgcElasticFieldMapperConfig findFieldForFacet(OgcFacetConfig facetConfig) {
+        for (var field : config.getFields()) {
+            if (field.getFacetsConfig() == null || field.getFacetsConfig().isEmpty()) {
+                continue;
+            }
+            var facetNameForField =
+                    field.getFacetsConfig().stream().map(f -> f.getFacetName()).toList();
+            if (facetNameForField.contains(facetConfig.getFacetName())) {
+                return field;
+            }
+        }
+        return null;
+    }
+
+    /**
      * for aggregates/facets, what is the default number of buckets?
      *
      * @return default number of facet buckets
@@ -62,10 +82,7 @@ public class DynamicPropertiesFacade {
             if (field.getFacetsConfig() == null || field.getFacetsConfig().isEmpty()) {
                 continue;
             }
-            for (var facetConfig : field.getFacetsConfig()) {
-                facetConfig.setField(field); // parent link
-                result.add(facetConfig);
-            }
+            result.addAll(field.getFacetsConfig());
         }
         return result;
     }
