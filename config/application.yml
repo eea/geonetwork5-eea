@@ -12,8 +12,8 @@ geonetwork:
     # name and checks the resolved address(es). Covers loopback, private, link-local,
     # broadcast, *.local and IPv6 loopback / mapped literals.
     excludeHosts: "^(localhost|127\\..*|10\\..*|172\\.(1[6-9]|2[0-9]|3[01])\\..*|192\\.168\\..*|169\\.254\\..*|100\\.(6[4-9]|[7-9][0-9]|1[01][0-9]|12[0-7])\\..*|0\\..*|255\\.255\\.255\\.255|.*\\.local|.*\\.localhost|::1|0:0:0:0:0:0:0:1|::ffff:.*)$"
-    # Optional allowlist (primary control when set): case-insensitive host regexes the
-    # Datahub UI actually needs. When non-empty, the host must match one of these AND
+    # Optional allowlist (primary control when set): case-insensitive host regexes.
+    # When non-empty, the host must match one of these AND
     # still satisfy checkInLinkTable. Empty = allowlist not enforced.
     allowedHosts: []
     #  - ".*\\.europa\\.eu"
