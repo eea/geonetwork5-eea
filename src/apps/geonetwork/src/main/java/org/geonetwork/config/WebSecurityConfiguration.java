@@ -6,8 +6,6 @@
 
 package org.geonetwork.config;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;

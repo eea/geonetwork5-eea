@@ -20,7 +20,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.Map;
 import javax.imageio.ImageIO;
 import lombok.RequiredArgsConstructor;
 import org.geonetwork.domain.Metadata;
