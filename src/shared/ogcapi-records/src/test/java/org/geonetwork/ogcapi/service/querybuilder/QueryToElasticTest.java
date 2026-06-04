@@ -201,7 +201,7 @@ public class QueryToElasticTest {
         var q = queryToElastic.getQueryablesQuery(query);
 
         // extract just the created query
-        var mmq = (RangeQuery) ((BoolQuery) q._get()).must().get(0)._get();
+        var mmq = ((BoolQuery) q._get()).must().get(0).range();
 
         var createdQuery = mmq;
 
@@ -211,11 +211,11 @@ public class QueryToElasticTest {
         // from: "2023-10-22T21:10:03Z"
         //  to :2024-10-22T21:10:03Z
         assertEquals(RangeQuery.class, createdQuery.getClass());
-        var rangeQueryBuilder = (RangeQuery) createdQuery;
+        var rangeQueryBuilder = createdQuery.date();
         assertEquals("created", rangeQueryBuilder.field());
 
-        assertEquals("2023-10-22T21:10:03Z", rangeQueryBuilder.gte().toString());
-        assertEquals("2024-10-22T21:10:03Z", rangeQueryBuilder.lte().toString());
+        assertEquals("2023-10-22T21:10:03Z", rangeQueryBuilder.gte());
+        assertEquals("2024-10-22T21:10:03Z", rangeQueryBuilder.lte());
     }
 
     /** tests date types - should result in a range query, with from=null */
@@ -248,7 +248,7 @@ public class QueryToElasticTest {
         // add the queryables search to the boolQuery
         var q = queryToElastic.getQueryablesQuery(query);
 
-        var rangeQuery = (RangeQuery) ((BoolQuery) q._get()).must().get(0)._get();
+        var rangeQuery = ((BoolQuery) q._get()).must().get(0).range();
 
         // test the created elastic query
         // should be a RangeQueryBuilder
@@ -256,11 +256,12 @@ public class QueryToElasticTest {
         // from: "2023-10-22T21:10:03Z"
         //  to :2024-10-22T21:10:03Z
         assertEquals(RangeQuery.class, rangeQuery.getClass());
-        var rangeQueryBuilder = (RangeQuery) rangeQuery;
+        var rangeQueryBuilder = rangeQuery.date();
         assertEquals("created", rangeQueryBuilder.field());
 
-        assertNull(rangeQueryBuilder.from());
-        assertEquals("2024-10-22T21:10:03Z", rangeQueryBuilder.lte().toString());
+        assertNull(rangeQueryBuilder.gte());
+        assertNull(rangeQueryBuilder.gt());
+        assertEquals("2024-10-22T21:10:03Z", rangeQueryBuilder.lte());
     }
 
     /** tests date types - should result in a range query, with to=null */
@@ -293,7 +294,7 @@ public class QueryToElasticTest {
         // add the queryables search to the boolQuery
         var q = queryToElastic.getQueryablesQuery(query);
 
-        var rangeQuery = (RangeQuery) ((BoolQuery) q._get()).must().get(0)._get();
+        var rangeQuery = ((BoolQuery) q._get()).must().get(0).range();
 
         // test the created elastic query
         // should be a RangeQueryBuilder
@@ -301,11 +302,12 @@ public class QueryToElasticTest {
         // from: "2023-10-22T21:10:03Z"
         //  to :2024-10-22T21:10:03Z
         assertEquals(RangeQuery.class, rangeQuery.getClass());
-        var rangeQueryBuilder = (RangeQuery) rangeQuery;
+        var rangeQueryBuilder = rangeQuery.date();
         assertEquals("created", rangeQueryBuilder.field());
 
-        assertNull(rangeQueryBuilder.to());
-        assertEquals("2023-10-22T21:10:03Z", rangeQueryBuilder.gte().toString());
+        assertNull(rangeQueryBuilder.lte());
+        assertNull(rangeQueryBuilder.lt());
+        assertEquals("2023-10-22T21:10:03Z", rangeQueryBuilder.gte());
     }
 
     /** tests date types - should result in a range query */
