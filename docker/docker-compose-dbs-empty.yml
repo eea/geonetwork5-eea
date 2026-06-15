@@ -30,13 +30,14 @@ services:
       "
 
   postgres:
-    image: postgis/postgis:17-3.5
+    image: kartoza/postgis:17-3.5
     ports:
       - "5432:5432"
     environment:
-        POSTGRES_PASSWORD: geonetwork
         POSTGRES_USER: geonetwork
-        POSTGRES_DB: geonetwork
+        POSTGRES_PASS: geonetwork
+        POSTGRES_DBNAME: geonetwork
+        ALLOW_IP_RANGE: 0.0.0.0/0
 
 
 
