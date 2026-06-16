@@ -27,7 +27,7 @@ public class GeonetworkGenericApplication extends BaseApplication {
         SpringApplication.run(GeonetworkGenericApplication.class, args);
     }
 
-    private static void setupYmlConfigurationFiles() throws Exception {
+    protected static void setupYmlConfigurationFiles() throws Exception {
         var resolver = new ResolveYmlConfigs();
         var locs = resolver.resolveYamlLocations();
         resolver.setResolveYamlLocations(locs);

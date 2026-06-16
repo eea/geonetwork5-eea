@@ -54,9 +54,21 @@ public class ResolveYmlConfigs {
      * @param locations see #resolveYamlLocations()
      */
     public void setResolveYamlLocations(List<ApplicationYmlLocation> locations) {
-        var spring_config_locations =
-                locations.stream().map(x -> x.getUrl().toString()).toList();
-        var spring_config_location = String.join(",", spring_config_locations);
-        System.setProperty("spring.config.location", spring_config_location);
+        List<String> springConfigLocations = new ArrayList<>();
+        for (var loc : locations) {
+            springConfigLocations.add(loc.getUrl().toString());
+        }
+
+        String externalConfig = System.getProperty("spring.config.location");
+        if (externalConfig == null || externalConfig.isEmpty()) {
+            externalConfig = System.getenv("SPRING_CONFIG_LOCATION");
+        }
+
+        if (externalConfig != null && !externalConfig.isEmpty()) {
+            springConfigLocations.add(externalConfig);
+        }
+
+        String combinedLocations = String.join(",", springConfigLocations);
+        System.setProperty("spring.config.location", combinedLocations);
     }
 }

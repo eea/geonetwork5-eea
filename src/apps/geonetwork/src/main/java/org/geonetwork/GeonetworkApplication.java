@@ -5,6 +5,8 @@
 
 package org.geonetwork;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -13,4 +15,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableCaching
 @EnableScheduling
 @SpringBootApplication(scanBasePackages = {"org.geonetwork"})
-public class GeonetworkApplication extends GeonetworkGenericApplication {}
+@Slf4j
+public class GeonetworkApplication extends GeonetworkGenericApplication {
+    public static void main(String[] args) throws Exception {
+
+        setupYmlConfigurationFiles();
+        log.warn("spring.config.location = " + System.getProperty("spring.config.location"));
+
+        SpringApplication.run(GeonetworkApplication.class, args);
+    }
+}
