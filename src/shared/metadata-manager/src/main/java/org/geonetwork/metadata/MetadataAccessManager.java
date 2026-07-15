@@ -209,7 +209,7 @@ public class MetadataAccessManager implements IMetadataAccessManager {
      * @param metadataId The metadata internal identifier
      */
     private boolean hasEditingPermissionWithProfile(final int metadataId) throws Exception {
-        if (this.authenticationFacade.getAuthentication().isAuthenticated()) {
+        if (!this.authenticationFacade.getAuthentication().isAuthenticated()) {
             return false;
         }
 
