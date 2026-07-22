@@ -4,6 +4,7 @@
  */
 package org.geonetwork.ogcapi.service.indexConvert.dynamic;
 
+import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,12 +12,16 @@ import org.geonetwork.index.model.record.IndexRecord;
 import org.geonetwork.ogcapi.records.generated.model.OgcApiRecordsJsonPropertyDto;
 import org.geonetwork.ogcapi.records.generated.model.OgcApiRecordsJsonSchemaDto;
 import org.geonetwork.ogcapi.records.generated.model.OgcApiRecordsRecordGeoJSONDto;
+import org.geonetwork.ogcapi.service.configuration.OgcApiConfigChangedEvent;
+import org.geonetwork.ogcapi.service.configuration.OgcApiPropertyMappingService;
 import org.geonetwork.ogcapi.service.configuration.OgcElasticFieldMapperConfig;
 import org.geonetwork.ogcapi.service.configuration.OgcElasticFieldsMapperConfig;
 import org.geonetwork.ogcapi.service.configuration.OgcFacetConfig;
 import org.geonetwork.ogcapi.service.configuration.SimpleType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 /**
  * This gives a higher level api to the Dynamic properties.
@@ -27,13 +32,26 @@ import org.springframework.stereotype.Component;
 public class DynamicPropertiesFacade {
 
     @Autowired
-    private OgcElasticFieldsMapperConfig config;
+    private OgcApiPropertyMappingService configService;
 
     @Autowired
     ElasticTypingSystem elasticTypingSystem;
 
     @Autowired
     ExtraElasticPropertiesService extraElasticPropertiesService;
+
+    private volatile OgcElasticFieldsMapperConfig config;
+
+    @PostConstruct
+    void loadConfig() {
+        config = configService.getConfig();
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    void onConfigChanged(OgcApiConfigChangedEvent event) {
+        config = configService.getConfig();
+        elasticTypingSystem.refresh(config);
+    }
 
     public void injectFacetsIntoResponse(
             IndexRecord indexRecord, String iso3lang, OgcApiRecordsRecordGeoJSONDto result) {
