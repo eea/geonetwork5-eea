@@ -188,17 +188,19 @@ spring:
     import:
       - optional:classpath:application-schemas.yml
       - optional:classpath:application-data-ingester.yml
+      - optional:configserver:http://localhost:8888
+      - classpath:application-gn4.yml
+      - optional:classpath:application-ogcapi-records.yml
+
 management:
-  endpoint:
-    info:
-      enabled: true
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health
   health:
     ldap:
       enabled: false
+
 springdoc:
   show-login-endpoint: true
   swagger-ui:
