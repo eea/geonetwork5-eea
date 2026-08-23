@@ -34,7 +34,6 @@ public class OgcApiLinkConfiguration {
         if (!ogcApiRecordsBaseUrl.endsWith("/")) {
             ogcApiRecordsBaseUrl += "/";
         }
-        ogcApiRecordsBaseUrl = ogcApiRecordsBaseUrl.replace("//", "/");
         this.ogcApiRecordsBaseUrl = ogcApiRecordsBaseUrl;
     }
 
@@ -50,7 +49,6 @@ public class OgcApiLinkConfiguration {
         if (!gnBaseUrl.endsWith("/")) {
             gnBaseUrl += "/";
         }
-        gnBaseUrl = gnBaseUrl.replace("//", "/");
 
         this.gnBaseUrl = gnBaseUrl;
     }
