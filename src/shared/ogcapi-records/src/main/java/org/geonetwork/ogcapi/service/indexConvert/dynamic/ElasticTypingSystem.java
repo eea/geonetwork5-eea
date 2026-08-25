@@ -234,22 +234,30 @@ public class ElasticTypingSystem {
         var pathPart = path.removeFirst();
         var first = this.elasticIndexInfo.mappings().properties().get(pathPart);
 
-        if (first == null) {
+        if (first == null || !(first._get() instanceof PropertyVariant firstPv)) {
             return null; // don't know about this type
         }
-        PropertyVariant elasticProperty = (PropertyVariant) first._get();
+        PropertyVariant elasticProperty = firstPv;
 
         while (!path.isEmpty()) {
             pathPart = path.removeFirst();
-            if (elasticProperty instanceof ObjectProperty objectProperty) {
-                elasticProperty = (PropertyVariant)
-                        objectProperty.properties().get(pathPart)._get();
-            } else if (elasticProperty instanceof TextProperty textProperty) {
-                elasticProperty = TextProperty.of(tp -> tp);
-                //              elasticProperty = (PropertyVariant)  textProperty.fields().get(pathPart);
+            if (elasticProperty instanceof PropertyBase propBase) {
+                Property child = null;
+                if (propBase.properties() != null && propBase.properties().containsKey(pathPart)) {
+                    child = propBase.properties().get(pathPart);
+                } else if (propBase.fields() != null && propBase.fields().containsKey(pathPart)) {
+                    child = propBase.fields().get(pathPart);
+                }
+
+                if (child != null && child._get() instanceof PropertyVariant pv) {
+                    elasticProperty = pv;
+                } else {
+                    log.warn("Elastic Index Definition - couldn't find '{}' in {}", pathPart, elasticProperty);
+                    return null;
+                }
             } else {
-                throw new RuntimeException(
-                        "Elastic Index Definition - couldn't find " + pathPart + " in " + elasticProperty);
+                log.warn("Elastic Index Definition - couldn't find '{}' in {}", pathPart, elasticProperty);
+                return null;
             }
         }
         return elasticProperty;
