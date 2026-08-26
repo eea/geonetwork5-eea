@@ -1,7 +1,6 @@
 /*
- * (c) 2003 Open Source Geospatial Foundation - all rights reserved
- * This code is licensed under the GPL 2.0 license,
- * available at the root application directory.
+ * SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 // =============================================================================
 // ===	Copyright (C) 2001-2023 Food and Agriculture Organization of the
@@ -209,7 +208,7 @@ public final class Geonet {
     /**
      * Parameters that can be used in searches. See the parameters for a more complete description.
      *
-     * @see ../services.util.MainUtil.getDefaultSearch for default values.
+     * @see "../services.util.MainUtil.getDefaultSearch for default values."
      */
     public static final class SearchResult {
         /** Parameter name: {@value #TITLE} - Free text field that searches in the title */

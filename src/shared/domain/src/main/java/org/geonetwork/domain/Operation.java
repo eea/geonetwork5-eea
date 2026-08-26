@@ -1,7 +1,6 @@
 /*
- * (c) 2003 Open Source Geospatial Foundation - all rights reserved
- * This code is licensed under the GPL 2.0 license,
- * available at the root application directory.
+ * SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 package org.geonetwork.domain;
 
@@ -38,4 +37,9 @@ public class Operation {
     @NotNull
     @Column(name = "name", nullable = false, length = 32)
     private String name;
+
+    @Override
+    public String toString() {
+        return "Operation [name=" + name + ", id=" + id + "]";
+    }
 }

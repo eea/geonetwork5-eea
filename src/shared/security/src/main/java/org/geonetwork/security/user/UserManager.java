@@ -1,7 +1,6 @@
 /*
- * (c) 2003 Open Source Geospatial Foundation - all rights reserved
- * This code is licensed under the GPL 2.0 license,
- * available at the root application directory.
+ * SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 package org.geonetwork.security.user;
 
@@ -65,7 +64,7 @@ public class UserManager implements IUserManager {
             String company,
             Profile profile) {
         User newUser = User.builder()
-                .isenabled("y")
+                .isenabled(true)
                 .password("")
                 .username(username)
                 .name(Optional.ofNullable(name).orElse(""))

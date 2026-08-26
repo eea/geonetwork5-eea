@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    (c) 2003 Open Source Geospatial Foundation - all rights reserved
-    This code is licensed under the GPL 2.0 license,
-    available at the root application directory.
+    SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+    SPDX-License-Identifier: GPL-2.0-or-later
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -21,7 +20,22 @@
   <dependencies>
     <dependency>
       <groupId>org.geonetwork</groupId>
+      <artifactId>gn-generic-app</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geonetwork</groupId>
+      <artifactId>gn-ogcapi-records-implementation</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geonetwork</groupId>
       <artifactId>gn-index-client</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geonetwork</groupId>
+      <artifactId>ogcapi-records-shared</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -32,6 +46,26 @@
     <dependency>
       <groupId>org.geonetwork</groupId>
       <artifactId>gn-indexing</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geonetwork</groupId>
+      <artifactId>gn-configuration</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geonetwork</groupId>
+      <artifactId>gn-configuration-management-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geonetwork</groupId>
+      <artifactId>gn-proxy</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geonetwork</groupId>
+      <artifactId>gn-4</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -81,12 +115,17 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-gateway-mvc</artifactId>
+      <artifactId>spring-cloud-starter-gateway-server-webmvc</artifactId>
     </dependency>
     <!-- Commented to avoid error:
-    java.lang.ClassCastException: class org.geonetwork.springbatchharvester.HarvesterResult cannot be cast to class org.geonetwork.springbatchharvester.HarvesterResult (org.geonetwork.springbatchharvester.HarvesterResult is in unnamed module of loader 'app'; org.geonetwork.springbatchharvester.HarvesterResult is in unnamed module of loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader @2fb46040)
+    java.lang.ClassCastException: class org.geonetwork.springbatchharvester.HarvesterResult cannot be
+    cast to class org.geonetwork.springbatchharvester.HarvesterResult
+    (org.geonetwork.springbatchharvester.HarvesterResult is in unnamed module of loader 'app';
+    org.geonetwork.springbatchharvester.HarvesterResult is in unnamed module of loader
+    org.springframework.boot.devtools.restart.classloader.RestartClassLoader @2fb46040)
 
-    See https://stackoverflow.com/questions/57750294/class-loader-error-unnamed-module-of-loader-org-springframework-boot-devtools
+    See
+    https://stackoverflow.com/questions/57750294/class-loader-error-unnamed-module-of-loader-org-springframework-boot-devtools
     -->
     <!--<dependency>
       <groupId>org.springframework.boot</groupId>
@@ -94,11 +133,6 @@
       <scope>runtime</scope>
       <optional>true</optional>
     </dependency>-->
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <scope>runtime</scope>
-    </dependency>
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
@@ -133,6 +167,10 @@
       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-scalar</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.thymeleaf.extras</groupId>
       <artifactId>thymeleaf-extras-springsecurity6</artifactId>
     </dependency>
@@ -148,6 +186,11 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-config</artifactId>
+    </dependency>
+
     <!-- Patched XML Resolver 1.2 from apache xml-commons - fixes problems
                with windows URLs
     <dependency>
@@ -223,7 +266,6 @@
       <artifactId>spring-boot-test</artifactId>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>com.nimbusds</groupId>
       <artifactId>nimbus-jose-jwt</artifactId>
@@ -253,6 +295,9 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>org.geonetwork.GeonetworkApplication</mainClass>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

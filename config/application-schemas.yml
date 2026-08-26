@@ -96,8 +96,9 @@ geonetwork:
             value: >
               <gco:CharacterString xmlns:gco="http://standards.iso.org/iso/19115/-3/gco/1.0">{{resourceIdentifier:-}}</gco:CharacterString>
 
+
           - name: "cl_spatialRepresentationType"
-            xpath: "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:spatialRepresentationType"
+            xpath: "mdb:identificationInfo/mri:MD_DataIdentification/mri:spatialRepresentationType"
             value: >
                 <mri:spatialRepresentationType xmlns:mri="http://standards.iso.org/iso/19115/-3/mri/1.0"
                                                                    xmlns:mcc="http://standards.iso.org/iso/19115/-3/mcc/1.0">

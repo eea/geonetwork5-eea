@@ -1,0 +1,131 @@
+/*
+ * SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
+package org.geonetwork.ogcapi.service.facets;
+
+import static org.geonetwork.ogcapi.service.configuration.SimpleType.DATE;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import lombok.extern.slf4j.Slf4j;
+import org.geonetwork.ogcapi.records.generated.model.*;
+import org.geonetwork.ogcapi.service.configuration.BucketSorting;
+import org.geonetwork.ogcapi.service.configuration.FacetType;
+import org.geonetwork.ogcapi.service.configuration.OgcFacetConfig;
+import org.geonetwork.ogcapi.service.indexConvert.dynamic.DynamicPropertiesFacade;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+@Slf4j(topic = "org.fao.geonet.ogcapi.records")
+public class FacetsJsonService {
+
+    @Autowired
+    DynamicPropertiesFacade dynamicPropertiesFacade;
+
+    public OgcApiRecordsFacetsDto buildFacets(String catalogId) {
+        var result = new OgcApiRecordsFacetsDto();
+        result.setId(catalogId);
+        result.setTitle("Facets for catalog " + catalogId);
+        result.setFacets(new HashMap<>());
+
+        for (var facet : this.dynamicPropertiesFacade.getFacetConfigs()) {
+            if (facet.getFacetType() == FacetType.TERM) {
+                var f = createTerm(facet);
+                result.getFacets().put(facet.getFacetName(), f);
+            } else if (facet.getFacetType() == FacetType.FILTER) {
+                var f = createFilter(facet);
+                result.getFacets().put(facet.getFacetName(), f);
+            } else if (facet.getFacetType() == FacetType.HISTOGRAM_FIXED_BUCKET_COUNT
+                    || facet.getFacetType() == FacetType.HISTOGRAM_FIXED_INTERVAL) {
+                var f = createHistogram(facet);
+                result.getFacets().put(facet.getFacetName(), f);
+            } else {
+                throw new RuntimeException("Unknown facet type: " + facet.getFacetType());
+            }
+        }
+
+        return result;
+    }
+
+    private OgcApiRecordsFacetFilterDto createFilter(OgcFacetConfig facet) {
+        var correspondingField = dynamicPropertiesFacade.findFieldForFacet(facet);
+        var result = new OgcApiRecordsFacetFilterDto();
+        result.setProperty(correspondingField.getOgcProperty());
+        result.setType("term");
+        result.setBucketCount(facet.getBucketCount());
+        var sortedBy = OgcApiRecordsFacetSortedByDto.COUNT;
+        if (facet.getBucketSorting() == BucketSorting.VALUE) {
+            sortedBy = OgcApiRecordsFacetSortedByDto.VALUE;
+        }
+        result.setSortedBy(sortedBy);
+        result.setxElasticProperty(correspondingField.getElasticProperty());
+        result.setFilters(new HashMap<>());
+        for (var filter : facet.getFilters()) {
+            result.getFilters().put(filter.getFilterName(), filter.getFilterEquationCql());
+        }
+        return result;
+    }
+
+    private OgcApiRecordsFacetHistogramDto createHistogram(OgcFacetConfig facet) {
+        var correspondingField = dynamicPropertiesFacade.findFieldForFacet(facet);
+
+        var result = new OgcApiRecordsFacetHistogramDto();
+        result.setProperty(correspondingField.getOgcProperty());
+        result.setType("histogram");
+        result.setBucketCount(facet.getBucketCount());
+        result.setxElasticProperty(correspondingField.getElasticProperty());
+
+        var sortedBy = OgcApiRecordsFacetSortedByDto.COUNT;
+        if (facet.getBucketSorting() == BucketSorting.VALUE) {
+            sortedBy = OgcApiRecordsFacetSortedByDto.VALUE;
+        }
+        result.setSortedBy(sortedBy);
+        result.setxElasticProperty(correspondingField.getElasticProperty());
+
+        var bucketType = OgcApiRecordsFacetHistogramDto.BucketTypeEnum.FIXED_BUCKET_COUNT;
+        if (facet.getFacetType() == FacetType.HISTOGRAM_FIXED_INTERVAL) {
+            bucketType = OgcApiRecordsFacetHistogramDto.BucketTypeEnum.FIXED_INTERVAL;
+        }
+        result.setBucketType(bucketType);
+
+        if (facet.getCalendarIntervalUnit() != null) {
+            result.setxIntervalCalendarInterval(facet.getCalendarIntervalUnit().toString());
+        }
+        if (facet.getNumberBucketInterval() != null) {
+            result.setxIntervalNumber(new BigDecimal(facet.getNumberBucketInterval()));
+        }
+
+        var dataType = OgcApiRecordsFacetHistogramDto.XElasticDatatypeEnum.NUMBER;
+        if (dynamicPropertiesFacade
+                        .getByElasticProperty(correspondingField.getElasticProperty())
+                        .getType()
+                == DATE) {
+            dataType = OgcApiRecordsFacetHistogramDto.XElasticDatatypeEnum.DATE;
+        }
+        result.setxElasticDatatype(dataType);
+
+        result.setxMinimumDocCount(facet.getMinimumDocumentCount());
+
+        return result;
+    }
+
+    private OgcApiRecordsFacetTermsDto createTerm(OgcFacetConfig facet) {
+        var correspondingField = dynamicPropertiesFacade.findFieldForFacet(facet);
+
+        var result = new OgcApiRecordsFacetTermsDto();
+        result.setProperty(correspondingField.getOgcProperty());
+        result.setType("term");
+        result.setBucketCount(facet.getBucketCount());
+        var sortedBy = OgcApiRecordsFacetSortedByDto.COUNT;
+        if (facet.getBucketSorting() == BucketSorting.VALUE) {
+            sortedBy = OgcApiRecordsFacetSortedByDto.VALUE;
+        }
+        result.setSortedBy(sortedBy);
+        result.setxElasticProperty(correspondingField.getElasticProperty());
+
+        result.setMinOccurs(facet.getMinimumDocumentCount());
+        return result;
+    }
+}

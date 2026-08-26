@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    (c) 2003 Open Source Geospatial Foundation - all rights reserved
-    This code is licensed under the GPL 2.0 license,
-    available at the root application directory.
+    SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+    SPDX-License-Identifier: GPL-2.0-or-later
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -11,7 +10,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.3.13</version>
+    <version>3.5.11</version>
     <relativePath></relativePath>
     <!-- lookup parent from repository -->
   </parent>
@@ -50,17 +49,21 @@
 
   <properties>
     <java.version>21</java.version>
-    <spring-cloud.version>2023.0.6</spring-cloud.version>
-    <es.version>8.14.1</es.version>
-    <spring.version>6.3.6</spring.version>
-    <jackson.version>2.17.0</jackson.version>
+    <spring-cloud.version>2025.0.1</spring-cloud.version>
+    <spring.version>6.5.8</spring.version>
+    <springdoc.version>2.8.16</springdoc.version>
+    <swagger.version>2.2.52</swagger.version>
+    <es.version>8.19.13</es.version>
+    <jackson.version>2.17.3</jackson.version>
+    <liquibase.version>4.29.2</liquibase.version>
     <spotless.version>2.43.0</spotless.version>
     <lombok.version>1.18.34</lombok.version>
     <errorProne.version>2.18.0</errorProne.version>
     <pmd.version>6.42.0</pmd.version>
     <errorProne.version>2.29.0</errorProne.version>
     <jsonschema2pojo.version>1.2.1</jsonschema2pojo.version>
-
+    <geotools.version>32.2</geotools.version>
+    <jts.version>1.20.0</jts.version>
     <!-- build -->
     <fork.javac>false</fork.javac>
     <javac.maxHeapSize>256M</javac.maxHeapSize>
@@ -84,6 +87,13 @@
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-dependencies</artifactId>
         <version>${spring-cloud.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>${jackson.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -112,9 +122,15 @@
         <version>42.7.3</version>
       </dependency>
       <dependency>
-        <groupId>com.h2database</groupId>
-        <artifactId>h2</artifactId>
-        <version>2.2.224</version>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-core</artifactId>
+        <version>${liquibase.version}</version>
+        <exclusions>
+          <exclusion>
+            <artifactId>liquibase-commercial</artifactId>
+            <groupId>org.liquibase</groupId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>co.elastic.clients</groupId>
@@ -130,11 +146,6 @@
         <groupId>com.fasterxml.jackson.dataformat</groupId>
         <artifactId>jackson-dataformat-xml</artifactId>
         <version>${jackson.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>io.swagger.core.v3</groupId>
-        <artifactId>swagger-annotations-jakarta</artifactId>
-        <version>2.2.22</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
@@ -158,11 +169,6 @@
         <optional>true</optional>
       </dependency>
       <dependency>
-        <groupId>org.springdoc</groupId>
-        <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-        <version>2.6.0</version>
-      </dependency>
-      <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-core</artifactId>
         <version>${spring.version}</version>
@@ -175,7 +181,42 @@
       <dependency>
         <groupId>org.springframework.ldap</groupId>
         <artifactId>spring-ldap-core</artifactId>
-        <version>3.2.10</version>
+        <version>3.3.6</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-starter-common</artifactId>
+        <version>${springdoc.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        <version>${springdoc.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-starter-webmvc-scalar</artifactId>
+        <version>${springdoc.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.swagger.core.v3</groupId>
+        <artifactId>swagger-annotations-jakarta</artifactId>
+        <version>${swagger.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.swagger.core.v3</groupId>
+        <artifactId>swagger-annotations</artifactId>
+        <version>${swagger.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.swagger.core.v3</groupId>
+        <artifactId>swagger-core-jakarta</artifactId>
+        <version>${swagger.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.swagger.core.v3</groupId>
+        <artifactId>swagger-models-jakarta</artifactId>
+        <version>${swagger.version}</version>
       </dependency>
       <dependency>
         <groupId>org.thymeleaf.extras</groupId>
@@ -234,10 +275,16 @@
         <artifactId>spotbugs-annotations</artifactId>
         <version>4.8.4</version>
       </dependency>
+      <dependency>
+        <groupId>com.neovisionaries</groupId>
+        <artifactId>nv-i18n</artifactId>
+        <version>1.29</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <repositories>
+
     <repository>
       <snapshots>
         <enabled>false</enabled>
@@ -246,6 +293,19 @@
       <name>OSGeo Release repository</name>
       <url>https://repo.osgeo.org/repository/release/</url>
     </repository>
+
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>osgeo-snapshot</id>
+      <name>OSGeo Snapshot repository</name>
+      <url>https://repo.osgeo.org/repository/snapshot/</url>
+    </repository>
+
   </repositories>
 
   <build>
@@ -296,6 +356,15 @@
     </pluginManagement>
 
     <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <doclint>none</doclint>
+        </configuration>
+      </plugin>
+
       <!-- compilation -->
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -337,6 +406,8 @@
                 <exclude>src/*/resources/schemas/iso19139/schema2007/**</exclude>
                 <exclude>src/*/resources/schemas/iso19139/schema/**</exclude>
                 <exclude>src/*/resources/schemas/iso19115-3.2018/schema/**</exclude>
+                <exclude>src/*/resources/schemas/iso19139.nl.geografie.2.0.0/schema/**</exclude>
+                <exclude>src/*/resources/schemas/iso19139.nl.services.2.0.0/schema/**</exclude>
                 <exclude>geonetwork-frontend/**</exclude>
               </excludes>
             </licenseSet>
@@ -396,6 +467,7 @@
           <verifyFailOn>strict</verifyFailOn>
         </configuration>
       </plugin>
+
       <!--<plugin>
         <groupId>org.openapitools</groupId>
         <artifactId>openapi-generator-maven-plugin</artifactId>
@@ -469,6 +541,38 @@
         </executions>
       </plugin>
   -->
+
+      <!--      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <version>7.7.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${project.basedir}/src/test/resources/ogcprocesses_openapi_spec/ogcapi-processes-1.yaml</inputSpec>
+              <generatorName>spring</generatorName>
+              <generateAliasAsModel>true</generateAliasAsModel>
+              <modelNamePrefix>OgcApiProcesses</modelNamePrefix>
+              <modelNameSuffix>Dto</modelNameSuffix>
+              <skipValidateSpec>true</skipValidateSpec>
+              <configOptions>
+                <sourceFolder>src/gen/java/main</sourceFolder>
+                <useSpringBoot3>true</useSpringBoot3>
+                <generateBuilders>true</generateBuilders>
+                <annotationLibrary>swagger2</annotationLibrary>
+                <withXml>true</withXml>
+                <useOptional>false</useOptional>
+                <apiPackage>org.geonetwork.ogcapi.processes.generated</apiPackage>
+                <modelPackage>org.geonetwork.ogcapi.processes.generated.model</modelPackage>
+              </configOptions>
+              <additionalProperties></additionalProperties>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>-->
     </plugins>
   </build>
 
@@ -506,37 +610,6 @@
       </activation>
       <build>
         <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <excludes>
-                <exclude>**/*IntegrationTest.java</exclude>
-              </excludes>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>integration-test</id>
-                <phase>integration-test</phase>
-                <goals>
-                  <goal>integration-test</goal>
-                </goals>
-                <configuration>
-                  <excludes>
-                    <exclude>none</exclude>
-                  </excludes>
-                  <includes>
-                    <include>**/*IntegrationTest.java</include>
-                  </includes>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-
           <plugin>
             <groupId>com.diffplug.spotless</groupId>
             <artifactId>spotless-maven-plugin</artifactId>

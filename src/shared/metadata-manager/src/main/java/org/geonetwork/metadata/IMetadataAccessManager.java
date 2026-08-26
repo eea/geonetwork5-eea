@@ -1,7 +1,6 @@
 /*
- * (c) 2003 Open Source Geospatial Foundation - all rights reserved
- * This code is licensed under the GPL 2.0 license,
- * available at the root application directory.
+ * SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 package org.geonetwork.metadata;
 
@@ -41,10 +40,10 @@ public interface IMetadataAccessManager {
      * user belong. If the user is not authenticated, a dynamic group is assigned depending on user location (0 for
      * internal and 1 for external).
      */
-    Set<Operation> getOperations(int mdId) throws Exception;
+    Set<Operation> getOperations(int mdId, String ip) throws Exception;
 
-    Set<Operation> getOperations(int mdId, Collection<Operation> operations) throws Exception;
+    Set<Operation> getOperations(int mdId, String ip, Collection<Operation> operations) throws Exception;
 
     /** Returns all operations permitted by the user on a particular metadata. */
-    Set<Operation> getAllOperations(int mdId) throws Exception;
+    Set<Operation> getAllOperations(int mdId, String ip) throws Exception;
 }

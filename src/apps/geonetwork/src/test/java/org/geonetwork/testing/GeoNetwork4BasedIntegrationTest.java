@@ -1,7 +1,6 @@
 /*
- * (c) 2003 Open Source Geospatial Foundation - all rights reserved
- * This code is licensed under the GPL 2.0 license,
- * available at the root application directory.
+ * SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 package org.geonetwork.testing;
@@ -55,7 +54,7 @@ public class GeoNetwork4BasedIntegrationTest implements ApplicationContextInitia
     @Override
     public void initialize(ConfigurableApplicationContext ctx) {
         TestPropertyValues.of(
-                        "geonetwork.4.url=" + getGeoNetwork4Url(),
+                        "geonetwork.4.url=" + getGeoNetworkCoreUrl(),
                         "spring.datasource.url=" + getGeoNetworkDatabaseUrl(),
                         "spring.datasource.username=geonetwork",
                         "spring.datasource.password=geonetwork",
@@ -64,12 +63,12 @@ public class GeoNetwork4BasedIntegrationTest implements ApplicationContextInitia
                 .applyTo(ctx.getEnvironment());
     }
 
-    protected String getGeoNetwork4Url() {
+    protected String getGeoNetworkCoreUrl() {
         String serviceHost = environment.getServiceHost(GEONETWORK4_SERVICE, GEONETWORK4_PORT);
         Integer servicePort = environment.getServicePort(GEONETWORK4_SERVICE, GEONETWORK4_PORT);
-        String geonetwork4Url = "http://" + serviceHost + ":" + servicePort + "/geonetwork";
-        log.atInfo().log("Running with GeoNetwork 4 at URL {}", geonetwork4Url);
-        return geonetwork4Url;
+        String geonetworkCoreUrl = "http://" + serviceHost + ":" + servicePort + "/geonetwork";
+        log.atInfo().log("Running with GeoNetwork 4 at URL {}", geonetworkCoreUrl);
+        return geonetworkCoreUrl;
     }
 
     protected String getGeoNetworkDatabaseUrl() {

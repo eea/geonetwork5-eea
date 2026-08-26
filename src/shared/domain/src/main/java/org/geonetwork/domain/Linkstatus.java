@@ -1,11 +1,11 @@
 /*
- * (c) 2003 Open Source Geospatial Foundation - all rights reserved
- * This code is licensed under the GPL 2.0 license,
- * available at the root application directory.
+ * SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 package org.geonetwork.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +22,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.geonetwork.domain.converter.BooleanToYN;
 
 @Builder
 @AllArgsConstructor
@@ -46,8 +47,9 @@ public class Linkstatus {
     private String checkdate;
 
     @NotNull
-    @Column(name = "failing", nullable = false, length = Integer.MAX_VALUE)
-    private String failing;
+    @Column(name = "failing", nullable = false)
+    @Convert(converter = BooleanToYN.class)
+    private Boolean failing;
 
     @Column(name = "statusinfo", length = Integer.MAX_VALUE)
     private String statusinfo;

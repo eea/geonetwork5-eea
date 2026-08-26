@@ -1,12 +1,12 @@
 /*
- * (c) 2003 Open Source Geospatial Foundation - all rights reserved
- * This code is licensed under the GPL 2.0 license,
- * available at the root application directory.
+ * SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 package org.geonetwork.utility.xml;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
@@ -19,9 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmValue;
 import net.sf.saxon.s9api.Xslt30Transformer;
 import net.sf.saxon.s9api.XsltCompiler;
 import net.sf.saxon.s9api.XsltExecutable;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 /** XSLT utility class. */
@@ -93,20 +95,21 @@ public class XsltUtil {
     /** Transform XML string in OutputStream. */
     public static void transformXmlAsOutputStream(
             String inputXmlString,
-            InputStream xsltFile,
-            Map<QName, net.sf.saxon.s9api.XdmValue> xslParameters,
+            ClassPathResource xsltFile,
+            Map<QName, XdmValue> xslParameters,
             OutputStream outputStream) {
         try {
             Processor proc = XsltTransformerFactory.getProcessor();
             XsltCompiler compiler = proc.newXsltCompiler();
-
-            XsltExecutable xsl = compiler.compile(new StreamSource(xsltFile));
+            StreamSource source = new StreamSource(xsltFile.getInputStream());
+            source.setSystemId(xsltFile.getURL().toString());
+            XsltExecutable xsl = compiler.compile(source);
             Xslt30Transformer transformer = xsl.load30();
             if (xslParameters != null) {
                 transformer.setStylesheetParameters(xslParameters);
             }
             transformer.transform(new StreamSource(new StringReader(inputXmlString)), proc.newSerializer(outputStream));
-        } catch (SaxonApiException e) {
+        } catch (SaxonApiException | IOException e) {
             log.atError().log(e.getMessage());
             throw new RuntimeException(e);
         }

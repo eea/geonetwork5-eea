@@ -1,58 +1,30 @@
+#
+# ENVIRONMENT VARIABLES
+#
+#    Var                        default                           meaning
+# --------------------------------------------------------------------------------------------------
+#  GN5_BASE_URL               http://localhost:7979/geonetwork   Where is GN5 deployed.
+#  GN4_BASE_URL               http://localhost:8080/geonetwork  Where is GN4?
+#  GN4_PROXY_BASE_URL         http://localhost:7979/geonetwork  Where is proxied GN4?
+#  ELASTIC_URL                http://localhost:9200             Where is elastic?
+#  GN5_INDEX_CREATE_IF_EMPTY  true                              Create and reindex on startup if empty?
+#  POSTGRES_URL               jdbc:postgresql://localhost:5432/geonetwork  Where is the PostgreSQL database?
+#  GATEWAY_GEONETWORK_PATH    /geonetwork/**                    Where is the proxy to GN4?
+
+
 geonetwork:
-  url: http://localhost:7979
-  url_with_context: http://localhost:7979/geonetwork
-  home: /srv
+# TODO-EEA
+  #  url_with_context: http://localhost:7979/geonetwork
+  url: ${GN5_BASE_URL:http://localhost:7979/geonetwork}
+  home: ${GEONETWORK_HOME:/srv}
   signin: /srv/eng/catalog.signin
-  proxy:
-    # Enable or disable the HTTP proxy configuration. Keep disabled unless a
-    # server-side proxy is actually required by the front-end. Do not configure a
-    # redirect-following HTTP client for the gateway.
-    enabled: true
-    # Host denylist used as a fast pre-filter; host validation also resolves the
-    # name and checks the resolved address(es). Covers loopback, private, link-local,
-    # broadcast, *.local and IPv6 loopback / mapped literals.
-    excludeHosts: "^(localhost|127\\..*|10\\..*|172\\.(1[6-9]|2[0-9]|3[01])\\..*|192\\.168\\..*|169\\.254\\..*|100\\.(6[4-9]|[7-9][0-9]|1[01][0-9]|12[0-7])\\..*|0\\..*|255\\.255\\.255\\.255|.*\\.local|.*\\.localhost|::1|0:0:0:0:0:0:0:1|::ffff:.*)$"
-    # Optional allowlist (primary control when set): case-insensitive host regexes.
-    # When non-empty, the host must match one of these AND
-    # still satisfy checkInLinkTable. Empty = allowlist not enforced.
-    allowedHosts: []
-    #  - ".*\\.europa\\.eu"
-    #  - ".*\\.eionet\\.europa\\.eu"
-    # Allowed ports for proxied URIs. -1 means no port specified.
-    allowedPorts:
-      - -1
-      - 80
-      - 443
-    # Allowed HTTP methods for proxied requests
-    allowedMethods:
-      - GET
-      - POST
-    # Only allow proxy usage when the user is authenticated
-    onlyForAuthenticatedUsers: false
-    # If true, check the links table to ensure a stored link starts with the requested host
-    checkInLinkTable: true
-  4:
+  core:
     url: http://localhost:8080/geonetwork
-    path: >
-      /srv,
-      /static/,
-      /images/,
-      /catalog/,
-      /map/,
-      /criticalhealthcheck,
-      /warninghealthcheck,
-      /jolokia,
-      /xml/,
-      /index/,
-      /dashboards/,
-      /doc/api/index.html,
-      /doc/api/swagger-ui.css,
-      /doc/api/swagger-ui-bundle.js,
-      /doc/api/swagger-ui-standalone-preset.js
   index:
-    url: http://localhost:9200
+    url: ${ELASTIC_URL:http://localhost:9200}
     indexPrefix: gn5-
     indexRecordName: gn5-records
+    createIfEmpty: ${GN5_INDEX_CREATE_IF_EMPTY:true}
     username: elastic
     password: changeme
     elasticsearch:
@@ -114,6 +86,34 @@ geonetwork:
         name: login
         organization: company
         surname: lastname
+  proxy:
+    # Enable or disable the HTTP proxy configuration. Keep disabled unless a
+    # server-side proxy is actually required by the front-end. Do not configure a
+    # redirect-following HTTP client for the gateway.
+    enabled: true
+    # Host denylist used as a fast pre-filter; host validation also resolves the
+    # name and checks the resolved address(es). Covers loopback, private, link-local,
+    # broadcast, *.local and IPv6 loopback / mapped literals.
+    excludeHosts: "^(localhost|127\\..*|10\\..*|172\\.(1[6-9]|2[0-9]|3[01])\\..*|192\\.168\\..*|169\\.254\\..*|100\\.(6[4-9]|[7-9][0-9]|1[01][0-9]|12[0-7])\\..*|0\\..*|255\\.255\\.255\\.255|.*\\.local|.*\\.localhost|::1|0:0:0:0:0:0:0:1|::ffff:.*)$"
+    # Optional allowlist (primary control when set): case-insensitive host regexes.
+    # When non-empty, the host must match one of these AND
+    # still satisfy checkInLinkTable. Empty = allowlist not enforced.
+    allowedHosts: []
+    #  - ".*\\.europa\\.eu"
+    #  - ".*\\.eionet\\.europa\\.eu"
+    # Allowed ports for proxied URIs. -1 means no port specified.
+    allowedPorts:
+      - -1
+      - 80
+      - 443
+    # Allowed HTTP methods for proxied requests
+    allowedMethods:
+      - GET
+      - POST
+    # Only allow proxy usage when the user is authenticated
+    onlyForAuthenticatedUsers: false
+    # If true, check the links table to ensure a stored link starts with the requested host
+    checkInLinkTable: true
 
 server:
   port: 7979
@@ -125,17 +125,23 @@ server:
   forward-headers-strategy: framework
   tomcat:
     relaxed-query-chars: "|,[,]"
+
 spring:
   application:
-    name: GeoNetwork
+    name: ${SPRING_APPLICATION_NAME:GeoNetwork}
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:default}
   datasource:
-    url: jdbc:postgresql://localhost:5432/geonetwork5
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/geonetwork5}
     driverClassName: org.postgresql.Driver
     #    url: jdbc:h2:mem:gn5
     #    url: jdbc:h2:~/gn;AUTO_SERVER=TRUE
     #    driverClassName: org.h2.Driver
     username: postgres
     password: postgres
+  liquibase:
+    enabled: false
+    change-log: classpath:/db/changelog.xml
   jpa:
     open-in-view: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -164,21 +170,25 @@ spring:
 #            issuer-uri: https://custom/auth/realms/test
 
   cloud:
+    config:
+      label: ${SPRING_CLOUD_CONFIG_LABEL:master}
+      enabled: false
     gateway:
-      mvc:
-        routes:
-          - id: geonetwork4_api_migrated_redirect_to_gn5
-            uri: ${geonetwork.url_with_context}
-            predicates:
-              - Path=/srv/api/records/{uuid}/attachments/**
-            filters:
-              - RewritePath=/srv/api/records/(?<uuid>.+)/attachments(?<segment>.*), /api/records/${uuid}/attachments${segment}
-          - id: geonetwork_route
-            uri: ${geonetwork.4.url}
-            predicates:
-              - isGeoNetwork4Request=
-            filters:
-              - addSimpleGn4SecurityHeader=gn5.to.gn4.trusted.json.auth
+      server:
+        webmvc:
+          routes:
+            - id: geonetwork4_api_migrated_redirect_to_gn5
+              uri: ${geonetwork.url_with_context}
+              predicates:
+                - Path=/srv/api/records/{uuid}/attachments/**
+              filters:
+                - RewritePath=/srv/api/records/(?<uuid>.+)/attachments(?<segment>.*), /api/records/${uuid}/attachments${segment}
+            - id: geonetwork_route
+              uri: ${geonetwork.4.url}
+              predicates:
+                - isGeoNetwork4Request=
+              filters:
+                - addSimpleGn4SecurityHeader=gn5.to.gn4.trusted.json.auth
   batch:
     jdbc:
       initialize-schema: always
@@ -186,23 +196,34 @@ spring:
       enabled: false
   config:
     import:
+      - optional:configserver:http://localhost:8888
+      - classpath:application-gn4.yml
+      - optional:classpath:application-ogcapi-records.yml
       - optional:classpath:application-schemas.yml
       - optional:classpath:application-data-ingester.yml
 management:
-  endpoint:
-    info:
-      enabled: true
   endpoints:
     web:
       exposure:
-        include: "*"
-  health:
-    ldap:
-      enabled: false
+        include: health
+
 springdoc:
-  show-login-endpoint: true
+  api-docs:
+    default-produces-media-type: application/json
   swagger-ui:
     path: /doc/api/
+
+scalar:
+  enabled: true
+  path: /doc/api/discover
+  sources:
+    - url: ../../v3/api-docs
+      title: GeoNetwork 5 API
+      slug: gn5
+      isDefault: true
+    - url: ../../srv/api/doc
+      title: GeoNetwork 4 API
+      slug: gn4
 
 
 debug: false
@@ -216,7 +237,10 @@ logging:
 #    org.elasticsearch.client.RestClient: TRACE
 #    org.apache.http.impl.client and org.apache.http.wire: TRACE
 #    org.apache.http.headers: TRACE
-    org.springframework.security: DEBUG
+#    org.springframework.cache: TRACE
+dave:
+  firstName: first name from application.yml
+  lastName:  last name from application.yml
 
 ---
 
@@ -226,5 +250,8 @@ spring:
       - optional:classpath:application-test.yml
       - optional:classpath:application-schemas.yml
       - optional:classpath:application-data-ingester.yml
+      - classpath:application-gn4.yml
+      - optional:classpath:application-ogcapi-records.yml
     activate:
       on-profile: test
+

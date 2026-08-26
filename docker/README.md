@@ -1,4 +1,38 @@
-# Version 5.0.0
+# Infrastructure (Docker)
+
+This directory provides Docker Compose configurations for the GeoNetwork 5 environment.
+
+## Core Dependencies
+These files provide the database (PostGIS) and search engine (Elasticsearch).
+
+- **`docker-compose-dbs.yml`**: PostgreSQL with sample data (`dump.gn.sql`) and clean Elasticsearch (index is automatically initialized and populated on startup by GN5 when `GN5_INDEX_CREATE_IF_EMPTY=true`).
+- **`docker-compose-dbs-empty.yml`**: PostgreSQL and Elasticsearch **empty** (clean start).
+
+### Usage
+```bash
+# Start
+docker compose -f docker-compose-dbs.yml up -d
+
+# Stop and remove volumes (reset data)
+docker compose -f docker-compose-dbs.yml down -v
+```
+
+## Legacy & Integration
+- **`docker-compose-gn4.yml`**: Runs GeoNetwork 4.4, connected to the databases.
+- **`docker-compose-gn5.yml`**: Runs a pre-built GeoNetwork 5 image.
+- **`docker-compose-web.yml`**: A simple Angular frontend for OGC API Records.
+
+## Connection Details
+- **PostgreSQL:** `localhost:5432` (User/Pass: `postgres`/`postgres`)
+- **Elasticsearch:** `localhost:9200` (Index: `gn-records`)
+
+> [!NOTE]
+> **Linux Docker Users:** `host.docker.internal` is used to allow containers to connect back to the host machine. While this works out-of-the-box on Docker Desktop (Windows/Mac), on native Linux hosts it is resolved using the `extra_hosts` mapping (`host.docker.internal:host-gateway`) specified in the compose files. Ensure you use Docker Compose (v20.10+) to deploy these.
+
+
+
+
+# EEA fork
 
 ## Build GeoNetwork 5 docker image
 
@@ -19,32 +53,9 @@ or docker image with GDAL:
 (cd docker/gn5; cp ../../src/apps/geonetwork/target/gn-main-app-5.0.0-SNAPSHOT.jar .; docker build -t gn-main-app:5.0.0-SNAPSHOT .)
 ```
 
-## Build GeoNetwork 4
-
-Generated GeoNetwork 4 webapp and copy it in the current directory, name it `geonetwork.war`
-
-```shell
-cp ../../core-geonetwork/web/target/geonetwork.war .
-```
-
-## Run GeoNetwork
-
-Run the docker-composition from the current directory:
-
-```shell
-docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
-```
-
-Open http://localhost:7979/geonetwork
 
 
-## Database dump
 
-```shell
-docker compose exec database pg_dump -U geonetwork -d geonetwork -Fc > docker-entrypoint-initdb.d/dump
-```
 
-## Manual configuration
-
-* Sign in with `admin`/`admin`
-* Configure the port in GeoNetwork 4 in admin console (set it to 7979)
+---
+Back to [Main README](../README.md)

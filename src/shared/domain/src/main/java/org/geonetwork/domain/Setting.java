@@ -1,11 +1,11 @@
 /*
- * (c) 2003 Open Source Geospatial Foundation - all rights reserved
- * This code is licensed under the GPL 2.0 license,
- * available at the root application directory.
+ * SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 package org.geonetwork.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.geonetwork.domain.converter.BooleanToYN;
 
 @Builder
 @AllArgsConstructor
@@ -34,8 +35,9 @@ public class Setting {
     private Integer datatype;
 
     @NotNull
-    @Column(name = "internal", nullable = false, length = Integer.MAX_VALUE)
-    private String internal;
+    @Column(name = "internal", nullable = false)
+    @Convert(converter = BooleanToYN.class)
+    private Boolean internal;
 
     @NotNull
     @Column(name = "\"position\"", nullable = false)
@@ -45,10 +47,12 @@ public class Setting {
     private String value;
 
     @NotNull
-    @Column(name = "editable", nullable = false, length = Integer.MAX_VALUE)
-    private String editable;
+    @Column(name = "editable", nullable = false)
+    @Convert(converter = BooleanToYN.class)
+    private Boolean editable;
 
     @NotNull
-    @Column(name = "encrypted", nullable = false, length = Integer.MAX_VALUE)
-    private String encrypted;
+    @Column(name = "encrypted", nullable = false)
+    @Convert(converter = BooleanToYN.class)
+    private Boolean encrypted;
 }

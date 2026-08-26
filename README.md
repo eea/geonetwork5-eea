@@ -1,11 +1,38 @@
-# GeoNetwork
+# GeoNetwork 5
 
-Architecture experiment for GeoNetwork 5 development setting up clean Spring Boot application for Java 21 development.
+GeoNetwork 5 is an architecture experiment setting up a clean Spring Boot application for Java 21 development.
 
-* GeoNetwork 5: spring boot application using fresh dependencies for Java 21 development
-* Database: H2 database used for local development, PostgreSQL recommended for production
-* Elasticsearch: index and search engine
-* GeoNetwork 4: maintain functionality during architecture transition, using Java 11 and Jetty / Tomcat environment
+## Quick Start
 
+### 1. Start Dependencies (Docker)
+Ensure you have Docker installed, then start the database and search engine:
 
-Note: This is a branch for experimenting and learning purposes approaching some of the many topics to analyze toward a transition from 4 to 5...
+```bash
+# Start with sample data
+docker compose -f docker/docker-compose-dbs.yml up -d
+
+# OR start with an empty database
+docker compose -f docker/docker-compose-dbs-empty.yml up -d
+```
+See [docker/README.md](docker/README.md) for more infrastructure details.
+
+### 2. Build and Run
+Build the project and start the main application:
+
+```bash
+# Build (skipping slow tests/QA for speed)
+./mvnw clean install -DskipTests
+
+# Run the main application
+./mvnw spring-boot:run -pl src/apps/geonetwork
+```
+
+### 3. Access the Application
+- **Main App:** [http://localhost:7979/geonetwork](http://localhost:7979/geonetwork) (Login: `admin`/`admin`)
+- **API Docs:** [http://localhost:7979/v3/api-docs](http://localhost:7979/v3/api-docs)
+
+## Project Structure
+- `src/apps`: Main application entry points.
+- `src/modules`: Functional catalog modules.
+- `src/shared`: Core domain and utilities.
+- `docs/`: Technical documentation.

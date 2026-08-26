@@ -1,0 +1,56 @@
+/*
+ * SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
+package org.geonetwork.configuration;
+
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.servers.Server;
+import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.customizers.OpenApiCustomizer;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/** OpenAPI configuration. */
+@Slf4j
+@Configuration
+public class OpenApiConfiguration {
+
+    protected List<OpenApiCustomizer> openApiCustomizers;
+
+    public OpenApiConfiguration(List<OpenApiCustomizer> openApiCustomizers) {
+        this.openApiCustomizers = openApiCustomizers;
+    }
+
+    @Value("${geonetwork.url:'http://localhost:7979/geonetwork'}")
+    private String serverUrl;
+
+    /** OpenAPI configuration. */
+    @Bean
+    public OpenAPI myOpenApi() {
+        Server server = new Server();
+        server.setUrl(serverUrl);
+
+        Contact contact = new Contact();
+        contact.setEmail("geonetwork-users@lists.sourceforge.net");
+        contact.setName("GeoNetwork opensource");
+        contact.setUrl("https://geonetwork-opensource.org/");
+
+        License license = new License().name("GPL 2.0").url("https://www.gnu.org/licenses/old-licenses/lgpl-2.0.html");
+
+        Info info = new Info()
+                .title("GeoNetwork API")
+                .version("5.0.0")
+                .contact(contact)
+                .description("This API exposes endpoints to GeoNetwork API.")
+                .license(license);
+
+        return new OpenAPI().info(info).servers(List.of(server));
+    }
+}

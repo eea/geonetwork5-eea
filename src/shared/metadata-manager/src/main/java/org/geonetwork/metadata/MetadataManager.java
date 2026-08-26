@@ -1,7 +1,6 @@
 /*
- * (c) 2003 Open Source Geospatial Foundation - all rights reserved
- * This code is licensed under the GPL 2.0 license,
- * available at the root application directory.
+ * SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 package org.geonetwork.metadata;
 
@@ -9,6 +8,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.geonetwork.domain.Metadata;
 import org.geonetwork.domain.Operation;
@@ -27,22 +27,12 @@ import org.springframework.util.StringUtils;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class MetadataManager implements IMetadataManager {
     private final MetadataRepository metadataRepository;
     private final OperationRepository operationRepository;
     private final OperationallowedRepository operationallowedRepository;
     private final IMetadataDirProcessor metadataDirProcessor;
-
-    public MetadataManager(
-            MetadataRepository metadataRepository,
-            OperationRepository operationRepository,
-            OperationallowedRepository operationallowedRepository,
-            IMetadataDirProcessor metadataDirProcessor) {
-        this.metadataRepository = metadataRepository;
-        this.operationRepository = operationRepository;
-        this.operationallowedRepository = operationallowedRepository;
-        this.metadataDirProcessor = metadataDirProcessor;
-    }
 
     @Override
     public Metadata findMetadataById(int metadataId) throws MetadataNotFoundException {

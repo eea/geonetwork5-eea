@@ -1,13 +1,13 @@
 /*
- * (c) 2003 Open Source Geospatial Foundation - all rights reserved
- * This code is licensed under the GPL 2.0 license,
- * available at the root application directory.
+ * SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 package org.geonetwork.testing;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.Duration;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +21,8 @@ public class ElasticsearchBasedIntegrationTest {
     @Container
     protected static ElasticsearchContainer elasticsearchContainer = new ElasticsearchTestContainer()
             .withEnv("xpack.security.enabled", "false")
-            .withExposedPorts(9211);
+            .withExposedPorts(9211)
+            .withStartupTimeout(Duration.ofSeconds(90));
 
     @BeforeAll
     static void setUp() {

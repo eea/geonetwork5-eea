@@ -1,4 +1,8 @@
 /*
+ * SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
+/*
  * (c) 2003 Open Source Geospatial Foundation - all rights reserved
  * This code is licensed under the GPL 2.0 license,
  * available at the root application directory.
@@ -28,6 +32,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
@@ -180,7 +185,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
-    @ExceptionHandler({BaseApplicationException.class})
+    @ExceptionHandler({BaseApplicationException.class, HttpClientErrorException.class})
     @SuppressFBWarnings({"NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"})
     public ResponseEntity<Object> handleBaseApplicationException(BaseApplicationException exception) {
         final Locale locale = LocaleContextHolder.getLocale();

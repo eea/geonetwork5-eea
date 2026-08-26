@@ -1,8 +1,7 @@
 <!--
 
-    (c) 2003 Open Source Geospatial Foundation - all rights reserved
-    This code is licensed under the GPL 2.0 license,
-    available at the root application directory.
+    SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+    SPDX-License-Identifier: GPL-2.0-or-later
 
 -->
 <!-- This file specifies a spotbugs filter for excluding reports that
@@ -20,6 +19,48 @@
   -->
 <FindBugsFilter>
   <!-- Q: Is generated model restricted to trusted code? -->
+  <Match>
+    <Class name="org.geonetwork.ogcapi.service.dataaccess.simpleobjects.CatalogInfo"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP2"/>
+      <Bug pattern="EI_EXPOSE_REP"/>
+    </Or>
+  </Match>
+
+  <Match>
+    <Class name="org.geonetwork.ogcapi.service.links.MediaTypeAndProfile"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP2"/>
+      <Bug pattern="EI_EXPOSE_REP"/>
+    </Or>
+  </Match>
+
+  <Match>
+    <Class name="org.geonetwork.ogcapi.service.querybuilder.QueryablesExtractor$QueryChanges$QueryChangesBuilder"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP2"/>
+<!--      <Bug pattern="EI_EXPOSE_REP"/>-->
+    </Or>
+  </Match>
+
+
+
+  <Match>
+    <Package name="org.geonetwork.ogcapi.records.generated.model"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP2"/>
+      <Bug pattern="EI_EXPOSE_REP"/>
+    </Or>
+  </Match>
+  <Match>
+    <Class name="org.geonetwork.ogcapi.records.generated.ApiUtil"/>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP2"/>
+      <Bug pattern="EI_EXPOSE_REP"/>
+      <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"/>
+    </Or>
+  </Match>
+
   <Match>
     <Package name="org.geonetwork.search.ogcapi.records.generated.model"/>
     <Or>
@@ -154,7 +195,7 @@
     <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
   </Match>
   <Match>
-    <Class name="org.geonetwork.gn4proxypredicates.GeoNetwork4Predicate"/>
+    <Class name="org.geonetwork.gn4.proxypredicates.GeoNetwork4Predicate"/>
     <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
   </Match>
   <!--
@@ -168,5 +209,9 @@
   <Match>
     <Class name="org.geonetwork.utility.xml.XsltTransformerFactory"/>
     <Bug pattern="MS_EXPOSE_REP" />
+  </Match>
+
+  <Match>
+    <package name="org.geonetwork.schemas.model.schemaident"/>
   </Match>
 </FindBugsFilter>

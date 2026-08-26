@@ -1,7 +1,6 @@
 /*
- * (c) 2003 Open Source Geospatial Foundation - all rights reserved
- * This code is licensed under the GPL 2.0 license,
- * available at the root application directory.
+ * SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 package org.geonetwork.data;
 
@@ -14,6 +13,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class DataDirectory {
+
+    @Value("${geonetwork.directory.data}")
     private String dataDir;
 
     public Path getDataDir() {
@@ -24,8 +25,7 @@ public class DataDirectory {
         return Paths.get(dataDir).resolve("metadata_data");
     }
 
-    public DataDirectory(@Value("${geonetwork.directory.data}") String dataDir) {
-        this.dataDir = dataDir;
+    public DataDirectory() {
         log.info("DataDirectory initialized");
         log.info(String.format("  Data directory: %s", this.dataDir));
     }

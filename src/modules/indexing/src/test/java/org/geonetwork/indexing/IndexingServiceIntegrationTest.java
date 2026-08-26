@@ -1,7 +1,6 @@
 /*
- * (c) 2003 Open Source Geospatial Foundation - all rights reserved
- * This code is licensed under the GPL 2.0 license,
- * available at the root application directory.
+ * SPDX-FileCopyrightText: 2001 FAO-UN and others <geonetwork@osgeo.org>
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 package org.geonetwork.indexing;
@@ -30,7 +29,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(classes = {GeonetworkTestingApplication.class})
 @ActiveProfiles(value = {"test"})
-class IndexingServiceIntegrationTest extends ElasticsearchBasedIntegrationTest {
+class IndexingServiceTest extends ElasticsearchBasedIntegrationTest {
 
     @Autowired
     IndexingRecordService indexingRecordService;
@@ -56,8 +55,8 @@ class IndexingServiceIntegrationTest extends ElasticsearchBasedIntegrationTest {
         String fileBaseName = String.format("samples/%s", file);
         // String xml = Files.readString(Path.of(new ClassPathResource(fileBaseName +
         // ".xml").getURI()));
-        String xml =
-                IOUtils.toString(new ClassPathResource(fileBaseName + ".xml").getInputStream(), StandardCharsets.UTF_8);
+        String xml = IOUtils.toString(
+                new ClassPathResource(fileBaseName + ".xml").getInputStream(), String.valueOf(StandardCharsets.UTF_8));
 
         Metadata dbRecord = Metadata.builder()
                 .uuid(fileBaseName)
@@ -76,6 +75,10 @@ class IndexingServiceIntegrationTest extends ElasticsearchBasedIntegrationTest {
 
         metadataRepository.save(dbRecord);
 
+        // Before indexing documents, index setup is empty
+        indexClient.setupIndex(true);
+        assertTrue(indexClient.isIndexMissingOrEmpty());
+
         List<Future<?>> indexTaskSubmissions = indexingService.index(List.of(dbRecord.getUuid()));
         for (Future<?> task : indexTaskSubmissions) {
             task.get();
@@ -91,6 +94,7 @@ class IndexingServiceIntegrationTest extends ElasticsearchBasedIntegrationTest {
                             indexClient.getIndexRecordName())
                     .id(dbRecord.getUuid())));
             assertTrue(exists.value());
+            org.junit.jupiter.api.Assertions.assertFalse(indexClient.isIndexMissingOrEmpty());
         }
     }
 }

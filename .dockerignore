@@ -1,2 +1,20 @@
 .git
+.gitignore
 ./geonetwork-frontend/node_modules
+
+# Exclude Maven build target directories
+**/target/
+target/
+
+# Exclude IDE configuration files
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+# Exclude docker compose configurations and resources
+docker/
+
+# Exclude manuals and documentation
+docs/

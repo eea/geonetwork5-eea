@@ -1,0 +1,31 @@
+#from https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/schemas/featureCollectionGeoJSON.yaml
+type: object
+required:
+  - type
+  - features
+properties:
+  type:
+    type: string
+    enum:
+      - FeatureCollection
+  facets:
+    x-field-extra-annotation: "@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)"
+    additionalProperties:
+      $ref: '../facetSummary.yaml'
+  features:
+    type: array
+    items:
+      $ref: featureGeoJSON.yaml
+  links:
+    type: array
+    items:
+      $ref: ../link.yaml
+  timeStamp:
+    type: string
+    format: date-time
+  numberMatched:
+    type: integer
+    minimum: 0
+  numberReturned:
+    type: integer
+    minimum: 0
