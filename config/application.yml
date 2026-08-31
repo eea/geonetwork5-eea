@@ -18,6 +18,11 @@ geonetwork:
   url: ${GN5_BASE_URL:http://localhost:7979/geonetwork}
   home: ${GEONETWORK_HOME:/srv}
   signin: /srv/eng/catalog.signin
+  rss:
+    # Redirect target for /rss. Can include custom query params, eg:
+    # ogcapi-records/collections/{{UUID}}/items?f=rss&limit=20
+    # where {{UUID}} is replaced by the source UUID with type=portal.
+    redirect: ogcapi-records/collections/{{UUID}}/items?f=rss
   core:
     url: http://localhost:8080/geonetwork
   index:

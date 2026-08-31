@@ -23,20 +23,14 @@ import org.springframework.security.web.access.expression.DefaultWebSecurityExpr
 public class SecurityConfiguration {
 
     @Bean
-    @ConditionalOnProperty(
-            name = "geonetwork.security.provider",
-            havingValue = "database",
-            matchIfMissing = true)
+    @ConditionalOnProperty(name = "geonetwork.security.provider", havingValue = "database", matchIfMissing = true)
     @SuppressWarnings("deprecation")
     public PasswordEncoder passwordEncoder(@Value("${geonetwork.security.passwordSalt}") String salt) {
         return new StandardPasswordEncoder(salt);
     }
 
     @Bean
-    @ConditionalOnProperty(
-            name = "geonetwork.security.provider",
-            havingValue = "database",
-            matchIfMissing = true)
+    @ConditionalOnProperty(name = "geonetwork.security.provider", havingValue = "database", matchIfMissing = true)
     public UserDetailsService userDetailsService(
             @Value("${geonetwork.security.checkUsernameOrEmail: 'USERNAME_OR_EMAIL'}")
                     DatabaseUserAuthProperties checkUsernameOrEmail,

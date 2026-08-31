@@ -4,11 +4,17 @@
  */
 package org.geonetwork.metadata;
 
+import static org.geonetwork.setting.Settings.METADATA_URL_DYNAMICAPPLINKURL;
+import static org.geonetwork.setting.Settings.METADATA_URL_SITEMAPLINKURL;
+
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.geonetwork.domain.Metadata;
 import org.geonetwork.domain.Operation;
@@ -18,6 +24,7 @@ import org.geonetwork.domain.repository.MetadataRepository;
 import org.geonetwork.domain.repository.OperationRepository;
 import org.geonetwork.domain.repository.OperationallowedRepository;
 import org.geonetwork.metadata.datadir.IMetadataDirProcessor;
+import org.geonetwork.setting.SettingManager;
 import org.geonetwork.utility.TypeUtil;
 import org.geonetwork.utility.date.ISODate;
 import org.geonetwork.utility.legacy.xml.Xml;
@@ -27,12 +34,25 @@ import org.springframework.util.StringUtils;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class MetadataManager implements IMetadataManager {
     private final MetadataRepository metadataRepository;
     private final OperationRepository operationRepository;
     private final OperationallowedRepository operationallowedRepository;
+    private final SettingManager settingManager;
     private final IMetadataDirProcessor metadataDirProcessor;
+
+    public MetadataManager(
+            MetadataRepository metadataRepository,
+            OperationRepository operationRepository,
+            OperationallowedRepository operationallowedRepository,
+            SettingManager settingManager,
+            IMetadataDirProcessor metadataDirProcessor) {
+        this.metadataRepository = metadataRepository;
+        this.operationRepository = operationRepository;
+        this.operationallowedRepository = operationallowedRepository;
+        this.settingManager = settingManager;
+        this.metadataDirProcessor = metadataDirProcessor;
+    }
 
     @Override
     public Metadata findMetadataById(int metadataId) throws MetadataNotFoundException {
@@ -163,6 +183,39 @@ public class MetadataManager implements IMetadataManager {
     public Path getMetadataDir(Path metadataDataDirectory, String access, int metadataId)
             throws MetadataNotFoundException {
         return metadataDirProcessor.calculatePathWithAccess(metadataDataDirectory, access, metadataId);
+    }
+
+    @Override
+    public String getPermalinkUrl(String uuid, String language) {
+        String sitemapLinkUrl = settingManager.getValue(METADATA_URL_SITEMAPLINKURL);
+        return applyUrlTemplate(
+                uuid, language, StringUtils.hasLength(sitemapLinkUrl) ? sitemapLinkUrl : getDefaultLink(uuid));
+    }
+
+    @Override
+    public String getWebClientUrl(String uuid, String language) {
+        String sitemapLinkUrl = settingManager.getValue(METADATA_URL_DYNAMICAPPLINKURL);
+        return applyUrlTemplate(
+                uuid, language, StringUtils.hasLength(sitemapLinkUrl) ? sitemapLinkUrl : getDefaultLink(uuid));
+    }
+
+    private String getDefaultLink(String uuid) {
+        return settingManager.getBaseUrlWithContextPath() + "/srv/api/records/" + uuid + "?language=all";
+    }
+
+    private String applyUrlTemplate(String uuid, String language, String url) {
+        if (StringUtils.hasLength(url)) {
+            String upperCaseUrl = url.toUpperCase(Locale.getDefault());
+            Map<String, String> substitutions = new HashMap<>();
+            substitutions.put("{{UUID}}", uuid);
+            substitutions.put("{{LANG}}", StringUtils.hasLength(language) ? language : "");
+            for (Map.Entry<String, String> s : substitutions.entrySet()) {
+                if (upperCaseUrl.contains(s.getKey())) {
+                    url = url.replaceAll("(?i)" + Pattern.quote(s.getKey()), s.getValue());
+                }
+            }
+        }
+        return url;
     }
 
     @Override
