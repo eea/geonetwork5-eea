@@ -40,21 +40,18 @@ public class DatabaseUserDetailsService extends AbstractUserDetailsAuthenticatio
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final GeoNetworkUserService geoNetworkUserService;
     private final UserManager userManager;
 
     public DatabaseUserDetailsService(
             @Value("${geonetwork.security.databaseUserAuthProperty: 'USERNAME_OR_EMAIL'}")
                     DatabaseUserAuthProperties checkUsernameOrEmail,
             PasswordEncoder passwordEncoder,
-            GeoNetworkUserService geoNetworkUserService,
             UserRepository userRepository,
             UserManager userManager) {
         this.checkUsernameOrEmail = checkUsernameOrEmail;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.userManager = userManager;
-        this.geoNetworkUserService = geoNetworkUserService;
     }
 
     @Override
@@ -91,8 +88,6 @@ public class DatabaseUserDetailsService extends AbstractUserDetailsAuthenticatio
 
         org.geonetwork.domain.User currentUser = user.get();
         userManager.userLoginEvent(currentUser);
-
-        var authority = geoNetworkUserService.buildUserAuthority(user.get());
 
         return org.springframework.security.core.userdetails.User.withUsername(currentUser.getUsername())
                 .password(currentUser.getPassword())

@@ -7,7 +7,6 @@ package org.geonetwork.configuration;
 import org.geonetwork.domain.repository.UserRepository;
 import org.geonetwork.security.DatabaseUserAuthProperties;
 import org.geonetwork.security.DatabaseUserDetailsService;
-import org.geonetwork.security.GeoNetworkUserService;
 import org.geonetwork.security.user.UserManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -36,10 +35,8 @@ public class SecurityConfiguration {
                     DatabaseUserAuthProperties checkUsernameOrEmail,
             PasswordEncoder passwordEncoder,
             UserRepository userRepository,
-            UserManager userManager,
-            GeoNetworkUserService geoNetworkUserService) {
-        return new DatabaseUserDetailsService(
-                checkUsernameOrEmail, passwordEncoder, geoNetworkUserService, userRepository, userManager);
+            UserManager userManager) {
+        return new DatabaseUserDetailsService(checkUsernameOrEmail, passwordEncoder, userRepository, userManager);
     }
 
     @Bean

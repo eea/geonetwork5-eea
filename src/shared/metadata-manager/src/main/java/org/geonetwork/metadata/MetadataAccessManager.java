@@ -20,9 +20,7 @@ import org.geonetwork.domain.ReservedGroup;
 import org.geonetwork.domain.ReservedOperation;
 import org.geonetwork.domain.repository.GroupRepository;
 import org.geonetwork.domain.repository.OperationRepository;
-import org.geonetwork.domain.repository.UsergroupRepository;
 import org.geonetwork.security.IAuthenticationFacade;
-import org.geonetwork.security.user.UserManager;
 import org.springframework.stereotype.Component;
 
 /**
@@ -37,9 +35,7 @@ public class MetadataAccessManager implements IMetadataAccessManager {
 
     private final MetadataManager metadataManager;
     private final IAuthenticationFacade authenticationFacade;
-    private final UserManager userManager;
     private final GroupRepository groupRepository;
-    private final UsergroupRepository userGroupRepository;
     private final OperationRepository operationRepository;
     private final IntranetHelper intranetHelper;
 

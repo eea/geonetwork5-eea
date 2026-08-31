@@ -9,7 +9,8 @@
  */
 package org.geonetwork.data.gdal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -27,10 +28,7 @@ import org.geonetwork.domain.Metadata;
 import org.geonetwork.domain.Profile;
 import org.geonetwork.domain.User;
 import org.geonetwork.domain.repository.MetadataRepository;
-import org.geonetwork.domain.repository.OperationRepository;
-import org.geonetwork.domain.repository.OperationallowedRepository;
 import org.geonetwork.domain.repository.UserRepository;
-import org.geonetwork.domain.repository.UsergroupRepository;
 import org.geonetwork.editing.BatchEditMode;
 import org.geonetwork.editing.BatchEditsService;
 import org.geonetwork.editing.SchemaConfiguration;
@@ -53,11 +51,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.builder.Input;
@@ -87,20 +85,11 @@ class MetadataBuilderIntegrationTest {
     @Autowired
     private MetadataBuilder metadataBuilder;
 
-    @MockBean
+    @MockitoBean
     private MetadataRepository metadataRepository;
 
-    @MockBean
+    @MockitoBean
     private UserRepository userRepository;
-
-    @MockBean
-    private UsergroupRepository usergroupRepository;
-
-    @MockBean
-    private OperationRepository operationRepository;
-
-    @MockBean
-    private OperationallowedRepository operationallowedRepository;
 
     private GdalDataAnalyzer analyzer;
 
