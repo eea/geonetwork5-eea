@@ -254,4 +254,3 @@ spring:
       - optional:classpath:application-ogcapi-records.yml
     activate:
       on-profile: test
-
