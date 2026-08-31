@@ -55,8 +55,4 @@ public interface IMetadataManager {
     Path getMetadataDir(Path metadataDataDirectory, int metadataId) throws MetadataNotFoundException;
 
     Path getMetadataDir(Path metadataDataDirectory, String access, int metadataId) throws MetadataNotFoundException;
-
-    String getPermalinkUrl(String uuid, String language);
-
-    String getWebClientUrl(String uuid, String language);
 }

@@ -71,7 +71,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .mediaType("html", MediaType.TEXT_HTML)
                 .mediaType("json", MediaType.APPLICATION_JSON)
                 .mediaType("geojson", MediaType.valueOf("application/geo+json"))
-                .mediaType("rss", MediaType.valueOf("application/rss+xml"))
                 .mediaType("rdfxml", MediaType.valueOf("application/rdf+xml"))
                 .mediaType("application/rdf+xml", MediaType.valueOf("application/rdf+xml"))
                 .mediaType("application/rdf xml", MediaType.valueOf("application/rdf+xml"))
@@ -79,8 +78,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .mediaType(MediaType.TEXT_HTML.toString(), MediaType.TEXT_HTML)
                 .mediaType(MediaType.APPLICATION_JSON.toString(), MediaType.APPLICATION_JSON)
                 .mediaType("application/geo+json", MediaType.valueOf("application/geo+json"))
-                .mediaType("application/rss+xml", MediaType.valueOf("application/rss+xml"))
-                .mediaType("application/rss xml", MediaType.valueOf("application/rss+xml"))
                 .mediaType("application/geo json", MediaType.valueOf("application/geo+json"))
                 .defaultContentType(MediaType.APPLICATION_JSON);
 

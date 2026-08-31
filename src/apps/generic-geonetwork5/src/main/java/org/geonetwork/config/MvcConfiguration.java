@@ -14,8 +14,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /** MVC configuration. */
 @Configuration
 public class MvcConfiguration implements WebMvcConfigurer {
-    private final String homeUrl;
-    private final String signinUrl;
+    private String homeUrl;
+    private String signinUrl;
 
     public MvcConfiguration(
             @Value("${geonetwork.home: '/'}") String homeUrl, @Value("${geonetwork.signin: ''}") String signinUrl) {

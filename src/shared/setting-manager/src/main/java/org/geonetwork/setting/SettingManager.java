@@ -5,25 +5,18 @@
 package org.geonetwork.setting;
 
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.geonetwork.constants.Geonet;
 import org.geonetwork.domain.Setting;
 import org.geonetwork.domain.repository.SettingRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class SettingManager {
     private final SettingRepository settingRepository;
-
-    @Value("${geonetwork.url}")
-    private String baseUrl;
-
-    @Value("${server.servlet.context-path:}")
-    private String contextPath;
 
     /**
      * Return a setting by its key
@@ -91,22 +84,6 @@ public class SettingManager {
         return Integer.valueOf(value);
     }
 
-    /**
-     * Get value of a setting as boolean
-     *
-     * @param key The setting key
-     * @param defaultValue The default value
-     * @return The setting value as boolean
-     */
-    public boolean getValueAsBool(String key, boolean defaultValue) {
-        String value = getValue(key);
-        if (value != null) {
-            return "y".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value) || Boolean.parseBoolean(value);
-        } else {
-            return defaultValue;
-        }
-    }
-
     public String getServerURL() {
         String protocol = getValue(Settings.SYSTEM_SERVER_PROTOCOL);
         String host = getValue(Settings.SYSTEM_SERVER_HOST);
@@ -152,10 +129,5 @@ public class SettingManager {
         } else {
             return true;
         }
-    }
-
-    /** TODO: To be discussed if it still make sense to use host:port info from database? */
-    public String getBaseUrlWithContextPath() {
-        return baseUrl + contextPath;
     }
 }
