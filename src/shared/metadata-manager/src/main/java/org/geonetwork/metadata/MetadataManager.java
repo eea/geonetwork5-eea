@@ -213,4 +213,12 @@ public class MetadataManager implements IMetadataManager {
                 .map(operationallowed -> operationallowed.getId().getGroupid())
                 .collect(Collectors.toList());
     }
+
+    private String pad(int group, int length) {
+        String text = Integer.toString(group);
+
+        while (text.length() < length) text = "0" + text;
+
+        return text;
+    }
 }

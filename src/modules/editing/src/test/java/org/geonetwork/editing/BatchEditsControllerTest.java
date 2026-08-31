@@ -43,6 +43,7 @@ class BatchEditsControllerTest {
     @MockitoBean
     private MetadataRepository metadataRepository;
 
+    @SuppressWarnings("UnusedVariable")
     @MockitoBean
     private SettingManager settingManager;
 
