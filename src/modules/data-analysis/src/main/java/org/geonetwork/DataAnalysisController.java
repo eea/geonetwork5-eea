@@ -359,10 +359,10 @@ The overview is a small image representing the layer.
             throws ResourceNotFoundException, MetadataNotFoundException {
         if (isRemoteDatasource(datasource)) return datasource;
 
-        metadataManager.findMetadataByUuidOrId(uuid, false);
+        Metadata metadata = metadataManager.findMetadataByUuidOrId(uuid, false);
 
         try {
-            return calculateLocalDatasourcePath(uuid, visibility, datasource, approved);
+            return calculateLocalDatasourcePath(metadata.getUuid(), visibility, datasource, approved);
         } catch (Exception ex) {
             throw new ResourceNotFoundException("Failed to resolve datasource", ex);
         }

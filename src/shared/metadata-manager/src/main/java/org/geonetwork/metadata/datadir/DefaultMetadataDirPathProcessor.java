@@ -31,7 +31,8 @@ public class DefaultMetadataDirPathProcessor implements IMetadataDirProcessor {
     @Override
     public Path calculatePathWithAccess(Path dataDir, String access, int metadataId) throws MetadataNotFoundException {
         if (metadataDirectoryPrivileges.equals(MetadataDirPrivileges.DEFAULT)) {
-            return calculatePath(dataDir, metadataId).resolve(access);
+            // Remove in MEF3            return calculatePath(dataDir, metadataId).resolve(access);
+            return calculatePath(dataDir, metadataId);
         } else {
             return calculatePath(dataDir, metadataId);
         }

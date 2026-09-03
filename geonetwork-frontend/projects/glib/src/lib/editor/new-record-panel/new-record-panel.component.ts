@@ -15,17 +15,17 @@ import { InputTextModule } from 'primeng/inputtext';
 import {
   CreateMetadataTypeEnum,
   CreateRequest,
+  MetadataResource,
+  GetAllResourcesRequest,
+  PutResourceRequest,
   DeleteRecordRequest,
   RecordsApi,
 } from 'gapi';
 import {
   AnalysisSynchMetadataResourceRequest,
   DataFormat,
-  GetAllResourcesRequest,
   LayersRequest,
-  MetadataResource,
   PreviewDataAnalysisOnRecordRequest,
-  PutResourceRequest,
   RecordsApi as RecordsApi5,
   IndexRecord,
   DataAnalysisApi,
@@ -593,7 +593,11 @@ export class NewRecordPanelComponent implements OnInit {
         };
 
     const applyAnalysis =
-      this.dataAnalysisApi().applyDataAnalysisOnRecord(analysisRequest);
+      this.dataAnalysisApi().applyDataAnalysisOnRecord(analysisRequest, {
+        headers: {
+          accept: 'text/plain'
+        }
+      });
 
     applyAnalysis.then(
       () => {
@@ -665,8 +669,10 @@ export class NewRecordPanelComponent implements OnInit {
         file: event.files[i],
       };
 
-      this.recordsDataStoreApi()
-        .putResource(putResourceRequest)
+      this.recordsApi()
+        .putResource(putResourceRequest, {
+          headers: { accept: 'application/json' },
+        })
         .then(
           response => {
             // select the file by default, when uploading 1 file only
@@ -748,8 +754,10 @@ export class NewRecordPanelComponent implements OnInit {
       metadataUuid: this.newRecordId(),
     };
 
-    this.recordsDataStoreApi()
-      .getAllResources(getAllResourcesRequest)
+    this.recordsApi()
+      .getAllResources(getAllResourcesRequest, {
+        headers: { accept: 'application/json' },
+      })
       .then(
         response => {
           this.metadataFiles.set(response);
