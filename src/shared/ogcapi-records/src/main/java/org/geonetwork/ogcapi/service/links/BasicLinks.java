@@ -81,7 +81,7 @@ public class BasicLinks {
                 requestMediaTypeAndProfile.getResponseClass().equals(linkType);
 
         if (linkType.equals(OgcApiRecordsCollectionsResponse.class)) {
-            link.setRel("collections");
+            link.setRel("data");
             link.setTitle("All collections");
         }
         if (linkType.equals(OgcApiCollectionResponse.class)) {
@@ -101,12 +101,12 @@ public class BasicLinks {
         }
 
         if (!isRequestForAnOtherType) {
-            // request is for another type - this should be a LABELLED name, not "alternative"/"self"
+            // request is for another type - this should be a LABELLED name, not "alternate"/"self"
             return;
         }
 
-        // should be "alternative"/"self"
-        link.setRel("alternative");
+        // should be "alternate"/"self"
+        link.setRel("alternate");
 
         // see if it should be "self"
         // if:
