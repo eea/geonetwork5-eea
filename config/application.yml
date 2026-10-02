@@ -151,10 +151,12 @@ spring:
       max-file-size: 2GB
       max-request-size: 2GB
       enabled: true
-  security:
-    oauth2:
-      client:
-        registration:
+  # An empty "registration:" binds as "" and fails to start on Spring Boot 3.5,
+  # so keep the whole block commented until there is a real registration.
+#  security:
+#    oauth2:
+#      client:
+#        registration:
 #          github:
 #            clientId: github-client-id
 #            clientSecret: github-client-secret
