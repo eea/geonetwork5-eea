@@ -17,14 +17,17 @@ pipeline {
       }
 
       steps {
-        script{
-            if (env.BRANCH_NAME == env.default_branch ) {
-                tagName = GIT_COMMIT.take(8)
+        script {
+            // Lowercase the branch name and replace slashes with dashes for Docker tag compliance
+            def safeBranch = env.BRANCH_NAME.toLowerCase().replaceAll('/', '-')
+            def tagName
+            if (env.BRANCH_NAME == env.default_branch) {
+                tagName = "${GIT_COMMIT.take(8)}"
             } else {
-                tagName = "$BRANCH_NAME"
+                tagName = "${safeBranch}-${GIT_COMMIT.take(8)}"
             }
             try {
-                dockerImage = docker.build("$registry:$tagName", "--pull --no-cache --build-arg COMMIT_OR_BRANCH=$tagName -f ./docker/gn5/Dockerfile-gdal .")
+                dockerImage = docker.build("$registry:$tagName", "--pull --no-cache --build-arg COMMIT_OR_BRANCH=${GIT_COMMIT} -f ./docker/gn5/Dockerfile-gdal .")
                 docker.withRegistry( '', 'eeajenkins' ) {
                     dockerImage.push()
                 }
