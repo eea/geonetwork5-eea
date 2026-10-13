@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -81,7 +82,7 @@ public class WebSecurityConfiguration {
                         .failureUrl(signinUrl + "?failure=true")
                         //                        .defaultSuccessUrl("/", false)
                         .permitAll())
-                .httpBasic(AbstractHttpConfigurer::disable)
+                .httpBasic(Customizer.withDefaults())
                 //                .httpBasic(AbstractHttpConfigurer::disable)
                 //                .httpBasic(basic ->
                 //                        // No popup in browsers
