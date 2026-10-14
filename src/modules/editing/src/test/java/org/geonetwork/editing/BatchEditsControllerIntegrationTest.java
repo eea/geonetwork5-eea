@@ -23,19 +23,23 @@ import org.geonetwork.constants.Geonet;
 import org.geonetwork.domain.Metadata;
 import org.geonetwork.domain.Profile;
 import org.geonetwork.domain.User;
+import org.geonetwork.domain.repository.GroupRepository;
 import org.geonetwork.domain.repository.MetadataRepository;
 import org.geonetwork.domain.repository.OperationRepository;
 import org.geonetwork.domain.repository.OperationallowedRepository;
+import org.geonetwork.domain.repository.SettingRepository;
 import org.geonetwork.domain.repository.UserRepository;
 import org.geonetwork.domain.repository.UsergroupRepository;
 import org.geonetwork.editing.model.BatchEditParameter;
 import org.geonetwork.metadata.MetadataAccessManager;
 import org.geonetwork.metadata.MetadataManager;
+import org.geonetwork.metadata.config.MetadataDirConfig;
 import org.geonetwork.schemas.SchemaManager;
 import org.geonetwork.schemas.iso19115_3.ISO19115_3SchemaPlugin;
 import org.geonetwork.schemas.iso19139.ISO19139SchemaPlugin;
 import org.geonetwork.security.AuthenticationFacade;
 import org.geonetwork.security.user.UserManager;
+import org.geonetwork.utility.NetworkUtil;
 import org.geonetwork.utility.legacy.xml.Xml;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -53,7 +57,9 @@ import org.springframework.test.context.ActiveProfiles;
             TestConfiguration.class,
             BatchEditsService.class,
             MetadataManager.class,
+            MetadataDirConfig.class,
             MetadataAccessManager.class,
+            NetworkUtil.class,
             UserManager.class,
             AuthenticationFacade.class,
             SchemaManager.class,
@@ -77,6 +83,12 @@ class BatchEditsControllerIntegrationTest {
 
     @MockBean
     private OperationallowedRepository operationallowedRepository;
+
+    @MockBean
+    private GroupRepository groupRepository;
+
+    @MockBean
+    private SettingRepository settingRepository;
 
     @Autowired
     BatchEditsService batchEditService;
