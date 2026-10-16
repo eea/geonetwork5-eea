@@ -13,7 +13,9 @@ COPY --from=gnui /geonetwork-frontend/dist geonetwork5/geonetwork-frontend/dist
 WORKDIR /geonetwork5
 RUN ./mvnw -B clean install -Drelax
 
-FROM ghcr.io/osgeo/gdal:alpine-normal-latest AS final
+# Stable GDAL release: alpine-normal-latest is a development build and its output changes between builds.
+# Keep in sync with GdalDockerImage in the data-analysis tests.
+FROM ghcr.io/osgeo/gdal:alpine-normal-3.13.3 AS final
 
 ARG COMMIT_OR_BRANCH="unknown"
 
@@ -26,6 +28,8 @@ LABEL org.opencontainers.image.title="GeoNetwork 5 EEA"
 LABEL org.opencontainers.image.description="GeoNetwork 5 EEA is a catalog application for managing geospatial data and services."
 LABEL org.opencontainers.image.licenses="GPL-3.0-only"
 ENV COMMIT=${COMMIT_OR_BRANCH}
+# EEA settings live in config/application-eea.yml, packaged in the jar
+ENV SPRING_PROFILES_ACTIVE=eea
 
 WORKDIR /opt/geonetwork
 

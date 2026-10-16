@@ -32,6 +32,21 @@
         </msr:geometricObjects>
       </msr:MD_VectorSpatialRepresentation>
     </mdb:spatialRepresentationInfo>
+    <mdb:referenceSystemInfo
+                          xmlns:mrs="http://standards.iso.org/iso/19115/-3/mrs/1.0"
+                          xmlns:mcc="http://standards.iso.org/iso/19115/-3/mcc/1.0"
+                          xmlns:gcx="http://standards.iso.org/iso/19115/-3/gcx/1.0"
+                          xmlns:xlink="http://www.w3.org/1999/xlink">
+      <mrs:MD_ReferenceSystem>
+        <mrs:referenceSystemIdentifier>
+          <mcc:MD_Identifier>
+            <mcc:code>
+              <gcx:Anchor xlink:href="http://www.opengis.net/def/crs/EPSG/0/EPSG:4258">EPSG:4258</gcx:Anchor>
+            </mcc:code>
+          </mcc:MD_Identifier>
+        </mrs:referenceSystemIdentifier>
+      </mrs:MD_ReferenceSystem>
+    </mdb:referenceSystemInfo>
     <mdb:identificationInfo>
       <mri:MD_DataIdentification xmlns:mri="http://standards.iso.org/iso/19115/-3/mri/1.0">
         <mri:citation>
@@ -87,24 +102,6 @@
             <cat:versionNumber gco:nilReason="missing">
               <gco:CharacterString/>
             </cat:versionNumber>
-            <cat:versionDate>
-              <gco:Date/>
-            </cat:versionDate>
-            <gfc:producer>
-              <cit:CI_Responsibility>
-                <cit:role>
-                  <cit:CI_RoleCode codeList="http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#CI_RoleCode"
-                                   codeListValue="author"/>
-                </cit:role>
-                <cit:party>
-                  <cit:CI_Organisation>
-                    <cit:name gco:nilReason="missing">
-                      <gco:CharacterString></gco:CharacterString>
-                    </cit:name>
-                  </cit:CI_Organisation>
-                </cit:party>
-              </cit:CI_Responsibility>
-            </gfc:producer>
             <gfc:featureType>
               <gfc:FC_FeatureType>
                 <gfc:typeName>CEEUBG100kV2_1</gfc:typeName>
@@ -117,9 +114,6 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
-                    <gfc:cardinality gco:nilReason="missing">
-                      <gco:CharacterString/>
-                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -135,9 +129,6 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
-                    <gfc:cardinality gco:nilReason="missing">
-                      <gco:CharacterString/>
-                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -153,9 +144,6 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
-                    <gfc:cardinality gco:nilReason="missing">
-                      <gco:CharacterString/>
-                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -171,9 +159,6 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
-                    <gfc:cardinality gco:nilReason="missing">
-                      <gco:CharacterString/>
-                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -189,9 +174,6 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
-                    <gfc:cardinality gco:nilReason="missing">
-                      <gco:CharacterString/>
-                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -207,9 +189,6 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
-                    <gfc:cardinality gco:nilReason="missing">
-                      <gco:CharacterString/>
-                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -225,9 +204,6 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
-                    <gfc:cardinality gco:nilReason="missing">
-                      <gco:CharacterString/>
-                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -243,9 +219,6 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
-                    <gfc:cardinality gco:nilReason="missing">
-                      <gco:CharacterString/>
-                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -261,9 +234,6 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
-                    <gfc:cardinality gco:nilReason="missing">
-                      <gco:CharacterString/>
-                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -279,9 +249,6 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
-                    <gfc:cardinality gco:nilReason="missing">
-                      <gco:CharacterString/>
-                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -297,9 +264,6 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
-                    <gfc:cardinality gco:nilReason="missing">
-                      <gco:CharacterString/>
-                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -315,9 +279,6 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
-                    <gfc:cardinality gco:nilReason="missing">
-                      <gco:CharacterString/>
-                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>
@@ -333,9 +294,6 @@
                     <gfc:definition>
                       <gco:CharacterString/>
                     </gfc:definition>
-                    <gfc:cardinality gco:nilReason="missing">
-                      <gco:CharacterString/>
-                    </gfc:cardinality>
                     <gfc:valueType>
                       <gco:TypeName>
                         <gco:aName>

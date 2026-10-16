@@ -8,22 +8,17 @@
 #  GN4_PROXY_BASE_URL         http://localhost:7979/geonetwork  Where is proxied GN4?
 #  ELASTIC_URL                http://localhost:9200             Where is elastic?
 #  GN5_INDEX_CREATE_IF_EMPTY  true                              Create and reindex on startup if empty?
-#  POSTGRES_URL               jdbc:postgresql://localhost:5432/geonetwork  Where is the PostgreSQL database?
+#  POSTGRES_URL               jdbc:postgresql://localhost:5432/geonetwork  Where is the PostgreSQL database?  
 #  GATEWAY_GEONETWORK_PATH    /geonetwork/**                    Where is the proxy to GN4?
 
 
 geonetwork:
-# TODO-EEA
-  #  url_with_context: http://localhost:7979/geonetwork
   url: ${GN5_BASE_URL:http://localhost:7979/geonetwork}
   home: ${GEONETWORK_HOME:/srv}
-  signin: /srv/eng/catalog.signin
-  core:
-    url: http://localhost:8080/geonetwork
   index:
     url: ${ELASTIC_URL:http://localhost:9200}
     indexPrefix: gn5-
-    indexRecordName: gn5-records
+    indexRecordName: gn-records
     createIfEmpty: ${GN5_INDEX_CREATE_IF_EMPTY:true}
     username: elastic
     password: changeme
@@ -34,58 +29,21 @@ geonetwork:
           totalFields: 10000
   indexing:
     chunksize: 500
-    poolsize: 4
+    poolsize: 10
     bulktimeout: 45s
     requestimeout: 45000
     # Elasticsearch Bulk Async API
     asynchronous: false
   directory:
-    data: /private/tmp/core-geonetwork-main/web/src/main/webapp/WEB-INF/data/data
-    #metadata:
-    #  layout: DEFAULT|UUID
-    #  privileges: DEFAULT|NONE
-  openapi:
-    url: http://localhost:7979
+    data: /data/dev/gn/5/web/src/main/webapp/WEB-INF/data/data
   settings:
     system:
       metadata:
         prefergrouplogo: true
   security:
-    # SAMEORIGIN, DENY, ALLOW-FROM
-    frameOptions:
-      mode: SAMEORIGIN
-      allowFrom: ""
     provider: database
-    # provider: ldap
     passwordSalt: secret-hash-salt=
     databaseUserAuthProperty: USERNAME_OR_EMAIL
-    createdUser:
-      profile: Editor
-      group: sample
-    # Enabled if provider is ldap
-    ldap:
-      url: ldap://localhost:389
-      # url: # Empty use embedded LDAP
-      base: dc=springframework,dc=org
-      user-search-dn: ou=people
-      user-search-filter: uid={0}
-      attributes:
-        username: uid
-        email: email
-        name: cn
-        surname:
-  sso:
-    registration:
-      github:
-        email: email
-        name: login
-        organization: company
-        surname: lastname
-      custom:
-        email: email
-        name: login
-        organization: company
-        surname: lastname
   proxy:
     # Enable or disable the HTTP proxy configuration. Keep disabled unless a
     # server-side proxy is actually required by the front-end. Do not configure a
@@ -123,36 +81,33 @@ server:
       cookie:
         name: GNSESSIONID
   forward-headers-strategy: framework
-  tomcat:
-    relaxed-query-chars: "|,[,]"
 
 spring:
   application:
     name: ${SPRING_APPLICATION_NAME:GeoNetwork}
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:default}
+  cloud:
+    config:
+      label: ${SPRING_CLOUD_CONFIG_LABEL:master}
   datasource:
-    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/geonetwork5}
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/geonetwork}
     driverClassName: org.postgresql.Driver
-    #    url: jdbc:h2:mem:gn5
-    #    url: jdbc:h2:~/gn;AUTO_SERVER=TRUE
-    #    driverClassName: org.h2.Driver
-    username: postgres
-    password: postgres
+    username: geonetwork
+    password: geonetwork
   liquibase:
-    enabled: false
+    enabled: true
     change-log: classpath:/db/changelog.xml
   jpa:
     open-in-view: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-  #    database-platform: org.hibernate.dialect.H2Dialect
   servlet:
     multipart:
-      max-file-size: 2GB
-      max-request-size: 2GB
-      enabled: true
-  # An empty "registration:" binds as "" and fails to start on Spring Boot 3.5,
-  # so keep the whole block commented until there is a real registration.
+      max-file-size: 1GB
+      max-request-size: 1GB
+  # EEA: no placeholder registration, it would be listed as a sign in provider. An empty
+  # "registration:" binds as "" and fails to start on Spring Boot 3.5, so keep the whole block
+  # commented until there is a real registration.
 #  security:
 #    oauth2:
 #      client:
@@ -170,27 +125,6 @@ spring:
 #            user-info-uri: https://custom/auth/realms/test/protocol/openid-connect/userinfo
 #            jwk-set-uri: https://custom/auth/realms/test/protocol/openid-connect/certs
 #            issuer-uri: https://custom/auth/realms/test
-
-  cloud:
-    config:
-      label: ${SPRING_CLOUD_CONFIG_LABEL:master}
-      enabled: false
-    gateway:
-      server:
-        webmvc:
-          routes:
-            - id: geonetwork4_api_migrated_redirect_to_gn5
-              uri: ${geonetwork.url_with_context}
-              predicates:
-                - Path=/srv/api/records/{uuid}/attachments/**
-              filters:
-                - RewritePath=/srv/api/records/(?<uuid>.+)/attachments(?<segment>.*), /api/records/${uuid}/attachments${segment}
-            - id: geonetwork_route
-              uri: ${geonetwork.4.url}
-              predicates:
-                - isGeoNetwork4Request=
-              filters:
-                - addSimpleGn4SecurityHeader=gn5.to.gn4.trusted.json.auth
   batch:
     jdbc:
       initialize-schema: always
@@ -201,8 +135,7 @@ spring:
       - optional:configserver:http://localhost:8888
       - classpath:application-gn4.yml
       - optional:classpath:application-ogcapi-records.yml
-      - optional:classpath:application-schemas.yml
-      - optional:classpath:application-data-ingester.yml
+
 management:
   endpoints:
     web:
@@ -213,7 +146,7 @@ springdoc:
   api-docs:
     default-produces-media-type: application/json
   swagger-ui:
-    path: /doc/api/
+    path: /swagger-ui
 
 scalar:
   enabled: true
@@ -234,7 +167,6 @@ logging:
   level:
     org.geonetwork.schemas: DEBUG
     org.geonetwork.data: DEBUG
-#    org.springframework.cloud.gateway: DEBUG
 #    org.geonetwork.tasks.indexing: DEBUG
 #    org.elasticsearch.client.RestClient: TRACE
 #    org.apache.http.impl.client and org.apache.http.wire: TRACE
@@ -256,3 +188,4 @@ spring:
       - optional:classpath:application-ogcapi-records.yml
     activate:
       on-profile: test
+

@@ -174,16 +174,6 @@
         <version>${spring.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-ldap</artifactId>
-        <version>${spring.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.ldap</groupId>
-        <artifactId>spring-ldap-core</artifactId>
-        <version>3.3.6</version>
-      </dependency>
-      <dependency>
         <groupId>org.springdoc</groupId>
         <artifactId>springdoc-openapi-starter-common</artifactId>
         <version>${springdoc.version}</version>

@@ -18,7 +18,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
     private String signinUrl;
 
     public MvcConfiguration(
-            @Value("${geonetwork.home: '/'}") String homeUrl, @Value("${geonetwork.signin: ''}") String signinUrl) {
+            @Value("${geonetwork.home: '/'}") String homeUrl, @Value("${geonetwork.signin:}") String signinUrl) {
         this.homeUrl = homeUrl;
         this.signinUrl = signinUrl;
     }
@@ -43,10 +43,12 @@ public class MvcConfiguration implements WebMvcConfigurer {
                     .setViewName(indexPath);
         });
 
+        // login form and OAuth2 provider links
+        registry.addViewController("/home").setViewName("home");
         if (StringUtils.isNotEmpty(signinUrl)) {
             registry.addViewController("/signin").setViewName("redirect:" + signinUrl);
         } else {
-            registry.addViewController("/signin").setViewName("signin");
+            registry.addViewController("/signin").setViewName("home");
         }
     }
 }

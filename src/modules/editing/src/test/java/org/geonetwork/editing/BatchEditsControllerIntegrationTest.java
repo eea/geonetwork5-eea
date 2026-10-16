@@ -27,19 +27,23 @@ import org.geonetwork.constants.Geonet;
 import org.geonetwork.domain.Metadata;
 import org.geonetwork.domain.Profile;
 import org.geonetwork.domain.User;
+import org.geonetwork.domain.repository.GroupRepository;
 import org.geonetwork.domain.repository.MetadataRepository;
 import org.geonetwork.domain.repository.OperationRepository;
 import org.geonetwork.domain.repository.OperationallowedRepository;
 import org.geonetwork.domain.repository.UserRepository;
 import org.geonetwork.domain.repository.UsergroupRepository;
 import org.geonetwork.editing.model.BatchEditParameter;
+import org.geonetwork.metadata.IntranetHelper;
 import org.geonetwork.metadata.MetadataAccessManager;
 import org.geonetwork.metadata.MetadataManager;
+import org.geonetwork.metadata.config.MetadataDirConfig;
 import org.geonetwork.schemas.SchemaManager;
 import org.geonetwork.schemas.iso19115_3.ISO19115_3SchemaPlugin;
 import org.geonetwork.schemas.iso19139.ISO19139SchemaPlugin;
 import org.geonetwork.security.AuthenticationFacade;
-import org.geonetwork.security.user.UserManager;
+import org.geonetwork.security.GeonetworkAuthority;
+import org.geonetwork.setting.SettingManager;
 import org.geonetwork.utility.legacy.xml.Xml;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -47,19 +51,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @SpringBootTest(
         classes = {
             TestConfiguration.class,
             BatchEditsService.class,
             MetadataManager.class,
+            MetadataDirConfig.class,
             MetadataAccessManager.class,
-            UserManager.class,
             AuthenticationFacade.class,
+            GeonetworkAuthority.GeonetworkAuthorityBuilder.class,
             SchemaManager.class,
             SchemaConfiguration.class
         })
@@ -67,19 +72,34 @@ import org.springframework.test.context.ActiveProfiles;
 @EnableConfigurationProperties({SchemaConfiguration.class})
 @ActiveProfiles({"prod", "test"})
 class BatchEditsControllerIntegrationTest {
-    @MockBean
+    @MockitoBean
     private UserRepository userRepository;
 
-    @MockBean
+    @SuppressWarnings("UnusedVariable")
+    @MockitoBean
     private UsergroupRepository usergroupRepository;
 
-    @MockBean
+    @MockitoBean
     private MetadataRepository metadataRepository;
 
-    @MockBean
+    @SuppressWarnings("UnusedVariable")
+    @MockitoBean
+    private SettingManager settingManager;
+
+    @SuppressWarnings("UnusedVariable")
+    @MockitoBean
+    private GroupRepository groupRepository;
+
+    @SuppressWarnings("UnusedVariable")
+    @MockitoBean
+    private IntranetHelper intranetHelper;
+
+    @SuppressWarnings("UnusedVariable")
+    @MockitoBean
     private OperationRepository operationRepository;
 
-    @MockBean
+    @SuppressWarnings("UnusedVariable")
+    @MockitoBean
     private OperationallowedRepository operationallowedRepository;
 
     @Autowired

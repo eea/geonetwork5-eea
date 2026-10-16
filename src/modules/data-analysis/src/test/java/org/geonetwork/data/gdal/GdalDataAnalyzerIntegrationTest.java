@@ -13,9 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.mockStatic;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -23,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.io.IOUtils;
 import org.geonetwork.data.model.AttributeStatistics;
 import org.geonetwork.data.model.DataFormat;
 import org.geonetwork.data.model.DatasetInfo;
@@ -31,6 +38,7 @@ import org.geonetwork.data.model.DatasetLayerField;
 import org.geonetwork.data.model.RasterInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.core.io.ClassPathResource;
@@ -49,13 +57,9 @@ class GdalDataAnalyzerIntegrationTest {
         } else {
             String dataFolder = new ClassPathResource("data/samples").getFile().toString();
             String mountPoint = "/data";
+            GdalDockerImage.pull();
             analyzer = new GdalDataAnalyzer(
-                    String.format(
-                            "docker run --rm -v %s:%s ghcr.io/osgeo/gdal:alpine-normal-latest ",
-                            dataFolder, mountPoint),
-                    dataFolder,
-                    mountPoint,
-                    60);
+                    GdalDockerImage.runCommand(dataFolder, mountPoint), dataFolder, mountPoint, 60);
             //      GdalDataAnalyzer gdalDataAnalyzerMock = mock(GdalDataAnalyzer.class);
             //      when(gdalDataAnalyzerMock.getName()).thenReturn("GDAL");
             //      when(gdalDataAnalyzerMock.getVersion()).thenReturn("GDAL 3.2.0, released
@@ -220,34 +224,50 @@ class GdalDataAnalyzerIntegrationTest {
     }
 
     @Test
-    void getDatasourceLayersAndPropertiesFromWfs() {
+    void getDatasourceLayersAndPropertiesFromWfs() throws IOException {
         //    String wfsUrl = "WFS:https://sextant.ifremer.fr/services/wfs/environnement_marin";
         //    String wfsTypeName = "surval_lieux_actifs_ligne";
         String wfsUrl = "WFS:https://geoservices.brgm.fr/risques";
         String wfsTypeName = "ms:NEOPAL_FAILLE";
-        List<String> datasourceLayers = analyzer.getDatasourceLayers(wfsUrl);
-        assertTrue(datasourceLayers.stream().anyMatch(wfsTypeName::equals));
+        // The output of ogrinfo for the remote WFS is recorded: the test does not depend on the service.
+        String layers = readResource("data/wfs-ogrinfo/ogrinfo-layers.txt");
+        String layerPropertiesJson = readResource("data/wfs-ogrinfo/ogrinfo-layer-properties.json");
+        try (MockedStatic<GdalUtils> gdalUtils = mockStatic(GdalUtils.class, CALLS_REAL_METHODS)) {
+            gdalUtils
+                    .when(() -> GdalUtils.execute(any(CommandLine.class), anyInt()))
+                    .thenAnswer(invocation -> {
+                        CommandLine command = invocation.getArgument(0);
+                        return Optional.of(
+                                Arrays.asList(command.toStrings()).contains("-json") ? layerPropertiesJson : layers);
+                    });
+            List<String> datasourceLayers = analyzer.getDatasourceLayers(wfsUrl);
+            assertTrue(datasourceLayers.stream().anyMatch(wfsTypeName::equals));
 
-        analyzer.getLayerProperties(wfsUrl, wfsTypeName);
-        DatasetInfo properties =
-                analyzer.getLayerProperties(wfsUrl, wfsTypeName).get();
-        assertEquals("WFS", properties.getFormatDescription());
-        if (properties.getMetadata().get("") instanceof Map serviceProperties) {
-            assertEquals("GéoServices : risques naturels et industriels", serviceProperties.get("TITLE"));
-            assertEquals(
-                    "Ensemble des services d'accès aux données sur les risques naturels et industriels"
-                            + " diffusées par le BRGM",
-                    serviceProperties.get("ABSTRACT"));
-            assertEquals("BRGM", serviceProperties.get("PROVIDER_NAME"));
+            analyzer.getLayerProperties(wfsUrl, wfsTypeName);
+            DatasetInfo properties =
+                    analyzer.getLayerProperties(wfsUrl, wfsTypeName).get();
+            assertEquals("WFS", properties.getFormatDescription());
+            if (properties.getMetadata().get("") instanceof Map serviceProperties) {
+                assertEquals("GéoServices : risques naturels et industriels", serviceProperties.get("TITLE"));
+                assertEquals(
+                        "Ensemble des services d'accès aux données sur les risques naturels et industriels"
+                                + " diffusées par le BRGM",
+                        serviceProperties.get("ABSTRACT"));
+                assertEquals("BRGM", serviceProperties.get("PROVIDER_NAME"));
+            }
+            if (properties.getLayers().getFirst().getMetadata().get("") instanceof Map layerProperties) {
+                assertEquals("Déformations récentes et paléoséismes - Failles", layerProperties.get("TITLE"));
+                assertEquals(
+                        "Néopal est la base de données recensant les arguments géologiques de déformation plus"
+                                + " récentes que deux millions d'années (indices néotectoniques) en France, publiés"
+                                + " dans la littérature scientifique et évalués par un comité d'experts.",
+                        layerProperties.get("ABSTRACT"));
+                assertEquals("Risques;INSPIRE:Zones à risque naturel", layerProperties.get("KEYWORD_1"));
+            }
         }
-        if (properties.getLayers().getFirst().getMetadata().get("") instanceof Map layerProperties) {
-            assertEquals("Déformations récentes et paléoséismes - Failles", layerProperties.get("TITLE"));
-            assertEquals(
-                    "Néopal est la base de données recensant les arguments géologiques de déformation plus"
-                            + " récentes que deux millions d'années (indices néotectoniques) en France, publiés"
-                            + " dans la littérature scientifique et évalués par un comité d'experts.",
-                    layerProperties.get("ABSTRACT"));
-            assertEquals("Risques;INSPIRE:Zones à risque naturel", layerProperties.get("KEYWORD_1"));
-        }
+    }
+
+    private static String readResource(String path) throws IOException {
+        return IOUtils.toString(new ClassPathResource(path).getInputStream(), StandardCharsets.UTF_8);
     }
 }

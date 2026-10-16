@@ -1,0 +1,17 @@
+INFO: Open of `WFS:https://geoservices.brgm.fr/risques'
+      using driver `WFS' successful.
+Metadata:
+  TITLE=GéoServices : risques naturels et industriels
+  ABSTRACT=Ensemble des services d'accès aux données sur les risques naturels et industriels diffusées par le BRGM
+  PROVIDER_NAME=BRGM
+1: ms:ALEARG_REALISE (title: Exposition au retrait-gonflement des argiles)
+2: ms:NEOPAL_FAILLE (title: Déformations récentes et paléoséismes - Failles)
+3: ms:NEOPAL_VALIDE (title: Déformations récentes et paléoséismes - Indices validés)
+4: ms:NEOPAL_NON_VALIDE (title: Déformations récentes et paléoséismes - Indices non validés)
+5: ms:CAVITE_LOCALISEE (title: Cavités souterraines abandonnées d'origine non minière)
+6: ms:CAVITE_COMMUNE (title: Cavités souterraines non minières abandonnéées non localisée)
+7: ms:MVT_LOCALISE (title: Mouvements de Terrain)
+8: ms:MVT_COMMUNE (title: Mouvements de Terrain non localisés)
+9: ms:SIS_METROPOLE (title: SisFrance -Intensité des épicentres en métropole)
+10: ms:SIS_OUTREMER (title: SisFrance -Intensité des épicentres en outre-mer)
+11: ms:SIS_INTENSITE (title: Sismicité - Intensité interpolée maximale possiblement ressentie par communes)
