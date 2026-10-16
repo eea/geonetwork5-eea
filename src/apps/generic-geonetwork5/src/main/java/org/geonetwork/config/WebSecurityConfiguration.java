@@ -59,6 +59,8 @@ public class WebSecurityConfiguration {
                                 "/",
                                 "/home",
                                 "/test",
+                                "/actuator/health/liveness",
+                                "/actuator/health/readiness",
                                 "**",
                                 "/ogcapi-records/**",
                                 "/v3/api-docs/**",
