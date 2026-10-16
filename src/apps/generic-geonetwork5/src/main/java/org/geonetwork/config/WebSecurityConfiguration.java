@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import org.apache.commons.lang3.StringUtils;
 import org.geonetwork.security.GeoNetworkOAuth2UserService;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +21,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
@@ -46,7 +47,7 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
-            @Autowired(required = false) InMemoryClientRegistrationRepository clientRegistrationRepository,
+            ObjectProvider<ClientRegistrationRepository> clientRegistrations,
             @Autowired(required = false) GeoNetworkOAuth2UserService geoNetworkOAuth2UserService,
             @Value("${geonetwork.home: '/'}") String homeUrl,
             @Value("${geonetwork.signin: ''}") String signinUrl,
@@ -57,7 +58,6 @@ public class WebSecurityConfiguration {
                 .authorizeHttpRequests(requests -> requests.requestMatchers(
                                 "/",
                                 "/home",
-                                "/signin",
                                 "/test",
                                 "**",
                                 "/ogcapi-records/**",
@@ -68,10 +68,13 @@ public class WebSecurityConfiguration {
                         .anyRequest()
                         .authenticated());
 
-        if (clientRegistrationRepository != null) {
-            http.oauth2Login(oauth -> oauth.permitAll().userInfoEndpoint(userInfo -> userInfo.oidcUserService(
-                            geoNetworkOAuth2UserService.oidcUserService())
-                    .userService(geoNetworkOAuth2UserService.userService())));
+        // Only available when at least one spring.security.oauth2.client.registration is configured
+        if (clientRegistrations.getIfAvailable() != null) {
+            http.oauth2Login(oauth -> oauth.permitAll()
+                    .loginPage("/signin")
+                    .userInfoEndpoint(
+                            userInfo -> userInfo.oidcUserService(geoNetworkOAuth2UserService.oidcUserService())
+                                    .userService(geoNetworkOAuth2UserService.userService())));
         }
 
         http.formLogin(form -> form.loginPage("/signin")

@@ -13,7 +13,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.geonetwork.domain.repository.UserRepository;
-import org.geonetwork.security.user.UserManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,18 +39,18 @@ public class DatabaseUserDetailsService extends AbstractUserDetailsAuthenticatio
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final UserManager userManager;
+    private final GeoNetworkUserService geoNetworkUserService;
 
     public DatabaseUserDetailsService(
             @Value("${geonetwork.security.databaseUserAuthProperty: 'USERNAME_OR_EMAIL'}")
                     DatabaseUserAuthProperties checkUsernameOrEmail,
             PasswordEncoder passwordEncoder,
-            UserRepository userRepository,
-            UserManager userManager) {
+            GeoNetworkUserService geoNetworkUserService,
+            UserRepository userRepository) {
         this.checkUsernameOrEmail = checkUsernameOrEmail;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
-        this.userManager = userManager;
+        this.geoNetworkUserService = geoNetworkUserService;
     }
 
     @Override
@@ -75,7 +74,7 @@ public class DatabaseUserDetailsService extends AbstractUserDetailsAuthenticatio
     }
 
     @Override
-    public UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication)
+    protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication)
             throws AuthenticationException {
         Optional<org.geonetwork.domain.User> user =
                 switch (checkUsernameOrEmail) {
@@ -87,12 +86,13 @@ public class DatabaseUserDetailsService extends AbstractUserDetailsAuthenticatio
         isUserFoundAndEnabled(username, user);
 
         org.geonetwork.domain.User currentUser = user.get();
-        userManager.userLoginEvent(currentUser);
+
+        var authority = geoNetworkUserService.buildUserAuthority(user.get());
 
         return org.springframework.security.core.userdetails.User.withUsername(currentUser.getUsername())
                 .password(currentUser.getPassword())
-                //  .authorities(Collections.singletonList(authority))
-                .roles(currentUser.getProfile().name())
+                // not roles(): it would replace the authorities set here
+                .authorities(authority, GeoNetworkUserService.buildRoleAuthority(currentUser))
                 .build();
     }
 

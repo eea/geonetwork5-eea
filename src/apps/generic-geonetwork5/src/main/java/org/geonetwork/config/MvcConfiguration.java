@@ -43,10 +43,12 @@ public class MvcConfiguration implements WebMvcConfigurer {
                     .setViewName(indexPath);
         });
 
+        // login form and OAuth2 provider links
+        registry.addViewController("/home").setViewName("home");
         if (StringUtils.isNotEmpty(signinUrl)) {
             registry.addViewController("/signin").setViewName("redirect:" + signinUrl);
         } else {
-            registry.addViewController("/signin").setViewName("signin");
+            registry.addViewController("/signin").setViewName("home");
         }
     }
 }
