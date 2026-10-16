@@ -11,13 +11,19 @@ import org.geonetwork.ogcapi.records.generated.model.OgcApiRecordsExceptionDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-/** Global exception handling - will wrap exceptions in the OgcApiRecordsExceptionDto */
-// TODO-EEA To merge with the other GEH
-//  @ControllerAdvice
+/**
+ * Exception handling of the OGC API Records controllers - will wrap exceptions in the OgcApiRecordsExceptionDto.
+ *
+ * <p>TODO-EEA Limited to the OGC API controllers: the catch-all handler below must not replace the handling of the
+ * other APIs, see {@code org.geonetwork.exceptions.GlobalExceptionHandler}. Requests that do not reach a controller are
+ * handled by {@link OgcApiNotFoundResolver}.
+ */
+@ControllerAdvice(basePackages = "org.geonetwork.ogcapi")
 @Slf4j
 public class GlobalExceptionHandler {
 
