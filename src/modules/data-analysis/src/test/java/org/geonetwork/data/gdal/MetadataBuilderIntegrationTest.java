@@ -118,15 +118,11 @@ class MetadataBuilderIntegrationTest {
     private GdalDataAnalyzer analyzer;
 
     @BeforeEach
-    void setUp() throws IOException {
+    void setUp() throws IOException, InterruptedException {
         String dataFolder = new ClassPathResource("data/samples").getFile().toString();
         String mountPoint = "/data";
-        analyzer = new GdalDataAnalyzer(
-                String.format(
-                        "docker run --rm -v %s:%s ghcr.io/osgeo/gdal:alpine-normal-3.10.3 ", dataFolder, mountPoint),
-                dataFolder,
-                mountPoint,
-                60);
+        GdalDockerImage.pull();
+        analyzer = new GdalDataAnalyzer(GdalDockerImage.runCommand(dataFolder, mountPoint), dataFolder, mountPoint, 60);
     }
 
     @Test

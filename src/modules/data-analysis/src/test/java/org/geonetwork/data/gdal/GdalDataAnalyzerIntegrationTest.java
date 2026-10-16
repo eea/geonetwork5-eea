@@ -49,13 +49,9 @@ class GdalDataAnalyzerIntegrationTest {
         } else {
             String dataFolder = new ClassPathResource("data/samples").getFile().toString();
             String mountPoint = "/data";
+            GdalDockerImage.pull();
             analyzer = new GdalDataAnalyzer(
-                    String.format(
-                            "docker run --rm -v %s:%s ghcr.io/osgeo/gdal:alpine-normal-3.10.3 ",
-                            dataFolder, mountPoint),
-                    dataFolder,
-                    mountPoint,
-                    60);
+                    GdalDockerImage.runCommand(dataFolder, mountPoint), dataFolder, mountPoint, 60);
             //      GdalDataAnalyzer gdalDataAnalyzerMock = mock(GdalDataAnalyzer.class);
             //      when(gdalDataAnalyzerMock.getName()).thenReturn("GDAL");
             //      when(gdalDataAnalyzerMock.getVersion()).thenReturn("GDAL 3.2.0, released
