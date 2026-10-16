@@ -27,17 +27,24 @@ import org.geonetwork.data.model.DatasetInfo;
 import org.geonetwork.domain.Metadata;
 import org.geonetwork.domain.Profile;
 import org.geonetwork.domain.User;
+import org.geonetwork.domain.repository.GroupRepository;
 import org.geonetwork.domain.repository.MetadataRepository;
+import org.geonetwork.domain.repository.OperationRepository;
+import org.geonetwork.domain.repository.OperationallowedRepository;
 import org.geonetwork.domain.repository.UserRepository;
+import org.geonetwork.domain.repository.UsergroupRepository;
 import org.geonetwork.editing.BatchEditMode;
 import org.geonetwork.editing.BatchEditsService;
 import org.geonetwork.editing.SchemaConfiguration;
+import org.geonetwork.metadata.IntranetHelper;
 import org.geonetwork.metadata.MetadataAccessManager;
 import org.geonetwork.metadata.MetadataManager;
 import org.geonetwork.metadata.config.MetadataDirConfig;
 import org.geonetwork.metadata.datadir.DefaultMetadataDirPathProcessor;
 import org.geonetwork.schemas.SchemaManager;
 import org.geonetwork.security.AuthenticationFacade;
+import org.geonetwork.security.GeonetworkAuthority;
+import org.geonetwork.setting.SettingManager;
 import org.geonetwork.utility.legacy.xml.Xml;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -70,6 +77,7 @@ import org.xmlunit.diff.ElementSelectors;
     MetadataManager.class,
     MetadataAccessManager.class,
     AuthenticationFacade.class,
+    GeonetworkAuthority.GeonetworkAuthorityBuilder.class,
     SchemaManager.class,
     MetadataDirConfig.class,
     DefaultMetadataDirPathProcessor.class
@@ -88,6 +96,24 @@ class MetadataBuilderIntegrationTest {
 
     @MockitoBean
     private UserRepository userRepository;
+
+    @MockitoBean
+    private UsergroupRepository usergroupRepository;
+
+    @MockitoBean
+    private GroupRepository groupRepository;
+
+    @MockitoBean
+    private OperationRepository operationRepository;
+
+    @MockitoBean
+    private OperationallowedRepository operationallowedRepository;
+
+    @MockitoBean
+    private SettingManager settingManager;
+
+    @MockitoBean
+    private IntranetHelper intranetHelper;
 
     private GdalDataAnalyzer analyzer;
 

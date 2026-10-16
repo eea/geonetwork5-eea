@@ -182,6 +182,8 @@ spring:
   config:
     import:
       - optional:classpath:application-test.yml
+      - optional:classpath:application-schemas.yml
+      - optional:classpath:application-data-ingester.yml
       - classpath:application-gn4.yml
       - optional:classpath:application-ogcapi-records.yml
     activate:
