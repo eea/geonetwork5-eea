@@ -23,7 +23,9 @@ import org.geonetwork.domain.repository.MetadataRepository;
 import org.geonetwork.domain.repository.OperationRepository;
 import org.geonetwork.domain.repository.OperationallowedRepository;
 import org.geonetwork.editing.model.BatchEditParameter;
+import org.geonetwork.metadata.MetadataAccessManager;
 import org.geonetwork.metadata.MetadataManager;
+import org.geonetwork.metadata.config.MetadataDirConfig;
 import org.geonetwork.schemas.SchemaManager;
 import org.geonetwork.schemas.iso19115_3.ISO19115_3SchemaPlugin;
 import org.geonetwork.schemas.iso19139.ISO19139SchemaPlugin;
@@ -31,13 +33,21 @@ import org.geonetwork.setting.SettingManager;
 import org.geonetwork.utility.legacy.xml.Xml;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @SpringBootTest(
-        classes = {TestConfiguration.class, BatchEditsService.class, SchemaManager.class, MetadataManager.class})
+        classes = {
+            TestConfiguration.class,
+            BatchEditsService.class,
+            SchemaManager.class,
+            MetadataManager.class,
+            MetadataDirConfig.class
+        })
+@EnableConfigurationProperties({SchemaConfiguration.class})
 class BatchEditsControllerTest {
 
     @MockitoBean
@@ -46,6 +56,9 @@ class BatchEditsControllerTest {
     @SuppressWarnings("UnusedVariable")
     @MockitoBean
     private SettingManager settingManager;
+
+    @MockitoBean
+    private MetadataAccessManager metadataAccessManager;
 
     @SuppressWarnings("UnusedVariable")
     @MockitoBean
@@ -73,10 +86,12 @@ class BatchEditsControllerTest {
 
         Metadata metadata = new Metadata();
         metadata.setUuid("uuid1");
+        metadata.setId(1);
         metadata.setSchemaid("iso19115-3.2018");
         metadata.setData("<mdb:MD_Metadata xmlns:mdb=\"http://standards.iso.org/iso/19115/-3/mdb/2.0\"/>");
         when(metadataRepository.findAllByUuidIn(List.of("uuid1"))).thenReturn(List.of(metadata));
         when(metadataRepository.findByUuid(uuids[0])).thenReturn(Optional.of(metadata));
+        when(metadataAccessManager.canEdit(1)).thenReturn(true);
 
         String result = Xml.getString(batchEditService
                 .applyBatchEdits(uuids, null, false, edits, request, BatchEditMode.PREVIEW)
