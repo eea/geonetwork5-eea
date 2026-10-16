@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 /** GDAL image used to run the GDAL commands in the tests. */
 final class GdalDockerImage {
     // Do not use a latest tag: it is a development build and its output changes.
-    static final String NAME = "ghcr.io/osgeo/gdal:alpine-normal-3.10.3";
+    static final String NAME = "ghcr.io/osgeo/gdal:alpine-normal-3.13.3";
 
     private static boolean pulled = false;
 
