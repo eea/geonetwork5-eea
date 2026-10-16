@@ -51,7 +51,7 @@ class GdalDataAnalyzerIntegrationTest {
             String mountPoint = "/data";
             analyzer = new GdalDataAnalyzer(
                     String.format(
-                            "docker run --rm -v %s:%s ghcr.io/osgeo/gdal:alpine-normal-latest ",
+                            "docker run --rm -v %s:%s ghcr.io/osgeo/gdal:alpine-normal-3.10.3 ",
                             dataFolder, mountPoint),
                     dataFolder,
                     mountPoint,

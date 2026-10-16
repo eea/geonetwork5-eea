@@ -21,7 +21,7 @@ geonetwork:
       resources:
         - type: "dataset"
           properties:
-            - name: "name"
+            - name: "title"
               help: "Set the title of the dataset"
               context: "DatasetLayer"
               operations:
