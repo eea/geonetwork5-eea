@@ -51,10 +51,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @SpringBootTest(
         classes = {
@@ -72,28 +72,34 @@ import org.springframework.test.context.ActiveProfiles;
 @EnableConfigurationProperties({SchemaConfiguration.class})
 @ActiveProfiles({"prod", "test"})
 class BatchEditsControllerIntegrationTest {
-    @MockBean
+    @MockitoBean
     private UserRepository userRepository;
 
-    @MockBean
+    @SuppressWarnings("UnusedVariable")
+    @MockitoBean
     private UsergroupRepository usergroupRepository;
 
-    @MockBean
+    @MockitoBean
     private MetadataRepository metadataRepository;
 
-    @MockBean
+    @SuppressWarnings("UnusedVariable")
+    @MockitoBean
     private SettingManager settingManager;
 
-    @MockBean
+    @SuppressWarnings("UnusedVariable")
+    @MockitoBean
     private GroupRepository groupRepository;
 
-    @MockBean
+    @SuppressWarnings("UnusedVariable")
+    @MockitoBean
     private IntranetHelper intranetHelper;
 
-    @MockBean
+    @SuppressWarnings("UnusedVariable")
+    @MockitoBean
     private OperationRepository operationRepository;
 
-    @MockBean
+    @SuppressWarnings("UnusedVariable")
+    @MockitoBean
     private OperationallowedRepository operationallowedRepository;
 
     @Autowired

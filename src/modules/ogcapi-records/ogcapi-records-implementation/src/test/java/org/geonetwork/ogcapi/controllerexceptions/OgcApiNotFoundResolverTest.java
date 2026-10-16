@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -59,7 +60,7 @@ class OgcApiNotFoundResolverTest {
 
         assertNotNull(result);
         verify(response).setStatus(404);
-        assertTrue(body.toString().contains("\"code\":\"404\""));
+        assertTrue(body.toString(StandardCharsets.UTF_8).contains("\"code\":\"404\""));
     }
 
     @Test

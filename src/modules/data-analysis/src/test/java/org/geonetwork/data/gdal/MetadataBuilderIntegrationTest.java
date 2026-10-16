@@ -97,21 +97,27 @@ class MetadataBuilderIntegrationTest {
     @MockitoBean
     private UserRepository userRepository;
 
+    @SuppressWarnings("UnusedVariable")
     @MockitoBean
     private UsergroupRepository usergroupRepository;
 
+    @SuppressWarnings("UnusedVariable")
     @MockitoBean
     private GroupRepository groupRepository;
 
+    @SuppressWarnings("UnusedVariable")
     @MockitoBean
     private OperationRepository operationRepository;
 
+    @SuppressWarnings("UnusedVariable")
     @MockitoBean
     private OperationallowedRepository operationallowedRepository;
 
+    @SuppressWarnings("UnusedVariable")
     @MockitoBean
     private SettingManager settingManager;
 
+    @SuppressWarnings("UnusedVariable")
     @MockitoBean
     private IntranetHelper intranetHelper;
 
