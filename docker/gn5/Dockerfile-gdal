@@ -26,6 +26,8 @@ LABEL org.opencontainers.image.title="GeoNetwork 5 EEA"
 LABEL org.opencontainers.image.description="GeoNetwork 5 EEA is a catalog application for managing geospatial data and services."
 LABEL org.opencontainers.image.licenses="GPL-3.0-only"
 ENV COMMIT=${COMMIT_OR_BRANCH}
+# EEA settings live in config/application-eea.yml, packaged in the jar
+ENV SPRING_PROFILES_ACTIVE=eea
 
 WORKDIR /opt/geonetwork
 

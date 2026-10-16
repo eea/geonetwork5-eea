@@ -1,0 +1,46 @@
+# EEA deployment settings, applied on top of application.yml.
+# Activate with SPRING_PROFILES_ACTIVE=eea (the Docker image does it by default).
+geonetwork:
+  signin: /srv/eng/catalog.signin
+  core:
+    url: http://localhost:8080/geonetwork
+  index:
+    indexPrefix: gn5-
+    indexRecordName: gn5-records
+  indexing:
+    poolsize: 4
+  openapi:
+    url: http://localhost:7979
+  security:
+    # SAMEORIGIN, DENY, ALLOW-FROM
+    frameOptions:
+      mode: SAMEORIGIN
+      allowFrom: ""
+
+server:
+  tomcat:
+    relaxed-query-chars: "|,[,]"
+
+spring:
+  datasource:
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/geonetwork5}
+    username: postgres
+    password: postgres
+  liquibase:
+    enabled: false
+  servlet:
+    multipart:
+      max-file-size: 2GB
+      max-request-size: 2GB
+      enabled: true
+  cloud:
+    config:
+      enabled: false
+  config:
+    import:
+      - optional:classpath:application-schemas.yml
+      - optional:classpath:application-data-ingester.yml
+
+springdoc:
+  swagger-ui:
+    path: /doc/api/

@@ -6,6 +6,7 @@ services:
     image: geonetwork5-local:latest
     environment:
       - SPRING_CONFIG_LOCATION=file:/config/application.yml
+      - SPRING_PROFILES_ACTIVE=eea
       - GN5_BASE_URL=http://localhost:7979/geonetwork
       - GN4_BASE_URL=http://localhost:8080/geonetwork
       - GN4_DOCKER_URL=http://host.docker.internal:8080/geonetwork
@@ -16,6 +17,7 @@ services:
       - GEONETWORK_HOME=/srv
     volumes:
       - ../config/application.yml:/config/application.yml
+      - ../config/application-eea.yml:/config/application-eea.yml
     ports:
       - ${GEONETWORK5_PORT:-7979}:7979
     extra_hosts:
