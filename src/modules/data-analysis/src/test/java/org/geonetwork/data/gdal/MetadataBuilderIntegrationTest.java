@@ -38,7 +38,6 @@ import org.geonetwork.metadata.config.MetadataDirConfig;
 import org.geonetwork.metadata.datadir.DefaultMetadataDirPathProcessor;
 import org.geonetwork.schemas.SchemaManager;
 import org.geonetwork.security.AuthenticationFacade;
-import org.geonetwork.security.user.UserManager;
 import org.geonetwork.utility.legacy.xml.Xml;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -70,7 +69,6 @@ import org.xmlunit.diff.ElementSelectors;
     BatchEditsService.class,
     MetadataManager.class,
     MetadataAccessManager.class,
-    UserManager.class,
     AuthenticationFacade.class,
     SchemaManager.class,
     MetadataDirConfig.class,

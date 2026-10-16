@@ -39,7 +39,6 @@ import org.geonetwork.schemas.SchemaManager;
 import org.geonetwork.schemas.iso19115_3.ISO19115_3SchemaPlugin;
 import org.geonetwork.schemas.iso19139.ISO19139SchemaPlugin;
 import org.geonetwork.security.AuthenticationFacade;
-import org.geonetwork.security.user.UserManager;
 import org.geonetwork.utility.legacy.xml.Xml;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -58,7 +57,6 @@ import org.springframework.test.context.ActiveProfiles;
             BatchEditsService.class,
             MetadataManager.class,
             MetadataAccessManager.class,
-            UserManager.class,
             AuthenticationFacade.class,
             SchemaManager.class,
             SchemaConfiguration.class
