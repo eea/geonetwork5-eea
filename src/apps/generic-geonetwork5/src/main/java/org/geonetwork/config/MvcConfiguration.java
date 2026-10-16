@@ -18,7 +18,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
     private String signinUrl;
 
     public MvcConfiguration(
-            @Value("${geonetwork.home: '/'}") String homeUrl, @Value("${geonetwork.signin: ''}") String signinUrl) {
+            @Value("${geonetwork.home: '/'}") String homeUrl, @Value("${geonetwork.signin:}") String signinUrl) {
         this.homeUrl = homeUrl;
         this.signinUrl = signinUrl;
     }

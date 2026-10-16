@@ -50,7 +50,7 @@ public class WebSecurityConfiguration {
             ObjectProvider<ClientRegistrationRepository> clientRegistrations,
             @Autowired(required = false) GeoNetworkOAuth2UserService geoNetworkOAuth2UserService,
             @Value("${geonetwork.home: '/'}") String homeUrl,
-            @Value("${geonetwork.signin: ''}") String signinUrl,
+            @Value("${geonetwork.signin:}") String signinUrl,
             @Value("${geonetwork.security.frameOptions.mode: 'DENY'}") String frameOptionMode,
             @Value("${geonetwork.security.frameOptions.allowFrom: ''}") String allowFrom)
             throws Exception {
@@ -82,7 +82,7 @@ public class WebSecurityConfiguration {
                         .successHandler((request, response, authentication) -> {
                             handleRedirectParam(request, response, homeUrl);
                         })
-                        .failureUrl(signinUrl + "?failure=true")
+                        .failureUrl(StringUtils.isNotEmpty(signinUrl) ? signinUrl + "?failure=true" : "/signin?error")
                         //                        .defaultSuccessUrl("/", false)
                         .permitAll())
                 .httpBasic(Customizer.withDefaults())
