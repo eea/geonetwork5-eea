@@ -16,7 +16,8 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 
 class AuthProviderServiceTest {
-    private static final String BASE_URL = "http://localhost:7979/geonetwork";
+    private static final String BASE_URL = "http://localhost:7979";
+    private static final String CONTEXT_PATH = "/geonetwork";
 
     private static InMemoryClientRegistrationRepository repository() {
         return new InMemoryClientRegistrationRepository(ClientRegistration.withRegistrationId("github")
@@ -30,19 +31,32 @@ class AuthProviderServiceTest {
     }
 
     @Test
-    void oauth2EndpointDoesNotRepeatContextPath() {
-        List<AuthProvider> providers = new AuthProviderService(repository(), BASE_URL, "").getAuthProviders();
+    void oauth2EndpointIncludesContextPath() {
+        List<AuthProvider> providers =
+                new AuthProviderService(repository(), BASE_URL, CONTEXT_PATH, "").getAuthProviders();
 
         assertEquals(1, providers.size());
         assertEquals("github", providers.get(0).getId());
         assertEquals("oauth2", providers.get(0).getType());
         assertEquals("GitHub", providers.get(0).getName());
-        assertEquals(BASE_URL + "/oauth2/authorization/github", providers.get(0).getEndpoint());
+        assertEquals(
+                "http://localhost:7979/geonetwork/oauth2/authorization/github",
+                providers.get(0).getEndpoint());
+    }
+
+    @Test
+    void oauth2EndpointWithoutContextPath() {
+        List<AuthProvider> providers = new AuthProviderService(repository(), BASE_URL, "", "").getAuthProviders();
+
+        assertEquals(
+                "http://localhost:7979/oauth2/authorization/github",
+                providers.get(0).getEndpoint());
     }
 
     @Test
     void databaseProviderListedFirstWhenEnabled() {
-        List<AuthProvider> providers = new AuthProviderService(repository(), BASE_URL, "database").getAuthProviders();
+        List<AuthProvider> providers =
+                new AuthProviderService(repository(), BASE_URL, CONTEXT_PATH, "database").getAuthProviders();
 
         assertEquals(2, providers.size());
         assertEquals("database", providers.get(0).getId());
@@ -52,7 +66,8 @@ class AuthProviderServiceTest {
 
     @Test
     void databaseProviderIdIsLowercaseWhateverTheConfiguredCase() {
-        List<AuthProvider> providers = new AuthProviderService(null, BASE_URL, "DATABASE").getAuthProviders();
+        List<AuthProvider> providers =
+                new AuthProviderService(null, BASE_URL, CONTEXT_PATH, "DATABASE").getAuthProviders();
 
         assertEquals(1, providers.size());
         assertEquals("database", providers.get(0).getId());
@@ -73,24 +88,27 @@ class AuthProviderServiceTest {
             }
         }
 
-        List<AuthProvider> providers = new AuthProviderService(new CustomRepository(), BASE_URL, "").getAuthProviders();
+        List<AuthProvider> providers =
+                new AuthProviderService(new CustomRepository(), BASE_URL, CONTEXT_PATH, "").getAuthProviders();
 
         assertEquals(1, providers.size());
-        assertEquals(BASE_URL + "/oauth2/authorization/github", providers.get(0).getEndpoint());
+        assertEquals(
+                BASE_URL + CONTEXT_PATH + "/oauth2/authorization/github",
+                providers.get(0).getEndpoint());
     }
 
     @Test
     void repositoryThatCannotBeListedGivesNoOauth2Providers() {
         ClientRegistrationRepository lookupOnly = id -> null;
 
-        assertTrue(new AuthProviderService(lookupOnly, BASE_URL, "")
+        assertTrue(new AuthProviderService(lookupOnly, BASE_URL, CONTEXT_PATH, "")
                 .getAuthProviders()
                 .isEmpty());
     }
 
     @Test
     void noRepositoryAndNoDatabaseGivesEmptyList() {
-        assertTrue(new AuthProviderService(null, BASE_URL, "ldap")
+        assertTrue(new AuthProviderService(null, BASE_URL, CONTEXT_PATH, "ldap")
                 .getAuthProviders()
                 .isEmpty());
     }
