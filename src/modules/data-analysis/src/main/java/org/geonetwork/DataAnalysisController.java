@@ -19,11 +19,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Max;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.geonetwork.data.DataAnalyzerException;
+import org.geonetwork.data.DataDirectory;
 import org.geonetwork.data.MetadataBuilder;
 import org.geonetwork.data.gdal.GdalDataAnalyzer;
 import org.geonetwork.data.gdal.GdalOverviewBuilder;
@@ -80,6 +82,8 @@ public class DataAnalysisController {
     MetadataManager metadataManager;
 
     Store metadataStore;
+
+    DataDirectory dataDirectory;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -371,17 +375,33 @@ The overview is a small image representing the layer.
     private String calculateLocalDatasourcePath(
             String metadataUuid, MetadataResourceVisibility visibility, String datasource, boolean approved)
             throws Exception {
+        if (dataDirectory.isS3()) {
+            // TODO: Use the Store once an S3 implementation exists. The filesystem store
+            //  checks that the file exists locally, which is never the case when resources are in S3.
+            if (datasource.contains("..") || datasource.startsWith("/") || datasource.contains(":")) {
+                throw new SecurityException(String.format("Invalid resource identifier '%s'.", datasource));
+            }
+            Metadata metadata = metadataManager.findMetadataByUuidOrId(metadataUuid, approved);
+            Path resourcePath = metadataManager
+                    .getMetadataDir(dataDirectory.getMetadataDir(), visibility.toString(), metadata.getId())
+                    .resolve(datasource);
+            return buildLocalDatasourceUrl(resourcePath);
+        }
+
         Store.ResourceHolder resourceHolder = metadataStore.getResource(metadataUuid, visibility, datasource, approved);
 
-        return buildLocalDatasourceUrl(resourceHolder.getPath().toString());
+        return buildLocalDatasourceUrl(resourceHolder.getPath());
     }
 
-    private String buildLocalDatasourceUrl(String string) {
-        if (string.endsWith(".zip")) {
-            return "/vsizip/" + string;
-        } else {
-            return string;
-        }
+    /**
+     * GDAL path of a resource from the data directory: the local path, or {@code /vsis3/<bucket>/<key>} when the data
+     * directory is stored in S3. Zip files are opened with {@code /vsizip/}.
+     */
+    private String buildLocalDatasourceUrl(Path resourcePath) {
+        String path = dataDirectory.isS3()
+                ? "/vsis3/" + dataDirectory.getS3Bucket() + "/" + dataDirectory.toS3Key(resourcePath)
+                : resourcePath.toString();
+        return path.endsWith(".zip") ? "/vsizip/" + path : path;
     }
 
     /**

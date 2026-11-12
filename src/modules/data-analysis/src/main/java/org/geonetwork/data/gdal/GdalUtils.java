@@ -15,7 +15,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,6 +43,22 @@ public class GdalUtils {
     private static final String GDAL_LAYERS_REGEX = "(?:[0-9]+|Layer): ([:\\-\\w]+) +\\(.*\\)";
 
     public static final String GDAL_DEFAULT_RASTER_LAYER = "RASTER_LAYER";
+
+    /** Extra environment variables for GDAL processes (e.g. S3 credentials for /vsis3/). */
+    private static volatile Map<String, String> extraEnvironment = Map.of();
+
+    protected static void setExtraEnvironment(Map<String, String> environment) {
+        extraEnvironment = Map.copyOf(environment);
+    }
+
+    private static Map<String, String> buildEnvironment() {
+        if (extraEnvironment.isEmpty()) {
+            return null; // Inherit the JVM environment
+        }
+        Map<String, String> environment = new HashMap<>(System.getenv());
+        environment.putAll(extraEnvironment);
+        return environment;
+    }
 
     protected static List<DataFormat> parseFormats(String output) {
         Pattern pattern = Pattern.compile(GDAL_FORMAT_REGEX);
@@ -101,7 +119,7 @@ public class GdalUtils {
         executor.setWatchdog(watchdog);
         executor.setStreamHandler(new PumpStreamHandler(outputStream));
         try {
-            executor.execute(command, resultHandler);
+            executor.execute(command, buildEnvironment(), resultHandler);
             resultHandler.waitFor();
             return Optional.of(outputStream.toString(UTF_8));
         } catch (InterruptedException | IOException e) {

@@ -36,6 +36,22 @@ geonetwork:
     asynchronous: false
   directory:
     data: /data/dev/gn/5/web/src/main/webapp/WEB-INF/data/data
+    # Where metadata resources (attachments) are stored: filesystem or s3.
+    # With s3, only the data analysis (GDAL /vsis3/) reads from the bucket for now.
+    type: ${GEONETWORK_DIRECTORY_TYPE:filesystem}
+    # S3 settings. Defaults reuse the OPENDAL_* variables of the GeoNetwork 4 OpenDAL store.
+    # A resource key is keyPrefix + its path relative to the data directory
+    # (e.g. data/metadata_data/00100-00199/101/file.gpkg).
+    s3:
+      bucket: ${OPENDAL_BUCKET:geonetwork-data}
+      keyPrefix: ${GEONETWORK_DIRECTORY_S3_KEYPREFIX:data}
+      # Empty for AWS. http://localhost:4566 for LocalStack.
+      endpoint: ${OPENDAL_ENDPOINT:}
+      region: ${OPENDAL_REGION:us-east-1}
+      accessKeyId: ${OPENDAL_ACCESS_KEY_ID:}
+      secretAccessKey: ${OPENDAL_SECRET_ACCESS_KEY:}
+      # false = path-style URLs (host/bucket/key), required for LocalStack/MinIO.
+      virtualHosting: false
   settings:
     system:
       metadata:

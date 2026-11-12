@@ -29,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.lang3.StringUtils;
 import org.geonetwork.data.DataAnalyzerException;
+import org.geonetwork.data.DataDirectory;
 import org.geonetwork.data.RasterDataAnalyzer;
 import org.geonetwork.data.VectorDataAnalyzer;
 import org.geonetwork.data.gdal.model.generated.GdalGdalinfoDto;
@@ -49,6 +50,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Polygon;
 import org.openapitools.jackson.nullable.JsonNullable;
 import org.openapitools.jackson.nullable.JsonNullableModule;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -88,6 +90,40 @@ public class GdalDataAnalyzer implements RasterDataAnalyzer, VectorDataAnalyzer 
         this.baseDir = baseDir;
         this.mountPoint = mountPoint;
         this.timeoutInSeconds = processTimeoutInSeconds;
+    }
+
+    /**
+     * When the data directory is in S3, configure GDAL /vsis3/ with the same settings.
+     *
+     * <p>See <a href="https://gdal.org/en/stable/user/virtual_file_systems.html#vsis3-aws-s3-files">/vsis3/</a>. When
+     * GDAL runs in Docker, the variables must be forwarded to the container (e.g. {@code -e AWS_ACCESS_KEY_ID}).
+     */
+    @Autowired(required = false)
+    void configureS3(DataDirectory dataDirectory) {
+        if (dataDirectory == null || !dataDirectory.isS3()) {
+            return;
+        }
+        Map<String, String> environment = new HashMap<>();
+        putIfNotEmpty(environment, "AWS_ACCESS_KEY_ID", dataDirectory.getS3AccessKeyId());
+        putIfNotEmpty(environment, "AWS_SECRET_ACCESS_KEY", dataDirectory.getS3SecretAccessKey());
+        putIfNotEmpty(environment, "AWS_REGION", dataDirectory.getS3Region());
+        String endpoint = dataDirectory.getS3Endpoint();
+        if (StringUtils.isNotEmpty(endpoint)) {
+            // GDAL expects host:port, the scheme is set with AWS_HTTPS
+            environment.put(
+                    "AWS_S3_ENDPOINT",
+                    endpoint.replaceFirst("(?i)^https?://", "").replaceAll("/+$", ""));
+            environment.put("AWS_HTTPS", endpoint.toLowerCase(Locale.ROOT).startsWith("http://") ? "NO" : "YES");
+        }
+        environment.put("AWS_VIRTUAL_HOSTING", dataDirectory.isS3VirtualHosting() ? "TRUE" : "FALSE");
+        GdalUtils.setExtraEnvironment(environment);
+        log.info("GDAL configured to read the data directory from S3 bucket '{}'.", dataDirectory.getS3Bucket());
+    }
+
+    private static void putIfNotEmpty(Map<String, String> map, String key, String value) {
+        if (StringUtils.isNotEmpty(value)) {
+            map.put(key, value);
+        }
     }
 
     @Override
@@ -300,7 +336,8 @@ public class GdalDataAnalyzer implements RasterDataAnalyzer, VectorDataAnalyzer 
 
     protected String buildDataSourcePath(String dataSource) {
         return mountPoint.isEmpty()
-                        || dataSource.matches("(?i)^(http|wfs|vis|db|/vsizip//vsicurl/http|/vsicurl/http).*")
+                        || dataSource.matches(
+                                "(?i)^(http|wfs|vis|db|/vsizip//vsicurl/http|/vsicurl/http|/vsizip//vsis3/|/vsis3/).*")
                 ? dataSource
                 : dataSource.replace(baseDir, mountPoint);
     }
