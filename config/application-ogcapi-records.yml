@@ -206,6 +206,55 @@ geonetwork:
           elasticProperty: geom
         - ogcProperty: time
           elasticProperty: resourceTemporalDateRange
+        # EEA thesauri. Indexed by the EEA GeoNetwork 4 schema configuration.
+        - ogcProperty: reportingObligations
+          elasticProperty: th_rod-eionet-europa-eu.default
+          indexRecordProperty: keywordByThesaurus.["th_rod-eionet-europa-eu"].[*].properties.["default"]
+          typeOverride: LIST_STRING
+          isQueryable: true
+          facetsConfig:
+            - facetName: reportingObligations
+              facetType: TERM
+              bucketSorting: COUNT
+              bucketSortingDirection: DESCENDING
+              bucketCount: 150
+              minimumDocumentCount: 1
+        - ogcProperty: eeaTopics
+          elasticProperty: th_eea-topics.default
+          indexRecordProperty: keywordByThesaurus.["th_eea-topics"].[*].properties.["default"]
+          typeOverride: LIST_STRING
+          isQueryable: true
+          facetsConfig:
+            - facetName: eeaTopics
+              facetType: TERM
+              bucketSorting: COUNT
+              bucketSortingDirection: DESCENDING
+              bucketCount: 50
+              minimumDocumentCount: 1
+        - ogcProperty: gemetKeywords
+          elasticProperty: th_gemet_tree.default
+          indexRecordProperty: keywordHierarchyByThesaurus.["th_gemet_tree"].defaultTexts
+          typeOverride: LIST_STRING
+          isQueryable: true
+          facetsConfig:
+            - facetName: gemetKeywords
+              facetType: TERM
+              bucketSorting: COUNT
+              bucketSortingDirection: DESCENDING
+              bucketCount: 500
+              minimumDocumentCount: 1
+        - ogcProperty: eeaBusinessDomain
+          elasticProperty: th_eea-business-domains_tree.default
+          indexRecordProperty: keywordHierarchyByThesaurus.["th_eea-business-domains_tree"].defaultTexts
+          typeOverride: LIST_STRING
+          isQueryable: true
+          facetsConfig:
+            - facetName: eeaBusinessDomain
+              facetType: TERM
+              bucketSorting: COUNT
+              bucketSortingDirection: DESCENDING
+              bucketCount: 100
+              minimumDocumentCount: 1
 
 
 
