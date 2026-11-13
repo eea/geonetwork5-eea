@@ -140,6 +140,24 @@ geonetwork:
               facetType: HISTOGRAM_FIXED_BUCKET_COUNT
               bucketCount: 5
               bucketSorting: VALUE
+        - ogcProperty: temporalExtent
+          elasticProperty: resourceTemporalExtentDateRange
+          # date_range in the index: no automatic type, so give it one for the facet
+          typeOverride: SINGLE_DATE
+          addPropertyToOutput: false
+          facetsConfig:
+            # number of records whose temporal extent covers each year (a record counts in every year it covers)
+            - facetName: temporalExtent
+              facetType: HISTOGRAM_FIXED_INTERVAL
+              calendarIntervalUnit: YEAR
+              # every year from the first to the last year with records, empty ones with a count of 0
+              minimumDocumentCount: 0
+              # from 1900 (ignores wrong dates such as 0201) to the current year (ongoing extents have no end)
+              hardBoundsMin: "1900"
+              hardBoundsMax: now/y
+              bucketCount: 500
+              bucketSorting: VALUE
+              bucketSortingDirection: ASCENDING
         - ogcProperty: resourceTitleObject
           elasticProperty: resourceTitleObject.default
           sortFieldSuffix: sort
@@ -161,6 +179,20 @@ geonetwork:
               facetType: HISTOGRAM_FIXED_BUCKET_COUNT
               bucketCount: 5
               bucketSorting: VALUE
+            # Counts per fixed scale range. bucketSorting: VALUE sorts filter buckets by name, hence the 1_ to 4_ prefixes.
+            - facetName: resolutionScaleDenominatorRanges
+              facetType: FILTER
+              bucketSorting: VALUE
+              bucketSortingDirection: ASCENDING
+              filters:
+                - filterName: 1_upTo100000
+                  filterEquationCql: resolutionScaleDenominator < 100000
+                - filterName: 2_100000to1000000
+                  filterEquationCql: resolutionScaleDenominator >= 100000 AND resolutionScaleDenominator < 1000000
+                - filterName: 3_1000000to10000000
+                  filterEquationCql: resolutionScaleDenominator >= 1000000 AND resolutionScaleDenominator < 10000000
+                - filterName: 4_above10000000
+                  filterEquationCql: resolutionScaleDenominator >= 10000000
         - ogcProperty: popularity
           elasticProperty: popularity
           indexRecordProperty: popularity
@@ -205,7 +237,7 @@ geonetwork:
         - ogcProperty: geometry
           elasticProperty: geom
         - ogcProperty: time
-          elasticProperty: resourceTemporalDateRange
+          elasticProperty: resourceTemporalExtentDateRange
 
 
 
