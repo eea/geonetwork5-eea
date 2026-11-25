@@ -90,6 +90,7 @@ class MetadataManagerTest {
                 mock(MetadataRepository.class),
                 mock(OperationRepository.class),
                 mock(OperationallowedRepository.class),
+                mock(IMetadataDirProcessor.class),
                 settingManager);
 
         var permalink = metadataManager.getPermalinkUrlBuilder("all");
@@ -109,6 +110,7 @@ class MetadataManagerTest {
                 mock(MetadataRepository.class),
                 mock(OperationRepository.class),
                 mock(OperationallowedRepository.class),
+                mock(IMetadataDirProcessor.class),
                 settingManager);
 
         var permalink = metadataManager.getPermalinkUrlBuilder("all");
