@@ -217,6 +217,9 @@ public class AttachmentsController {
             throws Exception {
 
         Metadata metadata = metadataManager.findMetadataByUuidOrId(metadataUuid, approved);
+        if (!metadataAccessManager.canEdit(metadata.getId())) {
+            throw new AccessDeniedException("User is not permitted to edit this record");
+        }
         store.delResources(metadata.getId());
     }
 
